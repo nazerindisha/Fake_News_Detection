@@ -1,0 +1,12 @@
+# Virtual Environments
+venv/
+fake_news_detector/venv/
+__pycache__/
+*.pyc
+
+# Local Datasets & Large Model Files
+*.csv
+*.joblib
+
+# IDE settings
+.vscode/
