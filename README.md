@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # 🛡️ VeriFact AI — Enterprise Bilingual Fake News Detection & Fact Verification Platform
 
 [![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -117,10 +118,39 @@ sequenceDiagram
 ---
 
 ## 📁 Enterprise Directory Structure
+=======
+# 🛡️ Multilingual & Multimodal Fake News Detection Platform
+
+A full-stack misinformation and fake news verification system supporting **English and Bangla**, powered by machine learning classification, local historical dataset matching, and real-time live web search fallback.
+
+---
+
+## 🚀 Key Features
+
+* **Bilingual Text Classification:** Instant verification for both English and regional Bangla news claims using TF-IDF vectorization and supervised ML models.
+* **Hybrid Actual News Retrieval:** 
+  * **Offline Historical Match:** Cross-references claims against local datasets (`True.csv` and `Authentic-48K.csv`).
+  * **Real-Time Live Web Search Fallback:** Automatically queries live web results via DuckDuckGo to verify breaking news and 2026 current events.
+* **FastAPI Backend:** Asynchronous REST API with automatic Swagger UI documentation and CORS middleware enabled.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Backend Framework:** FastAPI, Uvicorn, Pydantic
+* **Machine Learning & NLP:** Scikit-Learn, Pandas, Joblib, Cosine Similarity
+* **Live Search Integration:** `duckduckgo-search`
+* **Version Control:** Git & GitHub
+
+---
+
+## 📂 Project Structure
+>>>>>>> Stashed changes
 
 ```text
 Fake_News_Detection/
 │
+<<<<<<< Updated upstream
 ├── app/                                 # Main Application Core Package
 │   ├── __init__.py                      # Package initialization and metadata
 │   ├── main.py                          # FastAPI application factory & router mounting
@@ -185,10 +215,21 @@ Fake_News_Detection/
 ├── scraper.py                           # Root backward-compatible scraper wrapper
 ├── train.py                             # Root backward-compatible English training wrapper
 └── train_bn.py                          # Root backward-compatible Bangla training wrapper
+=======
+├── main.py               # FastAPI endpoints, model loading, and CORS setup
+├── retriever.py          # Hybrid local dataset & live web search engine
+├── train.py              # English model training pipeline
+├── train_bn.py           # Bangla model training pipeline
+├── scraper.py            # Web scraping utility
+├── check.py              # Dataset and environment verification script
+├── .gitignore            # Excludes virtual environments, CSV datasets, and large models
+└── README.md             # Project documentation
+>>>>>>> Stashed changes
 ```
 
 ---
 
+<<<<<<< Updated upstream
 ## 🔬 Layer-by-Layer Technical Breakdown
 
 ### 1. Application Core (`app/core/`)
@@ -397,3 +438,37 @@ This project is maintained as a collaborative team engineering effort.
 
 ## 📄 License
 This platform is open-source and distributed under the [MIT License](LICENSE).
+=======
+## ⚙️ Installation & Running Locally
+
+1. **Clone the Repository:**
+   ```bash
+   git clone [https://github.com/nazerindisha/Fake_News_Detection.git](https://github.com/nazerindisha/Fake_News_Detection.git)
+   cd Fake_News_Detection
+   ```
+
+2. **Create and Activate a Virtual Environment:**
+   ```bash
+   python -m venv venv
+   source venv/Scripts/activate  # On Windows Git Bash
+   ```
+
+3. **Install Dependencies:**
+   ```bash
+   pip install fastapi uvicorn pandas scikit-learn duckduckgo-search pydantic joblib
+   ```
+
+4. **Run the FastAPI Server:**
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+5. **Open Interactive API Docs:**
+   Navigate to **`http://127.0.0.1:8000/docs`** in your browser to test endpoints interactively.
+
+---
+
+## 🔮 Roadmap
+* Responsive frontend dashboard for seamless bilingual news verification.
+* AI-generated and manipulated image detection module.
+>>>>>>> Stashed changes

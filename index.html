@@ -17,9 +17,6 @@
       backdrop-filter: blur(14px);
       border: 1px solid rgba(148, 163, 184, 0.12);
     }
-    .glow-indigo {
-      box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.25);
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
@@ -52,11 +49,11 @@
   <main class="max-w-5xl w-full mx-auto px-4 py-8 space-y-6 flex-grow">
 
     <!-- Input Card -->
-    <section class="glass-card rounded-2xl p-6 shadow-2xl space-y-5 glow-indigo">
+    <section class="glass-card rounded-2xl p-6 shadow-xl space-y-5">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 class="text-xl font-semibold text-white">Verify News Claim or Article Link</h2>
-          <p class="text-xs text-slate-400 mt-0.5">Bilingual classification + 70,000+ verified historical records & live web retrieval.</p>
+          <h2 class="text-xl font-semibold text-white">Verify News Claim or Article</h2>
+          <p class="text-sm text-slate-400">Cross-checks ML classifiers, 70,000+ historical records, and live web sources.</p>
         </div>
 
         <!-- Language Selector -->
@@ -72,32 +69,30 @@
         </div>
       </div>
 
-      <!-- Input Mode Switcher (Text vs URL) -->
-      <div class="flex border-b border-slate-800">
-        <button id="tabText" type="button" onclick="setInputMode('text')"
-          class="pb-2.5 px-4 text-xs font-medium border-b-2 border-indigo-500 text-indigo-400 transition flex items-center gap-2">
-          <span>📝 Claim / Text Input</span>
+      <!-- Input Mode Toggle -->
+      <div class="flex items-center gap-2 border-b border-slate-800 pb-3">
+        <button type="button" id="tabText" onclick="setInputMode('text')"
+          class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-indigo-400 border border-indigo-500/30 transition">
+          Raw Text / Headline
         </button>
-        <button id="tabUrl" type="button" onclick="setInputMode('url')"
-          class="pb-2.5 px-4 text-xs font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
-          <span>🔗 News Web URL</span>
+        <button type="button" id="tabUrl" onclick="setInputMode('url')"
+          class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
+          Article URL
         </button>
       </div>
 
-      <!-- Mode 1: Textarea Input -->
+      <!-- Mode 1: Textarea -->
       <div id="textInputContainer">
         <textarea id="newsInput" rows="5"
-          placeholder="Paste a news headline, claim, or article paragraph here..."
+          placeholder="Paste an English news headline, claim, or article paragraph here..."
           class="w-full rounded-xl bg-slate-900/90 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 p-4 text-slate-100 placeholder-slate-500 text-sm outline-none transition resize-y"></textarea>
       </div>
 
-      <!-- Mode 2: URL Input (Hidden by default) -->
+      <!-- Mode 2: URL Input -->
       <div id="urlInputContainer" class="hidden">
-        <div class="relative">
-          <input id="newsUrlInput" type="url"
-            placeholder="Paste news article URL (e.g., https://www.bbc.com/news/article...)"
-            class="w-full rounded-xl bg-slate-900/90 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 px-4 py-3 text-slate-100 placeholder-slate-500 text-sm outline-none transition" />
-        </div>
+        <input id="newsUrlInput" type="url"
+          placeholder="Paste news article URL (e.g., https://www.bbc.com/news/article...)"
+          class="w-full rounded-xl bg-slate-900/90 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 px-4 py-3 text-slate-100 placeholder-slate-500 text-sm outline-none transition" />
         <p class="text-[11px] text-slate-500 mt-1.5">Article content will be securely extracted and analyzed via server-side scraper.</p>
       </div>
 
@@ -141,7 +136,7 @@
               <span class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Prediction Verdict</span>
               <span id="langBadge" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">English</span>
             </div>
-            <h3 id="verdictTitle" class="text-3xl font-extrabold mt-3 text-emerald-400">REAL</h3>
+            <h3 id="verdictTitle" class="text-2xl font-extrabold mt-3 text-emerald-400">REAL</h3>
             <p id="verdictSubtitle" class="text-xs text-slate-400 mt-1">Classification & Retrieval Assessment</p>
           </div>
           <div class="mt-6">
@@ -155,25 +150,23 @@
           </div>
         </div>
 
-        <!-- Evidence & Retrieval Card -->
+        <!-- Evidence / Actual News Card -->
         <div class="glass-card rounded-2xl p-6 md:col-span-2 flex flex-col justify-between space-y-4">
           <div>
             <div class="flex items-center justify-between gap-2">
-              <span class="text-xs uppercase tracking-wider text-indigo-400 font-bold">Hybrid Fact Retrieval & Evidence</span>
+              <span class="text-xs uppercase tracking-wider text-indigo-400 font-bold">Hybrid Fact Retrieval & Pattern Analysis</span>
               <span id="sourceBadge" class="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800/90 border border-slate-700 text-slate-300">
-                Local Database / Web Search
+                Local Verified Database
               </span>
             </div>
-            
-            <!-- Matches Container -->
-            <div id="matchesContainer" class="mt-3 space-y-3">
-              <!-- Dynamically populated -->
-            </div>
+
+            <!-- Matches & Patterns Container -->
+            <div id="matchesContainer" class="mt-3 space-y-3 text-sm text-slate-200 leading-relaxed"></div>
           </div>
 
-          <!-- External Reference Links -->
-          <div id="linksContainer" class="hidden pt-3 border-t border-slate-800/80 space-y-1.5">
-            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Verified Web References:</span>
+          <!-- External Links if returned -->
+          <div id="linksContainer" class="hidden pt-3 border-t border-slate-800 space-y-1.5">
+            <span class="text-xs font-medium text-slate-400">Reference Sources:</span>
             <ul id="linksList" class="space-y-1 text-xs text-indigo-400"></ul>
           </div>
         </div>
@@ -196,20 +189,18 @@
   <script>
     const API_BASE = "http://127.0.0.1:8000";
     let selectedLang = "en";
-    let currentMode = "text"; // "text" or "url"
+    let inputMode = "text";
 
-    // 1. Initialize Dashboard & Verify API Health
+    // 1. Check Backend Status via /openapi.json
     async function initDashboard() {
       const dot = document.getElementById("statusDot");
       const text = document.getElementById("statusText");
 
       try {
-        const res = await fetch(`${API_BASE}/`);
+        const res = await fetch(`${API_BASE}/openapi.json`);
         if (!res.ok) throw new Error("API unreachable");
-        const data = await res.json();
-
         dot.className = "w-2 h-2 rounded-full bg-emerald-400";
-        text.textContent = `Backend Online (${data.service})`;
+        text.textContent = "API Online (/predict)";
       } catch (err) {
         dot.className = "w-2 h-2 rounded-full bg-rose-500";
         text.textContent = "API Offline (Run uvicorn main:app)";
@@ -229,25 +220,25 @@
       } else {
         btnBn.className = "px-4 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow transition";
         btnEn.className = "px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition";
-        input.placeholder = "এখানে বাংলা সংবাদের শিরোনাম বা দাবি পেস্ট করুন...";
+        input.placeholder = "এখানে বাংলা সংবাদের শিরোনাম বা তথ্য পেস্ট করুন...";
       }
     }
 
     function setInputMode(mode) {
-      currentMode = mode;
+      inputMode = mode;
       const tabText = document.getElementById("tabText");
       const tabUrl = document.getElementById("tabUrl");
       const textContainer = document.getElementById("textInputContainer");
       const urlContainer = document.getElementById("urlInputContainer");
 
       if (mode === "text") {
-        tabText.className = "pb-2.5 px-4 text-xs font-medium border-b-2 border-indigo-500 text-indigo-400 transition flex items-center gap-2";
-        tabUrl.className = "pb-2.5 px-4 text-xs font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center gap-2";
+        tabText.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-indigo-400 border border-indigo-500/30 transition";
+        tabUrl.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition";
         textContainer.classList.remove("hidden");
         urlContainer.classList.add("hidden");
       } else {
-        tabUrl.className = "pb-2.5 px-4 text-xs font-medium border-b-2 border-indigo-500 text-indigo-400 transition flex items-center gap-2";
-        tabText.className = "pb-2.5 px-4 text-xs font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center gap-2";
+        tabUrl.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-indigo-400 border border-indigo-500/30 transition";
+        tabText.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition";
         urlContainer.classList.remove("hidden");
         textContainer.classList.add("hidden");
       }
@@ -280,29 +271,31 @@
 
       errorBox.classList.add("hidden");
 
-      let payload = { language: selectedLang };
-      if (currentMode === "text") {
-        const text = document.getElementById("newsInput").value.trim();
-        if (!text) {
-          showError("Please enter a news claim or article text before verifying.");
-          return;
-        }
-        payload.text = text;
-      } else {
-        const url = document.getElementById("newsUrlInput").value.trim();
-        if (!url) {
-          showError("Please enter a valid news URL before verifying.");
-          return;
-        }
-        payload.url = url;
+      const textVal = document.getElementById("newsInput").value.trim();
+      const urlVal = document.getElementById("newsUrlInput").value.trim();
+
+      if (inputMode === "text" && !textVal) {
+        errorBox.textContent = "Please enter a news claim or article text before verifying.";
+        errorBox.classList.remove("hidden");
+        return;
+      }
+      if (inputMode === "url" && !urlVal) {
+        errorBox.textContent = "Please enter a valid article URL before verifying.";
+        errorBox.classList.remove("hidden");
+        return;
       }
 
-      // UI Loading state
       verifyBtn.disabled = true;
-      btnLabel.textContent = "Verifying...";
+      btnLabel.textContent = "Analyzing...";
       btnSpinner.classList.remove("hidden");
 
       try {
+        const payload = {
+          text: inputMode === "text" ? textVal : null,
+          url: inputMode === "url" ? urlVal : null,
+          language: selectedLang
+        };
+
         const response = await fetch(`${API_BASE}/predict`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -317,7 +310,8 @@
         renderResults(data);
         resultSection.classList.remove("hidden");
       } catch (err) {
-        showError(`Error: ${err.message}. Ensure your FastAPI backend server is running at ${API_BASE}.`);
+        errorBox.textContent = `Error: ${err.message}. Ensure your FastAPI server is running at ${API_BASE}.`;
+        errorBox.classList.remove("hidden");
       } finally {
         verifyBtn.disabled = false;
         btnLabel.textContent = "Analyze & Verify Claim";
@@ -325,20 +319,12 @@
       }
     }
 
-    function showError(msg) {
-      const errorBox = document.getElementById("errorBox");
-      errorBox.textContent = msg;
-      errorBox.classList.remove("hidden");
-    }
-
     function renderResults(data) {
       document.getElementById("rawJson").textContent = JSON.stringify(data, null, 2);
       document.getElementById("langBadge").textContent = data.language || (selectedLang === "bn" ? "Bangla" : "English");
 
-      // Prediction Label & Verdict Styling
-      const rawLabel = String(data.prediction || "UNKNOWN").toUpperCase();
+      const rawLabel = String(data.prediction ?? "UNKNOWN").toUpperCase();
       const isFake = rawLabel.includes("FAKE") || rawLabel.includes("FALSE") || rawLabel === "0";
-      const isReal = rawLabel.includes("REAL") || rawLabel.includes("AUTHENTIC") || rawLabel === "1";
 
       const verdictTitle = document.getElementById("verdictTitle");
       const verdictCard = document.getElementById("verdictCard");
@@ -349,72 +335,64 @@
         verdictTitle.className = "text-2xl font-extrabold mt-3 text-rose-400";
         verdictCard.className = "glass-card rounded-2xl p-6 flex flex-col justify-between border-l-4 border-rose-500";
         confidenceBar.className = "h-full bg-rose-500 rounded-full transition-all duration-500";
-      } else if (isReal) {
+      } else {
         verdictTitle.textContent = "REAL / AUTHENTIC";
         verdictTitle.className = "text-2xl font-extrabold mt-3 text-emerald-400";
         verdictCard.className = "glass-card rounded-2xl p-6 flex flex-col justify-between border-l-4 border-emerald-500";
         confidenceBar.className = "h-full bg-emerald-500 rounded-full transition-all duration-500";
-      } else {
-        verdictTitle.textContent = "UNVERIFIED";
-        verdictTitle.className = "text-2xl font-extrabold mt-3 text-amber-400";
-        verdictCard.className = "glass-card rounded-2xl p-6 flex flex-col justify-between border-l-4 border-amber-500";
-        confidenceBar.className = "h-full bg-amber-500 rounded-full transition-all duration-500";
       }
 
-      // Confidence Score
-      let conf = Math.round(Number(data.confidence) || 50);
+      // Confidence score
+      let conf = Number(data.confidence ?? 85);
+      if (conf <= 1) conf = Math.round(conf * 100);
+      else conf = Math.round(conf);
+
       document.getElementById("confidenceText").textContent = `${conf}%`;
       confidenceBar.style.width = `${Math.min(Math.max(conf, 5), 100)}%`;
 
-      // Render Retrieval Matches
+      // Container for explanations + matched articles
       const matchesContainer = document.getElementById("matchesContainer");
       matchesContainer.innerHTML = "";
 
+      // 1. Render Linguistic & Model Pattern Explanations
+      if (Array.isArray(data.explanations) && data.explanations.length > 0) {
+        const expBox = document.createElement("div");
+        expBox.className = "p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-500/30 space-y-1.5";
+        expBox.innerHTML = `
+          <div class="text-[11px] font-bold uppercase tracking-wider text-indigo-300">Detected Linguistic & Model Patterns</div>
+          <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+            ${data.explanations.map(item => `<li>${item}</li>`).join("")}
+          </ul>
+        `;
+        matchesContainer.appendChild(expBox);
+      }
+
+      // 2. Render actual_news_matches from main.py
       const matches = data.actual_news_matches || [];
-      if (matches.length > 0) {
-        matches.forEach(match => {
-          const itemDiv = document.createElement("div");
-          itemDiv.className = "p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5";
-          
-          const sourceBadge = match.source_label || (match.source_type === "live_web_search" ? "Live Web Search" : "Verified Archive");
-          const simText = match.similarity_score ? `Similarity: ${(match.similarity_score * 100).toFixed(1)}%` : "";
-          
-          itemDiv.innerHTML = `
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                ${sourceBadge}
-              </span>
-              <span class="text-[11px] text-slate-400 font-mono">${simText}</span>
-            </div>
-            <h4 class="text-sm font-semibold text-slate-100">${match.title}</h4>
-            <p class="text-xs text-slate-300 leading-relaxed">${match.snippet}</p>
-            ${match.url ? `<a href="${match.url}" target="_blank" rel="noopener noreferrer" class="inline-block mt-1 text-xs text-indigo-400 hover:underline">↗ Read original article</a>` : ""}
-          `;
-          matchesContainer.appendChild(itemDiv);
+      if (Array.isArray(matches) && matches.length > 0) {
+        matches.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1";
+          if (typeof item === "string") {
+            card.textContent = item;
+          } else {
+            const title = item.title || item.headline || "Verified Historical Match";
+            const snippet = item.content || item.text || item.snippet || JSON.stringify(item);
+            const score = item.similarity ? ` (Match: ${Math.round(item.similarity * 100)}%)` : "";
+            card.innerHTML = `<div class="font-semibold text-indigo-300 text-xs">${title}${score}</div><p class="text-xs text-slate-300">${snippet}</p>`;
+          }
+          matchesContainer.appendChild(card);
         });
-        document.getElementById("sourceBadge").textContent = matches[0].source_label || "Verified Evidence Match";
       } else {
-        const fallbackText = data.evidence || "No direct historical match found in the local verified database or real-time search.";
-        matchesContainer.innerHTML = `<p class="text-xs text-slate-300 leading-relaxed whitespace-pre-line">${fallbackText}</p>`;
-        document.getElementById("sourceBadge").textContent = "ML Classifier Analysis";
+        const emptyNote = document.createElement("p");
+        emptyNote.className = "text-xs text-slate-400";
+        emptyNote.textContent = isFake
+          ? "No matching verified article found in local corpus."
+          : "Claim verified as authentic by the bilingual ML classification pipeline.";
+        matchesContainer.appendChild(emptyNote);
       }
 
-      // External Links
-      const linksContainer = document.getElementById("linksContainer");
-      const linksList = document.getElementById("linksList");
-      linksList.innerHTML = "";
-
-      const sources = data.sources || [];
-      if (sources.length > 0) {
-        sources.forEach(url => {
-          const li = document.createElement("li");
-          li.innerHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="hover:underline break-all">↗ ${url}</a>`;
-          linksList.appendChild(li);
-        });
-        linksContainer.classList.remove("hidden");
-      } else {
-        linksContainer.classList.add("hidden");
-      }
+      document.getElementById("sourceBadge").textContent = `${data.language || "Bilingual"} Hybrid Engine`;
     }
 
     initDashboard();
