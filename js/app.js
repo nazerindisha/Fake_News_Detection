@@ -24,10 +24,10 @@ function applyTheme(theme) {
   if (themeIcon && themeLabel) {
     if (theme === "dark") {
       themeIcon.innerHTML = `<svg class="w-3.5 h-3.5 text-indigo-400 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>`;
-      themeLabel.textContent = "Dark Mode";
+      themeLabel.textContent = "Dark";
     } else {
       themeIcon.innerHTML = `<svg class="w-3.5 h-3.5 text-amber-500 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
-      themeLabel.textContent = "White Mode";
+      themeLabel.textContent = "Light";
     }
   }
 
@@ -103,11 +103,11 @@ async function initDashboard() {
   try {
     const res = await fetch(`${API_BASE}/openapi.json`);
     if (!res.ok) throw new Error("API unreachable");
-    if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]";
-    if (text) text.textContent = "Engine Online (/predict & /predict-image)";
+    if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)] animate-pulse";
+    if (text) text.textContent = "Engine Online";
   } catch (err) {
     if (dot) dot.className = "w-2 h-2 rounded-full bg-zinc-400";
-    if (text) text.textContent = "Engine Offline (Run python run.py)";
+    if (text) text.textContent = "Engine Offline";
   }
 }
 

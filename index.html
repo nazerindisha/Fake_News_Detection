@@ -65,7 +65,7 @@
               PRO V2.5
             </span>
           </div>
-          <p class="text-[11px] font-normal" style="color: var(--text-muted);">Bilingual Misinformation & Multimodal Forensics</p>
+          <p class="text-[11px] font-normal" style="color: var(--text-muted);">Multimodal Intelligence & Verification</p>
         </div>
       </div>
 
@@ -74,8 +74,8 @@
         
         <!-- White / Dark Theme Switcher Button -->
         <button type="button" id="themeToggleBtn" onclick="toggleTheme()"
-          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono pill-theme hover:opacity-90 transition cursor-pointer shadow-xs active:scale-95"
-          title="Toggle White / Dark Theme">
+          class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono pill-theme hover:opacity-90 transition cursor-pointer shadow-xs active:scale-95"
+          title="Toggle Theme">
           <span id="themeIcon" class="flex items-center justify-center">
             <svg class="w-3.5 h-3.5 text-amber-500 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="4"></circle>
@@ -89,13 +89,13 @@
               <path d="m19.07 4.93-1.41 1.41"></path>
             </svg>
           </span>
-          <span id="themeLabel" class="hidden sm:inline font-semibold">White Mode</span>
+          <span id="themeLabel" class="hidden sm:inline font-semibold">Light</span>
         </button>
 
         <!-- Backend Status Pill -->
         <div id="serverStatus" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono pill-theme shadow-xs">
-          <span id="statusDot" class="w-2 h-2 rounded-full bg-zinc-400 animate-pulse"></span>
-          <span id="statusText" class="hidden sm:inline">Checking Engine...</span>
+          <span id="statusDot" class="w-2 h-2 rounded-full bg-zinc-400"></span>
+          <span id="statusText" class="hidden sm:inline">Engine Offline</span>
           <span class="sm:hidden font-mono text-[10px]" id="statusMobileText">Engine</span>
         </div>
       </div>
@@ -430,15 +430,29 @@
 
   </main>
 
-  <!-- Luxury Footer -->
+  <!-- Luxury Enterprise Footer -->
   <footer class="relative z-10 py-6 text-center text-xs font-mono transition-colors duration-300"
           style="background: var(--footer-bg); border-top: 1px solid var(--footer-border); color: var(--text-muted);">
-    <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <div class="flex items-center gap-2">
-        <span class="font-bold" style="color: var(--text-main);">VeriFact AI</span>
-        <span>• Enterprise Intelligence Platform • White Mode Default</span>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-5 h-5 rounded-md flex items-center justify-center font-bold text-xs shadow-2xs"
+             style="background: var(--logo-bg); color: var(--logo-text); border: 1px solid var(--logo-border);">
+          <svg class="w-2.5 h-2.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <span class="font-bold tracking-tight text-xs" style="color: var(--text-main);">VeriFact AI</span>
+        <span class="text-[11px] opacity-70">• Autonomous Fact Intelligence</span>
       </div>
-      <div class="text-[11px]" style="color: var(--text-subtle);">Dual NLP • ELA Vision Forensics • SSRF Guarded Scraper</div>
+      <div class="flex items-center gap-3 text-[11px] font-mono" style="color: var(--text-muted);">
+        <span>70,000+ Records</span>
+        <span class="opacity-30">•</span>
+        <span>SSRF Protected</span>
+        <span class="opacity-30">•</span>
+        <span class="px-2 py-0.5 rounded-full badge-indigo text-[10px] font-bold">PRO V2.5</span>
+      </div>
     </div>
   </footer>
 
