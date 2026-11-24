@@ -14,17 +14,21 @@
   <!-- Modular Custom Stylesheet -->
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black flex flex-col justify-between">
+<body class="selection:bg-indigo-600 selection:text-white flex flex-col justify-between">
 
-  <!-- Ambient Luxury Canvas Background -->
+  <!-- Ambient Luxury Canvas with Subtle Pastel Glows -->
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
-    <!-- Top Central Ambient Spotlight -->
+    <!-- Top Central Ambient Spotlight (Soft Indigo) -->
     <div id="ambientSpotlight" class="absolute -top-[280px] left-1/2 -translate-x-1/2 w-[1300px] h-[700px] rounded-full pointer-events-none"
          style="background: radial-gradient(ellipse at top, var(--spotlight-1), transparent 70%);"></div>
     
-    <!-- Secondary Bottom Ambient Glow -->
+    <!-- Secondary Bottom Ambient Glow (Soft Sky Cyan) -->
     <div class="absolute -bottom-[220px] -right-[120px] w-[750px] h-[650px] rounded-full pointer-events-none"
          style="background: radial-gradient(ellipse at center, var(--spotlight-2), transparent 70%);"></div>
+
+    <!-- Tertiary Ambient Side Aura (Soft Rose) -->
+    <div class="absolute top-[40%] -left-[180px] w-[600px] h-[600px] rounded-full pointer-events-none"
+         style="background: radial-gradient(ellipse at center, var(--spotlight-3), transparent 70%);"></div>
 
     <!-- Micro Dot-Matrix Grid with Subtle Radial Fade Mask -->
     <div id="ambientDots" class="absolute inset-0 [background-size:26px_26px] [mask-image:radial-gradient(ellipse_75%_65%_at_50%_35%,#000_50%,transparent_100%)] opacity-70"
@@ -42,10 +46,10 @@
       
       <!-- Brand & Emblem -->
       <div class="flex items-center gap-3">
-        <!-- SVG Diamond Aperture Emblem -->
+        <!-- SVG Diamond Aperture Emblem with Indigo Rim -->
         <div class="w-9 h-9 rounded-xl flex items-center justify-center font-extrabold text-sm shadow-sm transition-all"
              style="background: var(--logo-bg); color: var(--logo-text); border: 1px solid var(--logo-border);">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="w-4 h-4 text-indigo-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
             <polyline points="2 17 12 22 22 17"></polyline>
             <polyline points="2 12 12 17 22 12"></polyline>
@@ -54,7 +58,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-sm sm:text-base font-extrabold tracking-tight uppercase" style="color: var(--text-main);">VeriFact AI</h1>
-            <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full pill-theme font-semibold">
+            <span class="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full badge-indigo font-bold shadow-sm">
               Pro v2.5
             </span>
           </div>
@@ -74,7 +78,7 @@
         </button>
 
         <!-- Backend Status Pill -->
-        <div id="serverStatus" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono pill-theme shadow-sm">
+        <div id="serverStatus" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono pill-theme shadow-sm">
           <span id="statusDot" class="w-2 h-2 rounded-full bg-zinc-400 animate-pulse"></span>
           <span id="statusText" class="hidden sm:inline">Checking Engine...</span>
           <span class="sm:hidden font-mono text-[10px]" id="statusMobileText">Engine</span>
@@ -88,8 +92,8 @@
 
     <!-- Hero Announcement & Value Proposition -->
     <div class="text-center sm:text-left space-y-2.5">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase pill-theme">
-        <span class="w-1.5 h-1.5 rounded-full animate-ping" style="background: var(--text-main);"></span>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase badge-indigo shadow-sm">
+        <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping"></span>
         Autonomous Fact-Checking Intelligence • Multimodal Suite
       </div>
       <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-metallic leading-tight">
@@ -100,42 +104,55 @@
       </p>
     </div>
 
-    <!-- Live Telemetry KPI Cards -->
+    <!-- Live Telemetry KPI Cards with Subtle Pastel Accents -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-      <div class="mono-card-subtle p-3.5 flex flex-col justify-between hover:translate-y-[-1px] transition">
+      
+      <!-- 1. NLP Core (Soft Indigo) -->
+      <div class="mono-card-subtle p-3.5 flex flex-col justify-between hover:translate-y-[-1.5px] hover:border-indigo-300/50 transition">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] uppercase tracking-wider" style="color: var(--text-subtle);">NLP Core</span>
-          <span class="text-xs">🌐</span>
+          <span class="text-[10px] uppercase tracking-wider font-bold" style="color: var(--text-subtle);">NLP Core</span>
+          <div class="w-6 h-6 rounded-md flex items-center justify-center text-xs badge-indigo">
+            🌐
+          </div>
         </div>
-        <div class="mt-2 font-bold text-sm" style="color: var(--text-main);">Bangla & English</div>
-        <span class="text-[10px]" style="color: var(--text-muted);">Bilingual TF-IDF + Classifier</span>
+        <div class="mt-2.5 font-bold text-sm" style="color: var(--text-main);">Bangla & English</div>
+        <span class="text-[10px] mt-0.5" style="color: var(--text-muted);">Bilingual TF-IDF + Classifier</span>
       </div>
 
-      <div class="mono-card-subtle p-3.5 flex flex-col justify-between hover:translate-y-[-1px] transition">
+      <!-- 2. Ground Truth (Soft Emerald) -->
+      <div class="mono-card-subtle p-3.5 flex flex-col justify-between hover:translate-y-[-1.5px] hover:border-emerald-300/50 transition">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] uppercase tracking-wider" style="color: var(--text-subtle);">Ground Truth</span>
-          <span class="text-xs">📚</span>
+          <span class="text-[10px] uppercase tracking-wider font-bold" style="color: var(--text-subtle);">Ground Truth</span>
+          <div class="w-6 h-6 rounded-md flex items-center justify-center text-xs badge-emerald">
+            📚
+          </div>
         </div>
-        <div class="mt-2 font-bold text-sm" style="color: var(--text-main);">70,000+ Articles</div>
-        <span class="text-[10px]" style="color: var(--text-muted);">Indexed Hybrid Retriever</span>
+        <div class="mt-2.5 font-bold text-sm" style="color: var(--text-main);">70,000+ Articles</div>
+        <span class="text-[10px] mt-0.5" style="color: var(--text-muted);">Indexed Hybrid Retriever</span>
       </div>
 
-      <div class="mono-card-subtle p-3.5 flex flex-col justify-between hover:translate-y-[-1px] transition">
+      <!-- 3. Vision Forensics (Soft Violet) -->
+      <div class="mono-card-subtle p-3.5 flex flex-col justify-between hover:translate-y-[-1.5px] hover:border-purple-300/50 transition">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] uppercase tracking-wider" style="color: var(--text-subtle);">Vision Forensics</span>
-          <span class="text-xs">🔬</span>
+          <span class="text-[10px] uppercase tracking-wider font-bold" style="color: var(--text-subtle);">Vision Forensics</span>
+          <div class="w-6 h-6 rounded-md flex items-center justify-center text-xs badge-violet">
+            🔬
+          </div>
         </div>
-        <div class="mt-2 font-bold text-sm" style="color: var(--text-main);">ELA Spectrum</div>
-        <span class="text-[10px]" style="color: var(--text-muted);">Resave compression anomaly</span>
+        <div class="mt-2.5 font-bold text-sm" style="color: var(--text-main);">ELA Spectrum</div>
+        <span class="text-[10px] mt-0.5" style="color: var(--text-muted);">Resave compression anomaly</span>
       </div>
 
-      <div class="mono-card-subtle p-3.5 flex flex-col justify-between hover:translate-y-[-1px] transition">
+      <!-- 4. Security (Soft Sky) -->
+      <div class="mono-card-subtle p-3.5 flex flex-col justify-between hover:translate-y-[-1.5px] hover:border-sky-300/50 transition">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] uppercase tracking-wider" style="color: var(--text-subtle);">Security</span>
-          <span class="text-xs">🛡️</span>
+          <span class="text-[10px] uppercase tracking-wider font-bold" style="color: var(--text-subtle);">Security</span>
+          <div class="w-6 h-6 rounded-md flex items-center justify-center text-xs badge-sky">
+            🛡️
+          </div>
         </div>
-        <div class="mt-2 font-bold text-sm" style="color: var(--text-main);">SSRF Guard</div>
-        <span class="text-[10px]" style="color: var(--text-muted);">Private IP & loopback block</span>
+        <div class="mt-2.5 font-bold text-sm" style="color: var(--text-main);">SSRF Guard</div>
+        <span class="text-[10px] mt-0.5" style="color: var(--text-muted);">Private IP & loopback block</span>
       </div>
     </div>
 
@@ -164,12 +181,12 @@
         </div>
       </div>
 
-      <!-- Segmented Modality Tabs -->
+      <!-- Segmented Modality Tabs with Subtle Color Icons -->
       <div class="inline-flex rounded-xl p-1 gap-1 flex-wrap sm:flex-nowrap" style="background: var(--tab-bar-bg); border: 1px solid var(--card-border);">
         <button type="button" id="tabText" onclick="setInputMode('text')"
           class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition cursor-pointer"
           style="background: var(--tab-active-bg); color: var(--tab-active-text); box-shadow: var(--tab-active-shadow);">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -182,7 +199,7 @@
         <button type="button" id="tabUrl" onclick="setInputMode('url')"
           class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition cursor-pointer"
           style="color: var(--tab-inactive-text); background: transparent;">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
           </svg>
@@ -192,7 +209,7 @@
         <button type="button" id="tabImage" onclick="setInputMode('image')"
           class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition cursor-pointer"
           style="color: var(--tab-inactive-text); background: transparent;">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
             <circle cx="8.5" cy="8.5" r="1.5"></circle>
             <polyline points="21 15 16 10 5 21"></polyline>
@@ -211,8 +228,8 @@
           
           <!-- Character & Shortcut HUD -->
           <div class="absolute bottom-3 right-3 flex items-center gap-2 pointer-events-none">
-            <span id="charCount" class="text-[10px] font-mono px-2 py-0.5 rounded pill-theme opacity-80">0 chars</span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded pill-theme opacity-80 hidden sm:inline">Ctrl + ↵</span>
+            <span id="charCount" class="text-[10px] font-mono px-2 py-0.5 rounded pill-theme opacity-85">0 chars</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded badge-indigo opacity-90 hidden sm:inline">Ctrl + ↵</span>
           </div>
         </div>
       </div>
@@ -223,7 +240,7 @@
           <input id="newsUrlInput" type="url"
             placeholder="Paste news article URL (e.g., https://www.bbc.com/news/article...)"
             class="mono-input w-full rounded-2xl px-4 py-3.5 text-sm outline-none pl-11" />
-          <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style="color: var(--text-muted);">
+          <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-sky-500">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="2" y1="12" x2="22" y2="12"></line>
@@ -232,16 +249,16 @@
           </div>
         </div>
         <div class="flex items-center gap-2 text-[11px] font-mono" style="color: var(--text-muted);">
-          <span class="w-1.5 h-1.5 rounded-full" style="background: var(--text-muted);"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
           Scrapes text directly with SSRF protection against loopback/internal hosts.
         </div>
       </div>
 
       <!-- Modality 3: Image Forensics Input -->
       <div id="imageInputContainer" class="hidden space-y-4">
-        <div class="mono-card-subtle p-6 border-dashed rounded-2xl text-center space-y-3 cursor-pointer transition hover:border-black/30 dark:hover:border-white/30" style="border-color: var(--card-border);">
-          <div class="w-12 h-12 mx-auto rounded-full flex items-center justify-center pill-theme shadow-sm">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <div class="mono-card-subtle p-6 border-dashed rounded-2xl text-center space-y-3 cursor-pointer transition hover:border-violet-400/60" style="border-color: rgba(139, 92, 246, 0.3);">
+          <div class="w-12 h-12 mx-auto rounded-full flex items-center justify-center badge-violet shadow-sm">
+            <svg class="w-6 h-6 text-violet-600 dark:text-violet-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
               <circle cx="8.5" cy="8.5" r="1.5"></circle>
               <polyline points="21 15 16 10 5 21"></polyline>
@@ -249,7 +266,7 @@
           </div>
           <div>
             <div class="text-xs font-bold" style="color: var(--text-main);">Upload Image for Error Level Analysis</div>
-            <p class="text-[11px] font-mono mt-0.5" style="color: var(--text-muted);">JPEG, PNG, WebP up to 5 MB</p>
+            <p class="text-[11px] font-mono mt-0.5 text-violet-600/80 dark:text-violet-400/80">JPEG, PNG, WebP up to 5 MB</p>
           </div>
           <input id="imageFileInput" type="file" accept="image/jpeg,image/jpg,image/png,image/webp,image/avif"
             onchange="previewSelectedImage()"
@@ -259,11 +276,11 @@
 
         <div id="imagePreviewWrapper" class="hidden pt-1">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-[11px] font-mono uppercase tracking-wider" style="color: var(--text-subtle);">Image Preview:</span>
-            <button type="button" onclick="clearImagePreview()" class="text-[11px] font-mono hover:underline cursor-pointer" style="color: var(--text-muted);">Remove Image</button>
+            <span class="text-[11px] font-mono uppercase tracking-wider text-violet-600 dark:text-violet-400">Image Preview:</span>
+            <button type="button" onclick="clearImagePreview()" class="text-[11px] font-mono hover:underline cursor-pointer text-rose-500">Remove Image</button>
           </div>
-          <img id="imagePreview" src="" alt="Selected preview" class="max-h-64 rounded-2xl object-contain p-2 shadow-2xl mx-auto"
-               style="border: 1px solid var(--card-border); background: var(--card-subtle-bg);" />
+          <img id="imagePreview" src="" alt="Selected preview" class="max-h-64 rounded-2xl object-contain p-2 shadow-2xl mx-auto border border-violet-200/50 dark:border-violet-800/40"
+               style="background: var(--card-subtle-bg);" />
         </div>
       </div>
 
@@ -271,10 +288,10 @@
       <div class="flex flex-wrap items-center justify-between gap-4 pt-3 border-t" style="border-color: var(--card-border);">
         <div id="sampleControls" class="flex flex-wrap items-center gap-2 text-xs">
           <span class="font-mono text-[11px]" style="color: var(--text-muted);">Samples:</span>
-          <button type="button" onclick="loadSample('en')" class="px-3 py-1 rounded-lg pill-theme hover:opacity-80 text-xs transition cursor-pointer">
+          <button type="button" onclick="loadSample('en')" class="px-3 py-1 rounded-lg pill-theme hover:badge-indigo text-xs transition cursor-pointer">
             NASA Moon Ice
           </button>
-          <button type="button" onclick="loadSample('bn')" class="px-3 py-1 rounded-lg pill-theme hover:opacity-80 text-xs transition cursor-pointer">
+          <button type="button" onclick="loadSample('bn')" class="px-3 py-1 rounded-lg pill-theme hover:badge-emerald text-xs transition cursor-pointer">
             বাংলাদেশ ব্যাংক
           </button>
           <button type="button" onclick="clearAll()" class="px-3 py-1 rounded-lg hover:underline transition text-xs font-mono cursor-pointer" style="color: var(--text-muted);">
@@ -286,7 +303,7 @@
         <button id="verifyBtn" onclick="verifyNews()"
           class="btn-luxury px-6 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 cursor-pointer shadow-md">
           <span id="btnLabel">Analyze & Verify Claim</span>
-          <svg id="btnSpinner" class="hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" style="color: var(--btn-luxury-text);">
+          <svg id="btnSpinner" class="hidden w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
           </svg>
@@ -308,7 +325,7 @@
           <div>
             <div class="flex items-center justify-between">
               <span class="text-[11px] uppercase tracking-widest font-mono" style="color: var(--text-subtle);">Prediction Verdict</span>
-              <span id="langBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full pill-theme font-semibold">English</span>
+              <span id="langBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full badge-indigo font-bold">English</span>
             </div>
             
             <h3 id="verdictTitle" class="text-2xl font-black mt-3.5 tracking-tight" style="color: var(--text-main);">REAL</h3>
@@ -335,7 +352,7 @@
               <span id="evidenceHeading" class="text-xs uppercase tracking-wider font-mono font-semibold" style="color: var(--text-main);">
                 Hybrid Fact Retrieval & Pattern Analysis
               </span>
-              <span id="sourceBadge" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full pill-theme font-semibold">
+              <span id="sourceBadge" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full badge-indigo font-bold">
                 Ground-Truth Match
               </span>
             </div>
@@ -346,7 +363,7 @@
 
           <!-- Reference Sources Links -->
           <div id="linksContainer" class="hidden pt-3 border-t space-y-2" style="border-color: var(--card-border);">
-            <span class="text-xs font-mono uppercase" style="color: var(--text-subtle);">Verified Ground Truth Sources:</span>
+            <span class="text-xs font-mono uppercase text-sky-600 dark:text-sky-400">Verified Ground Truth Sources:</span>
             <ul id="linksList" class="space-y-1 text-xs underline font-mono" style="color: var(--text-main);"></ul>
           </div>
         </div>
@@ -356,7 +373,7 @@
       <details class="mono-card p-5 text-xs transition" style="color: var(--text-muted);">
         <summary class="cursor-pointer font-mono font-medium select-none hover:opacity-80 transition flex items-center justify-between" style="color: var(--text-main);">
           <span>View Complete JSON Engine Telemetry</span>
-          <button type="button" onclick="copyJsonPayload(event)" class="text-[11px] font-mono px-2.5 py-1 rounded-lg pill-theme hover:opacity-80 cursor-pointer">
+          <button type="button" onclick="copyJsonPayload(event)" class="text-[11px] font-mono px-2.5 py-1 rounded-lg badge-indigo hover:opacity-80 cursor-pointer">
             <span id="copyJsonBtnText">Copy JSON</span>
           </button>
         </summary>

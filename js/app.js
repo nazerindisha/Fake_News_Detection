@@ -301,14 +301,16 @@ function renderImageResults(data) {
   if (verdictTitle) verdictTitle.textContent = data.verdict || "ANALYZED";
   if (isSuspicious) {
     if (verdictTitle) verdictTitle.className = "text-xl font-black mt-3.5 tracking-tight text-amber-600 dark:text-amber-400";
-    if (verdictCard) verdictCard.style.borderLeft = "5px solid #d97706";
-    if (confidenceBar) confidenceBar.style.background = "#d97706";
+    if (verdictCard) verdictCard.style.borderLeft = "5px solid #f59e0b";
+    if (confidenceBar) confidenceBar.style.background = "#f59e0b";
     if (confidenceLevel) confidenceLevel.textContent = "High Local Compression Discrepancy";
+    if (langBadge) langBadge.className = "text-[10px] font-mono px-2.5 py-0.5 rounded-full badge-amber font-bold";
   } else {
-    if (verdictTitle) verdictTitle.className = "text-xl font-black mt-3.5 tracking-tight";
-    if (verdictCard) verdictCard.style.borderLeft = "5px solid var(--verdict-border)";
-    if (confidenceBar) confidenceBar.style.background = "var(--progress-bar)";
+    if (verdictTitle) verdictTitle.className = "text-xl font-black mt-3.5 tracking-tight text-emerald-700 dark:text-emerald-400";
+    if (verdictCard) verdictCard.style.borderLeft = "5px solid #10b981";
+    if (confidenceBar) confidenceBar.style.background = "#10b981";
     if (confidenceLevel) confidenceLevel.textContent = "Uniform Error Level Spectrum";
+    if (langBadge) langBadge.className = "text-[10px] font-mono px-2.5 py-0.5 rounded-full badge-emerald font-bold";
   }
 
   let conf = Number(data.confidence ?? 0.5);
@@ -324,23 +326,23 @@ function renderImageResults(data) {
   if (matchesContainer) {
     matchesContainer.innerHTML = `
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-        <div class="p-3.5 rounded-xl mono-card-subtle">
-          <div class="text-[10px] uppercase font-bold" style="color: var(--text-subtle);">ela_mean</div>
+        <div class="p-3.5 rounded-xl mono-card-subtle border border-indigo-200/50 dark:border-indigo-800/40">
+          <div class="text-[10px] uppercase font-bold text-indigo-600 dark:text-indigo-400">ela_mean</div>
           <div class="text-base font-extrabold mt-1" style="color: var(--text-main);">${f.ela_mean ?? "-"}</div>
           <span class="text-[9px]" style="color: var(--text-muted);">&lt; 4.5 typical</span>
         </div>
-        <div class="p-3.5 rounded-xl mono-card-subtle">
-          <div class="text-[10px] uppercase font-bold" style="color: var(--text-subtle);">ela_std</div>
+        <div class="p-3.5 rounded-xl mono-card-subtle border border-purple-200/50 dark:border-purple-800/40">
+          <div class="text-[10px] uppercase font-bold text-purple-600 dark:text-purple-400">ela_std</div>
           <div class="text-base font-extrabold mt-1" style="color: var(--text-main);">${f.ela_std ?? "-"}</div>
           <span class="text-[9px]" style="color: var(--text-muted);">Standard deviation</span>
         </div>
-        <div class="p-3.5 rounded-xl mono-card-subtle">
-          <div class="text-[10px] uppercase font-bold" style="color: var(--text-subtle);">ela_max</div>
+        <div class="p-3.5 rounded-xl mono-card-subtle border border-amber-200/50 dark:border-amber-800/40">
+          <div class="text-[10px] uppercase font-bold text-amber-600 dark:text-amber-400">ela_max</div>
           <div class="text-base font-extrabold mt-1" style="color: var(--text-main);">${f.ela_max ?? "-"}</div>
           <span class="text-[9px]" style="color: var(--text-muted);">Max delta pixel</span>
         </div>
-        <div class="p-3.5 rounded-xl mono-card-subtle">
-          <div class="text-[10px] uppercase font-bold" style="color: var(--text-subtle);">high_error_ratio</div>
+        <div class="p-3.5 rounded-xl mono-card-subtle border border-sky-200/50 dark:border-sky-800/40">
+          <div class="text-[10px] uppercase font-bold text-sky-600 dark:text-sky-400">high_error_ratio</div>
           <div class="text-base font-extrabold mt-1" style="color: var(--text-main);">${f.high_error_ratio ?? "-"}</div>
           <span class="text-[9px]" style="color: var(--text-muted);">Anomaly ratio</span>
         </div>
@@ -378,19 +380,27 @@ function renderResults(data) {
   if (isFake) {
     if (verdictTitle) {
       verdictTitle.textContent = "FAKE / MISLEADING";
-      verdictTitle.className = "text-2xl font-black mt-3.5 tracking-tight text-red-600 dark:text-red-400";
+      verdictTitle.className = "text-2xl font-black mt-3.5 tracking-tight text-rose-600 dark:text-rose-400";
     }
-    if (verdictCard) verdictCard.style.borderLeft = "5px solid #dc2626";
-    if (confidenceBar) confidenceBar.style.background = "#dc2626";
-    if (confidenceLevel) confidenceLevel.textContent = "Linguistic & Empirical Anomaly Detected";
+    if (verdictCard) verdictCard.style.borderLeft = "5px solid #f43f5e";
+    if (confidenceBar) confidenceBar.style.background = "#f43f5e";
+    if (confidenceLevel) {
+      confidenceLevel.textContent = "Linguistic & Empirical Anomaly Detected";
+      confidenceLevel.className = "text-[10px] font-mono mt-1 text-rose-600 dark:text-rose-400 font-semibold";
+    }
+    if (langBadge) langBadge.className = "text-[10px] font-mono px-2.5 py-0.5 rounded-full badge-amber font-bold";
   } else {
     if (verdictTitle) {
       verdictTitle.textContent = "REAL / AUTHENTIC";
-      verdictTitle.className = "text-2xl font-black mt-3.5 tracking-tight";
+      verdictTitle.className = "text-2xl font-black mt-3.5 tracking-tight text-emerald-700 dark:text-emerald-400";
     }
-    if (verdictCard) verdictCard.style.borderLeft = "5px solid var(--verdict-border)";
-    if (confidenceBar) confidenceBar.style.background = "var(--progress-bar)";
-    if (confidenceLevel) confidenceLevel.textContent = "Corroborated by Verified Records";
+    if (verdictCard) verdictCard.style.borderLeft = "5px solid #10b981";
+    if (confidenceBar) confidenceBar.style.background = "#10b981";
+    if (confidenceLevel) {
+      confidenceLevel.textContent = "Corroborated by Verified Records";
+      confidenceLevel.className = "text-[10px] font-mono mt-1 text-emerald-600 dark:text-emerald-400 font-semibold";
+    }
+    if (langBadge) langBadge.className = "text-[10px] font-mono px-2.5 py-0.5 rounded-full badge-emerald font-bold";
   }
 
   let conf = Number(data.confidence ?? 85);
