@@ -576,43 +576,22 @@
     el.innerHTML = `
       <svg class="w-full h-full animate-build" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <!-- Top Atmospheric Sky Gradients (Architectural Slate Monochrome) -->
+          <!-- Top Atmospheric Sky Gradients (Soft, Light & Airy) -->
           <linearGradient id="skylineTopGrad1" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--skyline-sky-start)" stop-opacity="0.45" />
+            <stop offset="0%" stop-color="var(--skyline-sky-start)" stop-opacity="0.3" />
             <stop offset="100%" stop-color="var(--skyline-sky-end)" stop-opacity="0" />
           </linearGradient>
 
           <linearGradient id="skylineTopGrad2" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--skyline-sky-start)" stop-opacity="0.25" />
+            <stop offset="0%" stop-color="var(--skyline-sky-start)" stop-opacity="0.15" />
             <stop offset="100%" stop-color="var(--skyline-sky-end)" stop-opacity="0" />
           </linearGradient>
 
-          <!-- Bottom Layered Horizon Wave Gradients (Architectural Slate Monochrome) -->
-          <linearGradient id="skylineWave1" x1="0" y1="0" x2="1" y2="0.6">
-            <stop offset="0%" stop-color="var(--skyline-wave1-start)" stop-opacity="0.8" />
-            <stop offset="100%" stop-color="var(--skyline-wave1-end)" stop-opacity="0.6" />
-          </linearGradient>
-
-          <linearGradient id="skylineWave2" x1="0" y1="0" x2="1" y2="0.5">
-            <stop offset="0%" stop-color="var(--skyline-wave2-start)" stop-opacity="0.85" />
-            <stop offset="100%" stop-color="var(--skyline-wave2-end)" stop-opacity="0.75" />
-          </linearGradient>
-
-          <linearGradient id="skylineWave3" x1="0" y1="0" x2="1" y2="0.3">
-            <stop offset="0%" stop-color="var(--skyline-wave3-start)" stop-opacity="0.92" />
-            <stop offset="100%" stop-color="var(--skyline-wave3-end)" stop-opacity="0.82" />
-          </linearGradient>
-
-          <linearGradient id="skylineWave4" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="var(--skyline-wave4-start)" stop-opacity="1" />
-            <stop offset="100%" stop-color="var(--skyline-wave4-end)" stop-opacity="0.95" />
-          </linearGradient>
-
-          <!-- Soft Horizon Mist Mask to blend base of skyscrapers -->
+          <!-- Soft Horizon Mist Mask to blend base of skyscrapers seamlessly into clean canvas -->
           <linearGradient id="skyMistMaskGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
-            <stop offset="68%" stop-color="#ffffff" stop-opacity="0.95" />
-            <stop offset="88%" stop-color="#ffffff" stop-opacity="0.25" />
+            <stop offset="65%" stop-color="#ffffff" stop-opacity="0.95" />
+            <stop offset="84%" stop-color="#ffffff" stop-opacity="0.2" />
             <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
           </linearGradient>
           <mask id="skyMistMask">
@@ -622,13 +601,11 @@
 
         <!-- 1. Top Atmosphere Flowing Ribbons (Parallax Plane 1) -->
         <g id="skylineGroupSky" class="skyline-sky-ribbon">
-          <path d="M 0 0 L 1440 0 L 1440 115 C 1050 50 500 160 0 90 Z" fill="url(#skylineTopGrad1)" />
-          <path d="M 0 0 L 1440 0 L 1440 65 C 950 15 420 105 0 50 Z" fill="url(#skylineTopGrad2)" />
-          <path d="M 0 80 C 480 150 980 45 1440 100" fill="none" stroke="var(--skyline-wave2-end)" stroke-width="1.2" opacity="0.3" />
-          <path d="M 0 110 C 550 185 1020 75 1440 135" fill="none" stroke="var(--skyline-wave1-end)" stroke-width="0.8" opacity="0.25" />
+          <path d="M 0 0 L 1440 0 L 1440 100 C 1050 45 500 135 0 75 Z" fill="url(#skylineTopGrad1)" />
+          <path d="M 0 0 L 1440 0 L 1440 55 C 950 15 420 85 0 40 Z" fill="url(#skylineTopGrad2)" />
         </g>
 
-        <!-- 2. Digital City Matrix Skyline (Masked with Horizon Mist - Multiplane Parallax 2 & 3) -->
+        <!-- 2. Digital City Matrix Skyline (Clean Horizon - Multiplane Parallax 2 & 3) -->
         <g mask="url(#skyMistMask)">
           <g id="skylineGroupBack" class="skyline-plane-back">
             ${backBuildingsSVG}
@@ -636,21 +613,6 @@
           <g id="skylineGroupFore" class="skyline-plane-fore">
             ${foreBuildingsSVG}
           </g>
-        </g>
-
-        <!-- 3. Bottom Layered Flowing Horizon Waves (Parallax Plane 4) -->
-        <g id="skylineGroupWaves" class="skyline-wave">
-          <!-- Layer 1: Uppermost gentle crest -->
-          <path d="M 0 740 C 380 690 920 790 1440 710 L 1440 900 L 0 900 Z" fill="url(#skylineWave1)" />
-          
-          <!-- Layer 2: Rolling middle wave -->
-          <path d="M 0 780 C 420 740 980 835 1440 755 L 1440 900 L 0 900 Z" fill="url(#skylineWave2)" />
-          
-          <!-- Layer 3: Graphite wave ribbon -->
-          <path d="M 0 825 C 390 790 1040 870 1440 805 L 1440 900 L 0 900 Z" fill="url(#skylineWave3)" />
-          
-          <!-- Layer 4: Deepest charcoal bottom horizon ribbon -->
-          <path d="M 0 865 C 450 835 1100 895 1440 850 L 1440 900 L 0 900 Z" fill="url(#skylineWave4)" />
         </g>
       </svg>
     `;
@@ -673,7 +635,6 @@
 
     const groupFore = document.getElementById("skylineGroupFore");
     const groupBack = document.getElementById("skylineGroupBack");
-    const groupWaves = document.getElementById("skylineGroupWaves");
     const groupSky = document.getElementById("skylineGroupSky");
 
     if (groupFore) {
@@ -683,10 +644,6 @@
     if (groupBack) {
       // Background buildings move with subtle distance parallax (12px)
       groupBack.setAttribute("transform", `translate(${(skylineParallaxX * 12).toFixed(2)}, 0)`);
-    }
-    if (groupWaves) {
-      // Horizon waves shift gently in foreground (7px)
-      groupWaves.setAttribute("transform", `translate(${(skylineParallaxX * 7).toFixed(2)}, 0)`);
     }
     if (groupSky) {
       // Sky ribbons shift subtly in opposite direction (-8px)

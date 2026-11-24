@@ -84,18 +84,10 @@
   --footer-bg: rgba(255, 255, 255, 0.92);
   --footer-border: #e2e8f0;
 
-  /* Layer 3: Skyline Architectural Slate Gray & Layered Monochrome Horizon */
+  /* Layer 3: Skyline Architectural Slate Gray & Clean Ambient Horizon */
   --skyline-sky-start: #cbd5e1;       /* Cool slate-300 */
   --skyline-sky-end: #f8fafc;         /* Soft canvas slate-50 */
-  --skyline-wave1-start: #f1f5f9;     /* Slate-100 */
-  --skyline-wave1-end: #e2e8f0;       /* Slate-200 */
-  --skyline-wave2-start: #e2e8f0;     /* Slate-200 */
-  --skyline-wave2-end: #cbd5e1;       /* Slate-300 */
-  --skyline-wave3-start: #94a3b8;     /* Slate-400 */
-  --skyline-wave3-end: #64748b;       /* Slate-500 */
-  --skyline-wave4-start: #475569;     /* Slate-600 */
-  --skyline-wave4-end: #1e293b;       /* Deep slate-800 */
-  --skyline-win-fore: #334155;        /* Foreground building windows: Charcoal slate-700 */
+  --skyline-win-fore: #475569;        /* Foreground building windows: Slate-600 */
   --skyline-win-back: #94a3b8;        /* Background building windows: Slate-400 */
   --skyline-mist: #ffffff;
 }
@@ -176,19 +168,11 @@
   --footer-bg: rgba(6, 7, 10, 0.92);
   --footer-border: rgba(255, 255, 255, 0.08);
 
-  /* Layer 3: Skyline Architectural Slate Gray (Dark Mode) */
+  /* Layer 3: Skyline Architectural Slate Gray & Clean Ambient Horizon (Dark Mode) */
   --skyline-sky-start: #1e293b;       /* Slate-800 */
   --skyline-sky-end: #090d16;         /* Deep canvas */
-  --skyline-wave1-start: #0f172a;     /* Slate-900 */
-  --skyline-wave1-end: #1e293b;       /* Slate-800 */
-  --skyline-wave2-start: #1e293b;     /* Slate-800 */
-  --skyline-wave2-end: #334155;       /* Slate-700 */
-  --skyline-wave3-start: #1e293b;     /* Slate-800 */
-  --skyline-wave3-end: #0f172a;       /* Slate-900 */
-  --skyline-wave4-start: #090d16;     /* Deep slate */
-  --skyline-wave4-end: #030304;       /* Obsidian */
-  --skyline-win-fore: #e2e8f0;        /* Platinum / titanium silver dots */
-  --skyline-win-back: #64748b;        /* Subtle slate-500 dots */
+  --skyline-win-fore: #cbd5e1;        /* Platinum / titanium silver dots */
+  --skyline-win-back: #475569;        /* Subtle slate-600 dots */
   --skyline-mist: #030304;
 }
 
@@ -267,9 +251,6 @@ body {
 
 /* Layer 3: Digital City Matrix Skyline & Layered Horizon Waves */
 .skyline-sky-ribbon {
-  transition: fill 0.3s ease;
-}
-.skyline-wave {
   transition: fill 0.3s ease;
 }
 .skyline-window {
