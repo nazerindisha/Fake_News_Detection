@@ -62,28 +62,45 @@
     el.id = "bgLayer-grid";
     el.className = "vector-bg-layer";
     el.innerHTML = `
+      <!-- Dynamic Cursor Illumination Spotlight -->
+      <div id="gridCursorSpotlight" class="absolute inset-0 pointer-events-none transition-opacity duration-300"></div>
+
+      <!-- Autonomous Sweeping Laser Line -->
+      <div class="grid-laser-scan-line"></div>
+
       <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <!-- Minor Subdivisions Grid (24px) -->
-          <pattern id="svgMinorGrid" width="24" height="24" patternUnits="userSpaceOnUse">
-            <path d="M 24 0 L 0 0 0 24" fill="none" class="stroke-minor-grid" stroke-width="0.65" />
+          <!-- Minor Subdivisions Dot Matrix (24px) -->
+          <pattern id="svgDotGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+            <circle cx="12" cy="12" r="0.75" class="fill-cross-subtle" opacity="0.45" />
           </pattern>
 
-          <!-- Major Coordinate Grid (120px) with Crosses (+) -->
+          <!-- Minor Subdivisions Grid Lines (24px) -->
+          <pattern id="svgMinorGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M 24 0 L 0 0 0 24" fill="none" class="stroke-minor-grid" stroke-width="0.55" stroke-dasharray="2 3" />
+          </pattern>
+
+          <!-- Major Technical Coordinate Grid (120px) with Crosses (+) -->
           <pattern id="svgMajorGrid" width="120" height="120" patternUnits="userSpaceOnUse">
             <rect width="120" height="120" fill="url(#svgMinorGrid)" />
-            <path d="M 120 0 L 0 0 0 120" fill="none" class="stroke-major-grid" stroke-width="1.25" />
-            
-            <!-- Primary Intersection Coordinate Crosses (+) -->
-            <path d="M -7 0 L 7 0 M 0 -7 L 0 7" class="stroke-cross" stroke-width="1.8" />
-            <circle cx="0" cy="0" r="1.2" class="fill-cross" />
+            <rect width="120" height="120" fill="url(#svgDotGrid)" />
+            <path d="M 120 0 L 0 0 0 120" fill="none" class="stroke-major-grid" stroke-width="1.1" />
 
-            <path d="M 113 120 L 127 120 M 120 113 L 120 127" class="stroke-cross" stroke-width="1.8" />
-            <circle cx="120" cy="120" r="1.2" class="fill-cross" />
+            <!-- Primary Intersection Coordinate Crosses (+) with concentric ring -->
+            <path d="M -9 0 L 9 0 M 0 -9 L 0 9" class="stroke-cross" stroke-width="1.8" />
+            <circle cx="0" cy="0" r="2.5" class="stroke-cross" fill="none" stroke-width="0.8" opacity="0.8" />
+            <circle cx="0" cy="0" r="1" class="fill-cross" />
 
-            <!-- Intermediate Mid-Point Subtle Ticks -->
-            <path d="M 54 60 L 66 60 M 60 54 L 60 66" class="stroke-cross-subtle" stroke-width="1.2" />
-            <circle cx="60" cy="60" r="0.9" class="fill-cross-subtle" />
+            <path d="M 111 120 L 129 120 M 120 111 L 120 129" class="stroke-cross" stroke-width="1.8" />
+            <circle cx="120" cy="120" r="2.5" class="stroke-cross" fill="none" stroke-width="0.8" opacity="0.8" />
+            <circle cx="120" cy="120" r="1" class="fill-cross" />
+
+            <!-- Intermediate Mid-Point Sub-ticks at (60, 60) -->
+            <path d="M 53 60 L 67 60 M 60 53 L 60 67" class="stroke-cross-subtle" stroke-width="1.2" />
+            <circle cx="60" cy="60" r="1.1" class="fill-cross-subtle" />
+
+            <!-- Micro Hash Ticks on Major Axis -->
+            <path d="M 0 57 L 0 63 M 120 57 L 120 63 M 57 0 L 63 0 M 57 120 L 63 120" class="stroke-minor-grid" stroke-width="1.2" />
           </pattern>
         </defs>
 
@@ -91,29 +108,45 @@
         <rect width="100%" height="100%" fill="url(#svgMajorGrid)" />
 
         <!-- Viewport Perimeter Alignment Reticles & Calipers -->
-        <g class="stroke-cross" fill="none" opacity="0.65">
+        <g class="stroke-cross" fill="none" opacity="0.85">
           <!-- Top-Left Corner Caliper Target -->
-          <svg x="0" y="0" width="60" height="60" overflow="visible">
-            <path d="M 24 48 L 24 24 L 48 24" stroke-width="2" />
-            <circle cx="24" cy="24" r="3" />
+          <svg x="0" y="0" width="80" height="80" overflow="visible">
+            <g transform="translate(24, 24)">
+              <path d="M 0 32 L 0 0 L 32 0" stroke-width="2" />
+              <circle cx="0" cy="0" r="4" stroke-width="1.2" />
+              <circle cx="0" cy="0" r="1.5" class="fill-cross" />
+              <path d="M -6 0 L 6 0 M 0 -6 L 0 6" stroke-width="1" />
+            </g>
           </svg>
-          
+
           <!-- Top-Right Corner Caliper Target -->
-          <svg x="100%" y="0" width="60" height="60" overflow="visible">
-            <path d="M -48 24 L -24 24 L -24 48" stroke-width="2" />
-            <circle cx="-24" cy="24" r="3" />
+          <svg x="100%" y="0" width="80" height="80" overflow="visible">
+            <g transform="translate(-24, 24)">
+              <path d="M 0 32 L 0 0 L -32 0" stroke-width="2" />
+              <circle cx="0" cy="0" r="4" stroke-width="1.2" />
+              <circle cx="0" cy="0" r="1.5" class="fill-cross" />
+              <path d="M -6 0 L 6 0 M 0 -6 L 0 6" stroke-width="1" />
+            </g>
           </svg>
 
           <!-- Bottom-Left Corner Caliper Target -->
-          <svg x="0" y="100%" width="60" height="60" overflow="visible">
-            <path d="M 24 -48 L 24 -24 L 48 -24" stroke-width="2" />
-            <circle cx="24" cy="-24" r="3" />
+          <svg x="0" y="100%" width="80" height="80" overflow="visible">
+            <g transform="translate(24, -24)">
+              <path d="M 0 -32 L 0 0 L 32 0" stroke-width="2" />
+              <circle cx="0" cy="0" r="4" stroke-width="1.2" />
+              <circle cx="0" cy="0" r="1.5" class="fill-cross" />
+              <path d="M -6 0 L 6 0 M 0 -6 L 0 6" stroke-width="1" />
+            </g>
           </svg>
 
           <!-- Bottom-Right Corner Caliper Target -->
-          <svg x="100%" y="100%" width="60" height="60" overflow="visible">
-            <path d="M -48 -24 L -24 -24 L -24 -48" stroke-width="2" />
-            <circle cx="-24" cy="-24" r="3" />
+          <svg x="100%" y="100%" width="80" height="80" overflow="visible">
+            <g transform="translate(-24, -24)">
+              <path d="M 0 -32 L 0 0 L -32 0" stroke-width="2" />
+              <circle cx="0" cy="0" r="4" stroke-width="1.2" />
+              <circle cx="0" cy="0" r="1.5" class="fill-cross" />
+              <path d="M -6 0 L 6 0 M 0 -6 L 0 6" stroke-width="1" />
+            </g>
           </svg>
         </g>
       </svg>
@@ -149,17 +182,32 @@
     neuralCanvas.className = "w-full h-full";
     el.appendChild(neuralCanvas);
 
-    // Interactive mouse tilt & parallax tracking (used across Full-Page Neural & Skyline)
+    // Interactive mouse tilt, spotlight & parallax tracking (used across Grid, Neural & Skyline)
     window.addEventListener("mousemove", (e) => {
       mouseScreenX = e.clientX;
       mouseScreenY = e.clientY;
       mouseNormX = (e.clientX / window.innerWidth) - 0.5;
       mouseNormY = (e.clientY / window.innerHeight) - 0.5;
+
+      // Real-time Grid Spotlight
+      const gridLayer = document.getElementById("bgLayer-grid");
+      if (gridLayer && (gridLayer.classList.contains("active") || (window.getComputedStyle(gridLayer).visibility !== "hidden" && parseFloat(window.getComputedStyle(gridLayer).opacity) > 0.04))) {
+        const spotlight = document.getElementById("gridCursorSpotlight");
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+
+        if (spotlight) {
+          spotlight.style.background = isDark 
+            ? `radial-gradient(circle 380px at ${e.clientX}px ${e.clientY}px, rgba(99, 102, 241, 0.22), transparent 75%)`
+            : `radial-gradient(circle 380px at ${e.clientX}px ${e.clientY}px, rgba(99, 102, 241, 0.14), transparent 75%)`;
+        }
+      }
     });
 
     window.addEventListener("mouseleave", () => {
       mouseScreenX = -9999;
       mouseScreenY = -9999;
+      const spotlight = document.getElementById("gridCursorSpotlight");
+      if (spotlight) spotlight.style.background = "transparent";
     });
 
     return el;

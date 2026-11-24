@@ -221,45 +221,120 @@ body {
 
 /* Layer 1: Enhanced Technical Blueprint Coordinate Grid (+) */
 .stroke-minor-grid {
-  stroke: rgba(15, 23, 42, 0.06);
+  stroke: rgba(15, 23, 42, 0.05);
 }
 [data-theme="dark"] .stroke-minor-grid {
-  stroke: rgba(255, 255, 255, 0.07);
+  stroke: rgba(255, 255, 255, 0.06);
 }
 
 .stroke-major-grid {
-  stroke: rgba(15, 23, 42, 0.08);
+  stroke: rgba(15, 23, 42, 0.09);
 }
 [data-theme="dark"] .stroke-major-grid {
-  stroke: rgba(255, 255, 255, 0.09);
+  stroke: rgba(255, 255, 255, 0.1);
 }
 
 .stroke-cross {
-  stroke: rgba(79, 70, 229, 0.45);
+  stroke: rgba(79, 70, 229, 0.6);
 }
 [data-theme="dark"] .stroke-cross {
-  stroke: rgba(165, 180, 252, 0.65);
+  stroke: rgba(165, 180, 252, 0.85);
 }
 
 .fill-cross {
-  fill: rgba(79, 70, 229, 0.45);
+  fill: rgba(79, 70, 229, 0.6);
 }
 [data-theme="dark"] .fill-cross {
-  fill: rgba(165, 180, 252, 0.7);
+  fill: rgba(165, 180, 252, 0.85);
 }
 
 .stroke-cross-subtle {
-  stroke: rgba(15, 23, 42, 0.2);
+  stroke: rgba(15, 23, 42, 0.25);
 }
 [data-theme="dark"] .stroke-cross-subtle {
-  stroke: rgba(255, 255, 255, 0.35);
+  stroke: rgba(255, 255, 255, 0.4);
 }
 
 .fill-cross-subtle {
-  fill: rgba(15, 23, 42, 0.2);
+  fill: rgba(15, 23, 42, 0.25);
 }
 [data-theme="dark"] .fill-cross-subtle {
-  fill: rgba(255, 255, 255, 0.35);
+  fill: rgba(255, 255, 255, 0.4);
+}
+
+.fill-grid-text {
+  fill: rgba(99, 102, 241, 0.45);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+[data-theme="dark"] .fill-grid-text {
+  fill: rgba(165, 180, 252, 0.55);
+}
+
+/* Luminous Autonomous Laser Scan Beam */
+.grid-laser-scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(99, 102, 241, 0.15) 15%, 
+    rgba(99, 102, 241, 0.75) 45%, 
+    rgba(56, 189, 248, 0.9) 50%, 
+    rgba(99, 102, 241, 0.75) 55%, 
+    rgba(99, 102, 241, 0.15) 85%, 
+    transparent 100%
+  );
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.45), 0 0 24px rgba(56, 189, 248, 0.3);
+  pointer-events: none;
+  animation: gridLaserSweep 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+[data-theme="dark"] .grid-laser-scan-line {
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(165, 180, 252, 0.2) 15%, 
+    rgba(129, 140, 248, 0.85) 45%, 
+    rgba(56, 189, 248, 1) 50%, 
+    rgba(129, 140, 248, 0.85) 55%, 
+    rgba(165, 180, 252, 0.2) 85%, 
+    transparent 100%
+  );
+  box-shadow: 0 0 16px rgba(129, 140, 248, 0.6), 0 0 32px rgba(56, 189, 248, 0.4);
+}
+
+@keyframes gridLaserSweep {
+  0% { top: -10px; opacity: 0; }
+  6% { opacity: 0.85; }
+  50% { opacity: 0.95; }
+  94% { opacity: 0.85; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Interactive Cursor Coordinate HUD Pill */
+.grid-coord-hud {
+  position: absolute;
+  transform: translate(20px, 20px);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  background: rgba(255, 255, 255, 0.88);
+  color: rgba(67, 56, 202, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.12);
+  z-index: 2;
+  white-space: nowrap;
+}
+[data-theme="dark"] .grid-coord-hud {
+  background: rgba(15, 23, 42, 0.88);
+  color: rgba(199, 210, 254, 0.98);
+  border-color: rgba(165, 180, 252, 0.32);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
 }
 
 /* Layer 3: Digital City Matrix Skyline & Layered Horizon Waves */
