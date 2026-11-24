@@ -35,8 +35,9 @@
     const foundIdx = PATTERNS.indexOf(savedPattern);
     currentPatternIndex = foundIdx >= 0 ? foundIdx : 0;
 
-    const savedAuto = localStorage.getItem("vf_bg_auto");
-    isAutoCycle = savedAuto !== null ? savedAuto === "true" : true;
+    // Default auto-cycle enabled for seamless theme transitions
+    isAutoCycle = true;
+    localStorage.setItem("vf_bg_auto", "true");
 
     // Display active pattern
     showPattern(PATTERNS[currentPatternIndex]);
@@ -291,9 +292,10 @@
   function renderNeuralFrame() {
     if (!neuralCanvas || !neuralCanvas.parentElement) return;
 
-    // Check if neural layer is active
+    // Check if neural layer is active or in crossfade transition
     const layer = document.getElementById("bgLayer-neural");
-    if (!layer || layer.style.opacity === "0") {
+    const isVisible = layer && (layer.classList.contains("active") || (window.getComputedStyle(layer).visibility !== "hidden" && parseFloat(window.getComputedStyle(layer).opacity) > 0.02));
+    if (!layer || !isVisible) {
       canvasAnimId = requestAnimationFrame(renderNeuralFrame);
       return;
     }
@@ -625,7 +627,8 @@
   // -------------------------------------------------------------
   function renderSkylineParallax() {
     const layer = document.getElementById("bgLayer-skyline");
-    if (!layer || layer.style.opacity === "0") {
+    const isVisible = layer && (layer.classList.contains("active") || (window.getComputedStyle(layer).visibility !== "hidden" && parseFloat(window.getComputedStyle(layer).opacity) > 0.02));
+    if (!layer || !isVisible) {
       skylineParallaxAnimId = requestAnimationFrame(renderSkylineParallax);
       return;
     }
@@ -654,7 +657,7 @@
   }
 
   // -------------------------------------------------------------
-  // 5. PATTERN DISPLAY & TRANSITIONS
+  // 5. PATTERN DISPLAY & TRANSITIONS (CINEMATIC CROSSFADE)
   // -------------------------------------------------------------
   function showPattern(patternName) {
     PATTERNS.forEach(name => {
@@ -662,12 +665,13 @@
       const btn = document.getElementById(`bgBtn-${name}`);
 
       if (layer) {
+        // Clear any old inline overrides so CSS 1.6s cross-fade executes cleanly
+        layer.style.opacity = "";
+        layer.style.visibility = "";
         if (name === patternName) {
-          layer.style.opacity = "1";
-          layer.style.visibility = "visible";
+          layer.classList.add("active");
         } else {
-          layer.style.opacity = "0";
-          layer.style.visibility = "hidden";
+          layer.classList.remove("active");
         }
       }
 
@@ -759,10 +763,11 @@
       currentPatternIndex = idx;
       showPattern(name);
 
-      // If user clicks, temporarily reset cycle timer so it stays on choice for 8s
-      if (isAutoCycle) {
-        startAutoCycle();
-      }
+      // Keep auto-cycling running with smooth transitions
+      isAutoCycle = true;
+      localStorage.setItem("vf_bg_auto", "true");
+      updateAutoUI();
+      startAutoCycle();
     }
   }
 
