@@ -10,6 +10,7 @@ from scraper import extract_text_from_url
 from retriever import ActualNewsRetriever
 from app.api.v1.router import api_router
 from app.api.v1.endpoints.image_prediction import predict_image
+from app.services.classifier import detect_language
 
 app = FastAPI(title="Multilingual & Multimodal Fake News Detection")
 
@@ -80,7 +81,7 @@ print("Backend initialization complete!")
 class NewsRequest(BaseModel):
     text: Optional[str] = None
     url: Optional[str] = None
-    language: str = "en"  # "en" or "bn"
+    language: str = "auto"  # "auto" (default), "en", or "bn"
 
 
 def analyze_patterns(text: str, model, lang_code: str) -> List[str]:
@@ -180,8 +181,11 @@ def predict_news(request: NewsRequest):
     if not input_text or not input_text.strip():
         raise HTTPException(status_code=400, detail="Please provide either text or a valid URL.")
 
-    # Select model based on requested language
-    lang_code = (request.language or "en").lower().strip()
+    # Select or auto-detect language (works for both raw text and scraped URLs)
+    lang_code = (request.language or "auto").lower().strip()
+    if lang_code in ("auto", "detect", ""):
+        lang_code = detect_language(input_text)
+
     if lang_code == "bn":
         model = bn_model
         lang_name = "Bangla"

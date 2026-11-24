@@ -200,18 +200,16 @@
           <p class="text-xs mt-0.5 font-normal" style="color: var(--text-muted);">Select input modality and enter your material for assessment.</p>
         </div>
 
-        <!-- Language Switcher Segmented Control -->
-        <div id="langSelector" class="inline-flex rounded-lg p-0.5 shadow-2xs" style="background: var(--tab-bar-bg); border: 1px solid var(--card-border);">
-          <button type="button" id="btnEn" onclick="setLanguage('en')"
-            class="px-3.5 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer"
-            style="background: var(--tab-active-bg); color: var(--tab-active-text); box-shadow: var(--tab-active-shadow);">
-            English
-          </button>
-          <button type="button" id="btnBn" onclick="setLanguage('bn')"
-            class="px-3.5 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer"
-            style="color: var(--tab-inactive-text);">
-            বাংলা (Bangla)
-          </button>
+        <!-- Autonomous Language Detection Indicator (Zero Manual Switching Required) -->
+        <div id="langSelector" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono badge-indigo shadow-2xs transition-all duration-200"
+             title="Automatically detects English and বাংলা from your text or article URL">
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span id="langAutoDot" class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+          <span id="langAutoText" class="font-semibold">Auto-Detect: EN / বাংলা</span>
         </div>
       </div>
 
@@ -256,8 +254,8 @@
       <div id="textInputContainer" class="space-y-2">
         <div class="relative">
           <textarea id="newsInput" rows="5"
-            oninput="updateCharCount()"
-            placeholder="Paste an English news headline, claim, or article paragraph here..."
+            oninput="handleTextInput()"
+            placeholder="Paste any English or বাংলা news headline, claim, or article paragraph — language is detected automatically..."
             class="mono-input w-full rounded-xl p-4 text-sm outline-none resize-y font-normal leading-relaxed min-h-[140px]"></textarea>
           
           <!-- Character & Shortcut HUD -->
@@ -278,7 +276,8 @@
       <div id="urlInputContainer" class="hidden space-y-2.5">
         <div class="relative">
           <input id="newsUrlInput" type="url"
-            placeholder="Paste news article URL (e.g., https://www.bbc.com/news/article...)"
+            oninput="updateLiveLanguageDetection()"
+            placeholder="Paste any English or বাংলা news article URL (e.g., https://www.bbc.com/news/...)"
             class="mono-input w-full rounded-xl px-4 py-3.5 text-sm outline-none pl-11" />
           <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-sky-500">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -4,7 +4,7 @@
  */
 
 const API_BASE = "http://127.0.0.1:8000";
-let selectedLang = "en";
+let selectedLang = "auto";
 let inputMode = "text";
 
 // -------------------------------------------------------------
@@ -51,13 +51,97 @@ function toggleTheme() {
 }
 
 function updateTabStyles() {
-  setLanguage(selectedLang);
+  updateLiveLanguageDetection();
   setInputMode(inputMode);
 }
 
 // -------------------------------------------------------------
-// CHARACTER COUNT & SHORTCUTS
+// CHARACTER COUNT, AUTO LANGUAGE DETECTION & SHORTCUTS
 // -------------------------------------------------------------
+function detectLanguageFromText(text) {
+  if (!text || !text.trim()) return "auto";
+  let bnCount = 0;
+  let enCount = 0;
+  for (let i = 0; i < text.length; i++) {
+    const code = text.charCodeAt(i);
+    if (code >= 0x0980 && code <= 0x09ff) {
+      bnCount++;
+    } else if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122)) {
+      enCount++;
+    }
+  }
+  if (bnCount === 0 && enCount === 0) return "auto";
+  if (bnCount > 0 && (enCount === 0 || (bnCount / (bnCount + enCount)) >= 0.3)) {
+    return "bn";
+  }
+  return "en";
+}
+
+function detectLanguageHintFromUrl(url) {
+  if (!url || !url.trim()) return "auto";
+  const lower = url.toLowerCase();
+  const bnHints = [
+    "prothomalo", "jugantor", "kalerkantho", "ittefaq", "samakal",
+    "banglatribune", "jagonews24", "somoynews", "dhakapost", "risingbd",
+    "mzamin", "dailyinqilab", "amadershomoy", "bd-pratidin", "kalbela",
+    "/bengali", "/bangla", "/bn/", "%e0%a6", "%e0%a7"
+  ];
+  return bnHints.some(hint => lower.includes(hint)) ? "bn" : "auto";
+}
+
+function updateLiveLanguageDetection() {
+  const badge = document.getElementById("langSelector");
+  const dot = document.getElementById("langAutoDot");
+  const label = document.getElementById("langAutoText");
+
+  if (!badge || !dot || !label) return;
+
+  badge.classList.remove("badge-indigo", "badge-emerald", "badge-sky");
+
+  if (inputMode === "url") {
+    const urlVal = document.getElementById("newsUrlInput") ? document.getElementById("newsUrlInput").value.trim() : "";
+    const urlHint = detectLanguageHintFromUrl(urlVal);
+    selectedLang = "auto"; // Backend inspects actual scraped article text
+    if (urlHint === "bn") {
+      badge.classList.add("badge-emerald");
+      dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse";
+      label.textContent = "Detected: বাংলা • URL";
+    } else if (urlVal.length > 0) {
+      badge.classList.add("badge-sky");
+      dot.className = "w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse";
+      label.textContent = "Auto-Detect on Scrape";
+    } else {
+      badge.classList.add("badge-indigo");
+      dot.className = "w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse";
+      label.textContent = "Auto-Detect: EN / বাংলা";
+    }
+    return;
+  }
+
+  const textVal = document.getElementById("newsInput") ? document.getElementById("newsInput").value : "";
+  const detected = detectLanguageFromText(textVal);
+  selectedLang = detected;
+
+  if (detected === "bn") {
+    badge.classList.add("badge-emerald");
+    dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse";
+    label.textContent = "Detected: বাংলা (Bangla)";
+  } else if (detected === "en") {
+    badge.classList.add("badge-sky");
+    dot.className = "w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse";
+    label.textContent = "Detected: English";
+  } else {
+    badge.classList.add("badge-indigo");
+    dot.className = "w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse";
+    label.textContent = "Auto-Detect: EN / বাংলা";
+  }
+}
+
+function handleTextInput() {
+  updateCharCount();
+  updateLiveLanguageDetection();
+}
+
 function updateCharCount() {
   const input = document.getElementById("newsInput");
   const countEl = document.getElementById("charCount");
@@ -120,33 +204,7 @@ async function initDashboard() {
 
 function setLanguage(lang) {
   selectedLang = lang;
-  const btnEn = document.getElementById("btnEn");
-  const btnBn = document.getElementById("btnBn");
-  const input = document.getElementById("newsInput");
-
-  if (btnEn && btnBn) {
-    if (lang === "en") {
-      btnEn.style.background = "var(--tab-active-bg)";
-      btnEn.style.color = "var(--tab-active-text)";
-      btnEn.style.boxShadow = "var(--tab-active-shadow)";
-      btnEn.style.fontWeight = "600";
-      btnBn.style.background = "transparent";
-      btnBn.style.color = "var(--tab-inactive-text)";
-      btnBn.style.boxShadow = "none";
-      btnBn.style.fontWeight = "500";
-      if (input) input.placeholder = "Paste an English news headline, claim, or article paragraph here...";
-    } else {
-      btnBn.style.background = "var(--tab-active-bg)";
-      btnBn.style.color = "var(--tab-active-text)";
-      btnBn.style.boxShadow = "var(--tab-active-shadow)";
-      btnBn.style.fontWeight = "600";
-      btnEn.style.background = "transparent";
-      btnEn.style.color = "var(--tab-inactive-text)";
-      btnEn.style.boxShadow = "none";
-      btnEn.style.fontWeight = "500";
-      if (input) input.placeholder = "বাংলা সংবাদ শিরোনাম, দাবি অথবা অনুচ্ছেদ এখানে লিখুন...";
-    }
-  }
+  updateLiveLanguageDetection();
 }
 
 function setInputMode(mode) {
@@ -190,6 +248,8 @@ function setInputMode(mode) {
   if (btnLabel) {
     btnLabel.textContent = mode === "image" ? "Analyze Image Forensics" : "Analyze & Verify Claim";
   }
+
+  updateLiveLanguageDetection();
 }
 
 function previewSelectedImage() {
@@ -225,7 +285,6 @@ function clearImagePreview() {
 
 function loadSample(lang) {
   setInputMode("text");
-  setLanguage(lang);
   const input = document.getElementById("newsInput");
   if (input) {
     if (lang === "en") {
@@ -234,7 +293,7 @@ function loadSample(lang) {
       input.value = "বাংলাদেশ ব্যাংক নতুন মুদ্রানীতি ঘোষণা করেছে এবং মূল্যস্ফীতি নিয়ন্ত্রণে নীতিগত সুদের হার ৫০ ভিত্তি পয়েন্ট বাড়ানোর সিদ্ধান্ত নিয়েছে।";
     }
   }
-  updateCharCount();
+  handleTextInput();
 }
 
 function clearAll() {
@@ -248,7 +307,7 @@ function clearAll() {
   clearImagePreview();
   if (resultSec) resultSec.classList.add("hidden");
   if (errBox) errBox.classList.add("hidden");
-  updateCharCount();
+  handleTextInput();
 }
 
 async function verifyNews() {
@@ -318,10 +377,11 @@ async function verifyNews() {
       renderImageResults(data);
       if (resultSection) resultSection.classList.remove("hidden");
     } else {
+      const resolvedLang = inputMode === "text" ? detectLanguageFromText(textVal) : "auto";
       const payload = {
         text: inputMode === "text" ? textVal : null,
         url: inputMode === "url" ? urlVal : null,
-        language: selectedLang
+        language: resolvedLang
       };
 
       const response = await fetch(`${API_BASE}/predict`, {

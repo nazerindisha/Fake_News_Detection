@@ -12,6 +12,19 @@ except ImportError:
     JOBLIB_AVAILABLE = False
 
 
+def detect_language(text: str) -> str:
+    """Automatically detects Bangla ('bn') vs English ('en') from Unicode script distribution."""
+    if not text:
+        return "en"
+    bn_count = sum(1 for ch in text if "\u0980" <= ch <= "\u09ff")
+    if bn_count == 0:
+        return "en"
+    en_count = sum(1 for ch in text if ("a" <= ch <= "z") or ("A" <= ch <= "Z"))
+    if en_count == 0:
+        return "bn"
+    return "bn" if (bn_count / (bn_count + en_count)) >= 0.30 else "en"
+
+
 def extract_stylometric_patterns(text: str, lang_code: str) -> List[str]:
     """Extracts surface-level clickbait, sensationalist, and stylometric patterns."""
     reasons = []
@@ -97,13 +110,15 @@ class ClassifierService:
     def is_bangla_ready(self) -> bool:
         return self.bn_model is not None
 
-    def explain_patterns(self, text: str, language: str = "en") -> List[str]:
+    def explain_patterns(self, text: str, language: str = "auto") -> List[str]:
         """
         Extracts explainability signals:
         1. Stylometric / clickbait triggers.
         2. Top influential lexical tokens from trained TF-IDF / FeatureUnion steps.
         """
-        lang = (language or "en").lower().strip()
+        lang = (language or "auto").lower().strip()
+        if lang in ("auto", "detect", ""):
+            lang = detect_language(text)
         model = self.bn_model if lang == "bn" else self.en_model
         reasons = extract_stylometric_patterns(text, lang)
 
@@ -152,7 +167,7 @@ class ClassifierService:
 
         return reasons or ["Standard lexical and structural distribution analyzed by TF-IDF classifier."]
 
-    def predict(self, text: str, language: str = "en") -> Tuple[str, float, Optional[str]]:
+    def predict(self, text: str, language: str = "auto") -> Tuple[str, float, Optional[str]]:
         """
         Classifies input claim/article text.
         Returns:
@@ -160,7 +175,9 @@ class ClassifierService:
             confidence: float (0.0 to 100.0)
             note: diagnostic message if model was uninitialized
         """
-        lang = (language or "en").lower().strip()
+        lang = (language or "auto").lower().strip()
+        if lang in ("auto", "detect", ""):
+            lang = detect_language(text)
         model = self.bn_model if lang == "bn" else self.en_model
         lang_name = "Bangla" if lang == "bn" else "English"
 

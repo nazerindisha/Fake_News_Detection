@@ -7,6 +7,7 @@ sys.path.insert(0, str(BASE_DIR))
 
 try:
     from app.schemas.news import NewsRequest, LanguageEnum, RetrievalMatch, PredictResponse
+    from app.services.classifier import detect_language
     PYDANTIC_AVAILABLE = True
 except ImportError:
     PYDANTIC_AVAILABLE = False
@@ -15,10 +16,22 @@ class TestSchemas(unittest.TestCase):
     def test_news_request_schema(self):
         if not PYDANTIC_AVAILABLE:
             self.skipTest("pydantic not installed in global environment")
+        req_default = NewsRequest(text="Test auto language")
+        self.assertEqual(req_default.language, LanguageEnum.AUTO)
         req = NewsRequest(text="Test news claim", language=LanguageEnum.EN)
         self.assertEqual(req.text, "Test news claim")
         self.assertEqual(req.language, LanguageEnum.EN)
         self.assertIsNone(req.url)
+
+    def test_auto_language_detection(self):
+        try:
+            from app.services.classifier import detect_language as dl
+        except ImportError:
+            self.skipTest("classifier dependencies not available")
+        self.assertEqual(dl("NASA discovers subterranean water ice reserves on the Moon."), "en")
+        self.assertEqual(dl("বাংলাদেশ ব্যাংক নতুন মুদ্রানীতি ঘোষণা করেছে।"), "bn")
+        self.assertEqual(dl("NASA এবং বাংলাদেশ ব্যাংক সম্পর্কিত খবর"), "bn")
+        self.assertEqual(dl(""), "en")
 
     def test_retrieval_match_schema(self):
         if not PYDANTIC_AVAILABLE:

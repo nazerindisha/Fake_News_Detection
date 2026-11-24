@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.schemas.news import NewsRequest, PredictResponse, RetrievalMatch
-from app.services.classifier import ClassifierService
+from app.services.classifier import ClassifierService, detect_language
 from app.services.retriever import RetrieverService
 from app.services.scraper import ScraperService
 
@@ -52,8 +52,15 @@ def predict_news(
             detail="Please supply either article 'text' or a valid 'url'."
         )
 
-    # 2. Select Language
-    lang_code = request.language.value if hasattr(request.language, "value") else str(request.language or "en").lower()
+    # 2. Select or Auto-Detect Language (works seamlessly for raw text and scraped URLs)
+    raw_lang = request.language.value if hasattr(request.language, "value") else str(request.language or "auto").lower().strip()
+    if raw_lang in ("auto", "detect", ""):
+        detect_source = f"{scraped_title or ''} {input_text}".strip()
+        lang_code = detect_language(detect_source)
+    elif raw_lang == "bn":
+        lang_code = "bn"
+    else:
+        lang_code = "en"
     lang_name = "Bangla" if lang_code == "bn" else "English"
 
     # 3. Model Classification & Explainability Patterns

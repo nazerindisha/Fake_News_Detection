@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field, HttpUrl
 
 
 class LanguageEnum(str, Enum):
+    AUTO = "auto"
     EN = "en"
     BN = "bn"
 
@@ -20,8 +21,8 @@ class NewsRequest(BaseModel):
         examples=["https://www.bbc.com/news/articles/c04901g7x9vo"]
     )
     language: Optional[LanguageEnum] = Field(
-        LanguageEnum.EN,
-        description="Language code: 'en' for English or 'bn' for Bangla"
+        LanguageEnum.AUTO,
+        description="Language code: 'auto' (automatic detection, default), 'en' for English, or 'bn' for Bangla"
     )
 
 
