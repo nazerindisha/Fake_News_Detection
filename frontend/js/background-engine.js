@@ -262,14 +262,14 @@
     });
   }
 
-  function renderNeuralFrame() {
+  function renderNeuralFrame(singleFrame = false) {
     if (!neuralCanvas || !neuralCanvas.parentElement) return;
 
     // Check if neural layer is active or in crossfade transition
     const layer = document.getElementById("bgLayer-neural");
     const isVisible = layer && (layer.classList.contains("active") || (window.getComputedStyle(layer).visibility !== "hidden" && parseFloat(window.getComputedStyle(layer).opacity) > 0.02));
     if (!layer || !isVisible) {
-      canvasAnimId = requestAnimationFrame(renderNeuralFrame);
+      if (!singleFrame) canvasAnimId = requestAnimationFrame(() => renderNeuralFrame(false));
       return;
     }
 
@@ -431,7 +431,9 @@
       neuralCtx.globalAlpha = 1.0;
     }
 
-    canvasAnimId = requestAnimationFrame(renderNeuralFrame);
+    if (!singleFrame) {
+      canvasAnimId = requestAnimationFrame(() => renderNeuralFrame(false));
+    }
   }
 
   // -------------------------------------------------------------
@@ -679,7 +681,7 @@
     // Initialize 3D neural canvas animation when switching to it
     if (patternName === "neural") {
       resizeNeuralCanvas();
-      if (!canvasAnimId) renderNeuralFrame();
+      if (!canvasAnimId) renderNeuralFrame(false);
     }
 
     // Trigger progressive construction ("Build Making") and start parallax when switching to Skyline
@@ -755,9 +757,24 @@
     }
   }
 
+  function refreshBackgroundTheme() {
+    const neuralLayer = document.getElementById("bgLayer-neural");
+    if (neuralCanvas && neuralLayer && neuralLayer.classList.contains("active")) {
+      renderNeuralFrame(true);
+    }
+    const spotlight = document.getElementById("gridCursorSpotlight");
+    if (spotlight && mouseScreenX > -1000) {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      spotlight.style.background = isDark
+        ? `radial-gradient(circle 380px at ${mouseScreenX}px ${mouseScreenY}px, rgba(99, 102, 241, 0.22), transparent 75%)`
+        : `radial-gradient(circle 380px at ${mouseScreenX}px ${mouseScreenY}px, rgba(99, 102, 241, 0.14), transparent 75%)`;
+    }
+  }
+
   // Expose functions globally to window
   window.setBackgroundPattern = selectPattern;
   window.toggleAutoCycle = toggleAutoCycle;
+  window.refreshBackgroundTheme = refreshBackgroundTheme;
 
   // Initialize on DOM ready
   document.addEventListener("DOMContentLoaded", () => {

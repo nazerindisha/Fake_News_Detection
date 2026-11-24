@@ -42,6 +42,9 @@
          style="background: linear-gradient(90deg, transparent, var(--top-rim-beam), transparent);"></div>
   </div>
 
+  <!-- Edge-less Ambient Foreground Readability Veil -->
+  <div class="foreground-scrim" aria-hidden="true"></div>
+
   <!-- Top Glassmorphic Navigation -->
   <header class="relative z-30 sticky top-0 transition-colors duration-200"
           style="background: var(--header-bg); border-bottom: 1px solid var(--header-border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
@@ -104,9 +107,6 @@
 
   <!-- Main Workspace -->
   <main class="relative z-10 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6 flex-grow">
-    <!-- Ambient Foreground Readability Scrim (Ensures 100% crisp foreground distinction from background) -->
-    <div class="foreground-scrim" aria-hidden="true"></div>
-
     <!-- Hero Announcement & Value Proposition -->
     <div class="text-center sm:text-left space-y-3">
       <!-- Eyebrow Pill Badge -->

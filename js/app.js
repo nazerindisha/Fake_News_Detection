@@ -34,20 +34,29 @@ function applyTheme(theme) {
   updateTabStyles();
 }
 
-let themeTransitionTimer = null;
-
 function toggleTheme() {
   const current = document.documentElement.getAttribute("data-theme") || "light";
   const next = current === "light" ? "dark" : "light";
-  
-  // Enable synchronized 60fps/120fps GPU theme transition across all UI layers
-  document.documentElement.classList.add("theme-transitioning");
-  applyTheme(next);
 
-  clearTimeout(themeTransitionTimer);
-  themeTransitionTimer = setTimeout(() => {
-    document.documentElement.classList.remove("theme-transitioning");
-  }, 350);
+  // Hardware-accelerated View Transitions API (zero mid-transition lag, zero out-of-sync boxes)
+  if (typeof document.startViewTransition === "function" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.documentElement.classList.add("theme-instant-swap");
+    const vt = document.startViewTransition(() => {
+      applyTheme(next);
+      if (typeof window.refreshBackgroundTheme === "function") {
+        window.refreshBackgroundTheme();
+      }
+      void document.documentElement.offsetHeight;
+    });
+    vt.finished.finally(() => {
+      document.documentElement.classList.remove("theme-instant-swap");
+    });
+  } else {
+    applyTheme(next);
+    if (typeof window.refreshBackgroundTheme === "function") {
+      window.refreshBackgroundTheme();
+    }
+  }
 }
 
 function updateTabStyles() {
