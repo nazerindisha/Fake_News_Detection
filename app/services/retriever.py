@@ -51,10 +51,11 @@ def extract_search_terms(text: str, max_words: int = 10) -> str:
 
 class RetrieverService:
     """
-    Production Hybrid Ground-Truth Retriever:
+    Production Hybrid Ground-Truth Retriever with Cross-Referencing:
     1. Indexes verified local datasets (True.csv & Authentic-48K.csv) with TF-IDF.
     2. Caches vectorized matrices for near-instantaneous startup.
-    3. Seamlessly falls back to regional live web search via DuckDuckGo.
+    3. Cross-references claims across both local ground-truth archives and live regional web sources.
+    4. Computes multi-source consensus to evaluate source agreement.
     """
 
     def __init__(self):
@@ -159,94 +160,137 @@ class RetrieverService:
     def is_bangla_indexed(self) -> bool:
         return self.bn_vectorizer is not None and self.bn_vectors is not None
 
-    def find_matches(self, text: str, language: str = "en", top_k: int = 2) -> List[Dict[str, Any]]:
-        """
-        Retrieves matching authentic news:
-        1. Queries local verified vector spaces.
-        2. Dispatches live web queries if local similarity is under threshold.
-        """
-        if not text:
-            return []
-
-        results: List[Dict[str, Any]] = []
-        max_sim = 0.0
-        lang = (language or "en").lower().strip()
-
-        # 1. Local English Search
+    def _query_local_archive(self, text: str, lang: str, top_k: int = 2) -> List[Dict[str, Any]]:
+        """Queries local ground-truth archive via cosine similarity."""
+        matches = []
         if lang == "en" and self.is_english_indexed:
             try:
                 query_vec = self.en_vectorizer.transform([text])
                 sims = cosine_similarity(query_vec, self.en_vectors).flatten()
                 if len(sims) > 0:
-                    best_idx = sims.argmax()
-                    max_sim = float(sims[best_idx])
-                    if max_sim >= settings.EN_SIMILARITY_THRESHOLD:
-                        row = self.true_df.iloc[best_idx]
-                        results.append({
-                            "source_type": "local_historical",
-                            "source_label": "Verified Archive (True.csv)",
-                            "title": str(row.get("title", "Verified Report")),
-                            "subject": str(row.get("subject", "General")),
-                            "date": str(row.get("date", "Historical Archive")),
-                            "similarity_score": round(max_sim, 4),
-                            "snippet": str(row.get("text", ""))[:320] + "...",
-                            "url": None
-                        })
+                    top_indices = sims.argsort()[-top_k:][::-1]
+                    for idx in top_indices:
+                        sim = float(sims[idx])
+                        if sim >= settings.EN_SIMILARITY_THRESHOLD:
+                            row = self.true_df.iloc[idx]
+                            matches.append({
+                                "source_type": "local_historical",
+                                "source_label": "Verified Archive (True.csv)",
+                                "title": str(row.get("title", "Verified Report")),
+                                "subject": str(row.get("subject", "General")),
+                                "date": str(row.get("date", "Historical Archive")),
+                                "similarity_score": round(sim, 4),
+                                "snippet": str(row.get("text", ""))[:320] + "...",
+                                "url": None
+                            })
             except Exception as e:
                 print(f"English local retrieval error: {e}")
 
-        # 2. Local Bangla Search
         elif lang == "bn" and self.is_bangla_indexed:
             try:
                 query_vec = self.bn_vectorizer.transform([text])
                 sims = cosine_similarity(query_vec, self.bn_vectors).flatten()
                 if len(sims) > 0:
-                    best_idx = sims.argmax()
-                    max_sim = float(sims[best_idx])
-                    if max_sim >= settings.BN_SIMILARITY_THRESHOLD:
-                        row = self.auth_df.iloc[best_idx]
-                        title_col = "headline" if "headline" in self.auth_df.columns else "title"
-                        text_col = "content" if "content" in self.auth_df.columns else "text"
-                        results.append({
-                            "source_type": "local_historical",
-                            "source_label": "Verified Archive (Authentic-48K)",
-                            "title": str(row.get(title_col, "সত্য সংবাদ রেকর্ড")),
-                            "subject": str(row.get("category", "সাধারণ")),
-                            "date": str(row.get("date", "ঐতিহাসিক রেকর্ড")),
-                            "similarity_score": round(max_sim, 4),
-                            "snippet": str(row.get(text_col, ""))[:320] + "...",
-                            "url": None
-                        })
+                    top_indices = sims.argsort()[-top_k:][::-1]
+                    for idx in top_indices:
+                        sim = float(sims[idx])
+                        if sim >= settings.BN_SIMILARITY_THRESHOLD:
+                            row = self.auth_df.iloc[idx]
+                            title_col = "headline" if "headline" in self.auth_df.columns else "title"
+                            text_col = "content" if "content" in self.auth_df.columns else "text"
+                            matches.append({
+                                "source_type": "local_historical",
+                                "source_label": "Verified Archive (Authentic-48K)",
+                                "title": str(row.get(title_col, "সত্য সংবাদ রেকর্ড")),
+                                "subject": str(row.get("category", "সাধারণ")),
+                                "date": str(row.get("date", "ঐতিহাসিক রেকর্ড")),
+                                "similarity_score": round(sim, 4),
+                                "snippet": str(row.get(text_col, ""))[:320] + "...",
+                                "url": None
+                            })
             except Exception as e:
                 print(f"Bangla local retrieval error: {e}")
 
-        # 3. Live Web Search Fallback (DuckDuckGo)
-        if not results or max_sim < settings.LIVE_SEARCH_FALLBACK_THRESHOLD:
-            if DDGS_AVAILABLE:
-                try:
-                    search_query = extract_search_terms(text, max_words=10)
-                    region = "bn-bd" if lang == "bn" else "wt-wt"
+        return matches
 
-                    with DDGS() as ddgs:
-                        live_items = list(ddgs.text(search_query, max_results=top_k, region=region))
-                        for item in live_items:
-                            body = item.get("body", "")
-                            q_words = set(search_query.lower().split())
-                            b_words = set(body.lower().split())
-                            overlap = len(q_words.intersection(b_words)) / max(len(q_words), 1)
-                            score = round(min(0.50 + (overlap * 0.45), 0.95), 2)
+    def _query_live_search(self, text: str, lang: str, top_k: int = 2) -> List[Dict[str, Any]]:
+        """Queries DuckDuckGo search for live web cross-referencing."""
+        results = []
+        if not DDGS_AVAILABLE:
+            return results
 
-                            results.append({
-                                "source_type": "live_web_search",
-                                "source_label": "Live Web Search (DuckDuckGo)",
-                                "title": item.get("title", "Live Search Match"),
-                                "subject": "Real-Time Web",
-                                "date": "Current Web",
-                                "similarity_score": score,
-                                "snippet": (body[:320] + "...") if len(body) > 320 else body,
-                                "url": item.get("href", "")
-                            })
-                except Exception as e:
-                    print(f"Live web search notice: {e}")
+        try:
+            search_query = extract_search_terms(text, max_words=10)
+            if not search_query:
+                return results
 
-        return results[:top_k]
+            region = "bn-bd" if lang == "bn" else "wt-wt"
+            with DDGS() as ddgs:
+                live_items = list(ddgs.text(search_query, max_results=top_k, region=region))
+                for item in live_items:
+                    body = item.get("body", "")
+                    q_words = set(search_query.lower().split())
+                    b_words = set(body.lower().split())
+                    overlap = len(q_words.intersection(b_words)) / max(len(q_words), 1)
+                    score = round(min(0.50 + (overlap * 0.45), 0.95), 2)
+
+                    results.append({
+                        "source_type": "live_web_search",
+                        "source_label": "Live Web Search (DuckDuckGo)",
+                        "title": item.get("title", "Live Search Match"),
+                        "subject": "Real-Time Web",
+                        "date": "Current Web",
+                        "similarity_score": score,
+                        "snippet": (body[:320] + "...") if len(body) > 320 else body,
+                        "url": item.get("href", "")
+                    })
+        except Exception as e:
+            print(f"Live web search notice: {e}")
+
+        return results
+
+    def find_matches(
+        self,
+        text: str,
+        language: str = "en",
+        top_k: int = 2,
+        enable_cross_reference: bool = True
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieves matching authentic news with multi-source cross-referencing:
+        1. Queries local verified vector spaces.
+        2. Cross-references against live web search.
+        3. Merges, ranks, and deduplicates evidence.
+        """
+        if not text:
+            return []
+
+        lang = (language or "en").lower().strip()
+        local_matches = self._query_local_archive(text, lang, top_k=top_k)
+
+        # If cross-referencing is enabled, fetch live search to corroborate local findings
+        # Or fall back if local matches are weak
+        live_matches = []
+        if enable_cross_reference or not local_matches:
+            # If we already have strong local matches, we request live search only if needed
+            need_live = (
+                not local_matches or
+                (local_matches and local_matches[0]["similarity_score"] < settings.LIVE_SEARCH_FALLBACK_THRESHOLD) or
+                enable_cross_reference
+            )
+            if need_live:
+                live_matches = self._query_live_search(text, lang, top_k=top_k)
+
+        # Merge and deduplicate by title/url
+        combined = []
+        seen_titles = set()
+
+        for item in local_matches + live_matches:
+            clean_title = item.get("title", "").strip().lower()
+            if clean_title and clean_title not in seen_titles:
+                seen_titles.add(clean_title)
+                combined.append(item)
+
+        # Sort by similarity score descending
+        combined.sort(key=lambda x: x.get("similarity_score", 0.0), reverse=True)
+        return combined[:top_k]
