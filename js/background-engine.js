@@ -122,27 +122,23 @@
   }
 
   // -------------------------------------------------------------
-  // 3. LAYER 2: DUAL-SHELL 3D GEODESIC AI CONSTELLATION (NEURAL)
+  // 2. LAYER 2: FULL-PAGE 3D NEURAL CONSTELLATION NETWORK
   // -------------------------------------------------------------
   let neuralCanvas, neuralCtx;
-  let outerShellNodes = [];
-  let innerCoreNodes = [];
-  let sphereEdges = [];
+  let neuralNodes = [];
+  let neuralEdges = [];
   let synapseSparks = [];
-
-  let rotX = 0.22;
-  let rotY = 0.45;
-  let targetRotX = 0.22;
-  let targetRotY = 0.45;
 
   let mouseNormX = 0;
   let mouseNormY = 0;
+  let mouseScreenX = -9999;
+  let mouseScreenY = -9999;
   let skylineParallaxX = 0;
   let skylineParallaxAnimId = null;
 
-  const OUTER_NODE_COUNT = 64;
-  const INNER_NODE_COUNT = 16;
-  const SPARK_COUNT = 20;
+  const NODE_COUNT_DESKTOP = 105;
+  const NODE_COUNT_MOBILE = 65;
+  const SPARK_COUNT = 32;
 
   function createNeuralLayer() {
     const el = document.createElement("div");
@@ -153,12 +149,17 @@
     neuralCanvas.className = "w-full h-full";
     el.appendChild(neuralCanvas);
 
-    // Interactive mouse tilt & parallax tracking (used by Neural & Skyline)
+    // Interactive mouse tilt & parallax tracking (used across Full-Page Neural & Skyline)
     window.addEventListener("mousemove", (e) => {
+      mouseScreenX = e.clientX;
+      mouseScreenY = e.clientY;
       mouseNormX = (e.clientX / window.innerWidth) - 0.5;
       mouseNormY = (e.clientY / window.innerHeight) - 0.5;
-      targetRotY = 0.45 + mouseNormX * 0.95;
-      targetRotX = 0.22 + mouseNormY * 0.7;
+    });
+
+    window.addEventListener("mouseleave", () => {
+      mouseScreenX = -9999;
+      mouseScreenY = -9999;
     });
 
     return el;
@@ -168,123 +169,47 @@
     if (!neuralCanvas) return;
     neuralCanvas.width = window.innerWidth;
     neuralCanvas.height = window.innerHeight;
-    initDualSphereModel();
+    initFullPageNeuralModel();
   }
 
-  function initDualSphereModel() {
-    outerShellNodes = [];
-    innerCoreNodes = [];
-    sphereEdges = [];
+  function initFullPageNeuralModel() {
+    neuralNodes = [];
+    neuralEdges = [];
     synapseSparks = [];
 
     const w = neuralCanvas.width || window.innerWidth;
     const h = neuralCanvas.height || window.innerHeight;
     const isMobile = w < 768;
+    const count = isMobile ? NODE_COUNT_MOBILE : NODE_COUNT_DESKTOP;
 
-    // Radius of outer geodesic sphere
-    const R_outer = Math.min(w, h) * (isMobile ? 0.42 : 0.38);
-    // Radius of inner nucleus core
-    const R_inner = R_outer * 0.46;
-
-    // 1. Generate Outer Geodesic Shell (Fibonacci Sphere)
-    for (let i = 0; i < OUTER_NODE_COUNT; i++) {
-      const phi = Math.acos(1 - 2 * (i + 0.5) / OUTER_NODE_COUNT);
-      const theta = Math.PI * (1 + Math.sqrt(5)) * (i + 0.5);
-      const rVar = R_outer * (0.92 + Math.random() * 0.18);
-
-      outerShellNodes.push({
-        x: rVar * Math.sin(phi) * Math.cos(theta),
-        y: rVar * Math.sin(phi) * Math.sin(theta),
-        z: rVar * Math.cos(phi),
-        baseRadius: Math.random() * 2.2 + 2.5,
+    // Distribute neural nodes across the ENTIRE viewport (Full-Page Coverage)
+    for (let i = 0; i < count; i++) {
+      neuralNodes.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        z: (Math.random() - 0.5) * 260,
+        vx: (Math.random() - 0.5) * 0.45,
+        vy: (Math.random() - 0.5) * 0.45,
+        vz: (Math.random() - 0.5) * 0.25,
+        baseRadius: Math.random() * 2.2 + 2.0,
         pulseOffset: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.035 + Math.random() * 0.02,
-        isCoreHub: i % 6 === 0,
-        isInner: false
+        pulseSpeed: 0.03 + Math.random() * 0.025,
+        isCoreHub: i % 7 === 0 // Major neural processing hubs
       });
     }
 
-    // 2. Generate Inner Nucleus Cluster
-    for (let j = 0; j < INNER_NODE_COUNT; j++) {
-      const phi = Math.acos(1 - 2 * (j + 0.5) / INNER_NODE_COUNT);
-      const theta = Math.PI * (1 + Math.sqrt(5)) * (j + 0.5);
-      const rVar = R_inner * (0.85 + Math.random() * 0.3);
-
-      innerCoreNodes.push({
-        x: rVar * Math.sin(phi) * Math.cos(theta),
-        y: rVar * Math.sin(phi) * Math.sin(theta),
-        z: rVar * Math.cos(phi),
-        baseRadius: Math.random() * 1.8 + 2.0,
-        pulseOffset: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.05 + Math.random() * 0.02,
-        isCoreHub: j % 3 === 0,
-        isInner: true
-      });
-    }
-
-    // Combine all nodes for edge index mapping
-    const allNodes = outerShellNodes.concat(innerCoreNodes);
-
-    // 3. Connect Outer Shell Nodes (3D Euclidean Threshold)
-    const maxOuterDist = R_outer * 0.58;
-    for (let i = 0; i < outerShellNodes.length; i++) {
-      for (let j = i + 1; j < outerShellNodes.length; j++) {
-        const dx = outerShellNodes[i].x - outerShellNodes[j].x;
-        const dy = outerShellNodes[i].y - outerShellNodes[j].y;
-        const dz = outerShellNodes[i].z - outerShellNodes[j].z;
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-        if (dist < maxOuterDist) {
-          sphereEdges.push({
-            from: i,
-            to: j,
-            dist: dist,
-            maxDist: maxOuterDist,
-            isCoreEdge: false
-          });
-        }
-      }
-    }
-
-    // 4. Connect Inner Nucleus Nodes & Radial Bridges to Outer Shell
-    const offsetInner = outerShellNodes.length;
-    for (let i = 0; i < innerCoreNodes.length; i++) {
-      // Connect to closest outer shell node (radial synapse bridge)
-      let closestOuter = 0;
-      let minOuterDist = Infinity;
-      for (let k = 0; k < outerShellNodes.length; k++) {
-        const dx = innerCoreNodes[i].x - outerShellNodes[k].x;
-        const dy = innerCoreNodes[i].y - outerShellNodes[k].y;
-        const dz = innerCoreNodes[i].z - outerShellNodes[k].z;
-        const d = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (d < minOuterDist) {
-          minOuterDist = d;
-          closestOuter = k;
-        }
-      }
-      sphereEdges.push({
-        from: offsetInner + i,
-        to: closestOuter,
-        dist: minOuterDist,
-        maxDist: R_outer,
-        isCoreEdge: true
-      });
-    }
-
-    // 5. Initialize Travelling Synaptic Sparks
+    // Initialize travelling sparks across the network
     for (let k = 0; k < SPARK_COUNT; k++) {
       spawnSpark();
     }
   }
 
   function spawnSpark() {
-    if (sphereEdges.length === 0) return;
-    const edgeIdx = Math.floor(Math.random() * sphereEdges.length);
     synapseSparks.push({
-      edgeIdx: edgeIdx,
+      fromNode: Math.floor(Math.random() * neuralNodes.length),
+      toNode: Math.floor(Math.random() * neuralNodes.length),
       progress: Math.random(),
-      speed: 0.012 + Math.random() * 0.016,
-      forward: Math.random() > 0.5,
+      speed: 0.012 + Math.random() * 0.018,
       history: []
     });
   }
@@ -307,119 +232,130 @@
     const h = neuralCanvas.height;
     neuralCtx.clearRect(0, 0, w, h);
 
-    // Dynamic easing towards mouse target rotation + constant gentle drift
-    rotX += (targetRotX - rotX) * 0.05 + 0.0008;
-    rotY += (targetRotY - rotY) * 0.05 + 0.0028;
-
-    const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-    const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-    const focal = 680;
-
-    // Center position: anchored on right half for desktop, centered for mobile
     const isMobile = w < 768;
-    const cx = isMobile ? w * 0.5 : w * 0.72;
-    const cy = isMobile ? h * 0.44 : h * 0.46;
+    const maxEdgeDist = isMobile ? 120 : 155;
+    const activeEdges = [];
 
-    const allNodes = outerShellNodes.concat(innerCoreNodes);
+    // 1. Update node physics across the FULL PAGE with boundary wrapping
+    for (let i = 0; i < neuralNodes.length; i++) {
+      const n = neuralNodes[i];
+      n.x += n.vx;
+      n.y += n.vy;
+      n.z += n.vz;
 
-    // Project 3D nodes into 2D screen coordinates
-    const projectedNodes = allNodes.map((n) => {
-      // Rotate Y
-      const x1 = n.x * cosY + n.z * sinY;
-      const z1 = n.z * cosY - n.x * sinY;
-      // Rotate X
-      const y1 = n.y * cosX - z1 * sinX;
-      const z2 = z1 * cosX + n.y * sinX;
+      // Mouse proximity deflection
+      if (mouseScreenX > -1000) {
+        const dx = n.x - mouseScreenX;
+        const dy = n.y - mouseScreenY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 180 && dist > 0) {
+          const force = (1 - dist / 180) * 1.2;
+          n.x += (dx / dist) * force;
+          n.y += (dy / dist) * force;
+        }
+      }
 
-      const scale = focal / (focal + z2 + 260);
-      const screenX = cx + x1 * scale;
-      const screenY = cy + y1 * scale;
+      // Smooth wrap-around across full page edges
+      if (n.x < -30) n.x = w + 30;
+      if (n.x > w + 30) n.x = -30;
+      if (n.y < -30) n.y = h + 30;
+      if (n.y > h + 30) n.y = -30;
+      if (n.z < -130) { n.z = -130; n.vz = -n.vz; }
+      if (n.z > 130) { n.z = 130; n.vz = -n.vz; }
+    }
 
-      // Depth alpha (0.22 to 1.0)
-      const depthAlpha = Math.max(0.22, Math.min(1.0, (z2 + 340) / 680));
-
+    // 2. Project 3D nodes into screen coordinates with parallax tilt
+    const projectedNodes = neuralNodes.map((n) => {
+      const depthScale = 1 + n.z / 420;
+      const screenX = n.x + mouseNormX * (n.z * 0.16);
+      const screenY = n.y + mouseNormY * (n.z * 0.16);
+      const depthAlpha = Math.max(0.2, Math.min(1.0, 0.6 + n.z / 300));
       return {
         screenX,
         screenY,
-        scale,
-        z: z2,
+        depthScale,
         depthAlpha,
         node: n
       };
     });
 
-    // 1. Draw 3D Edges with depth-weighted alpha
-    const edgeBaseColor = isDark ? "rgba(165, 180, 252," : "rgba(79, 70, 229,";
-    const coreBridgeColor = isDark ? "rgba(56, 189, 248," : "rgba(99, 102, 241,";
+    // 3. Connect dynamic synaptic edges across full page
+    const edgeColor = isDark ? "rgba(165, 180, 252," : "rgba(99, 102, 241,";
+    const coreEdgeColor = isDark ? "rgba(56, 189, 248," : "rgba(79, 70, 229,";
 
-    for (let i = 0; i < sphereEdges.length; i++) {
-      const edge = sphereEdges[i];
-      const p1 = projectedNodes[edge.from];
-      const p2 = projectedNodes[edge.to];
-      if (!p1 || !p2) continue;
+    for (let i = 0; i < projectedNodes.length; i++) {
+      for (let j = i + 1; j < projectedNodes.length; j++) {
+        const p1 = projectedNodes[i];
+        const p2 = projectedNodes[j];
+        const dx = p1.screenX - p2.screenX;
+        const dy = p1.screenY - p2.screenY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
 
-      const depthAvg = (p1.depthAlpha + p2.depthAlpha) * 0.5;
-      const distFactor = Math.max(0.1, 1 - edge.dist / edge.maxDist);
-      const edgeAlpha = depthAvg * distFactor * (isDark ? 0.68 : 0.45);
+        if (dist < maxEdgeDist) {
+          activeEdges.push({ from: i, to: j, dist, maxDist: maxEdgeDist });
+          const distFactor = (1 - dist / maxEdgeDist);
+          const alpha = distFactor * (p1.depthAlpha + p2.depthAlpha) * 0.5 * (isDark ? 0.65 : 0.42);
+          const isHubConn = p1.node.isCoreHub || p2.node.isCoreHub;
 
-      neuralCtx.beginPath();
-      neuralCtx.moveTo(p1.screenX, p1.screenY);
-      neuralCtx.lineTo(p2.screenX, p2.screenY);
-      neuralCtx.strokeStyle = edge.isCoreEdge
-        ? `${coreBridgeColor} ${edgeAlpha * 1.2})`
-        : `${edgeBaseColor} ${edgeAlpha})`;
-      neuralCtx.lineWidth = Math.max(0.8, (p1.scale + p2.scale) * 0.5 * (isDark ? 1.4 : 1.1));
-      neuralCtx.stroke();
+          neuralCtx.beginPath();
+          neuralCtx.moveTo(p1.screenX, p1.screenY);
+          neuralCtx.lineTo(p2.screenX, p2.screenY);
+          neuralCtx.strokeStyle = isHubConn
+            ? `${coreEdgeColor} ${alpha * 1.25})`
+            : `${edgeColor} ${alpha})`;
+          neuralCtx.lineWidth = Math.max(0.6, distFactor * 1.4);
+          neuralCtx.stroke();
+        }
+      }
     }
 
-    // 2. Draw Synaptic Sparks with Motion Comet Trails
+    // 4. Draw Travelling Synaptic Sparks across Full Page
     const sparkColor = isDark ? "rgba(56, 189, 248, 1)" : "rgba(67, 56, 202, 1)";
     const trailColor = isDark ? "rgba(129, 140, 248," : "rgba(99, 102, 241,";
 
-    for (let k = 0; k < synapseSparks.length; k++) {
-      const spark = synapseSparks[k];
-      const edge = sphereEdges[spark.edgeIdx];
-      if (!edge) continue;
+    if (activeEdges.length > 0) {
+      for (let k = 0; k < synapseSparks.length; k++) {
+        const spark = synapseSparks[k];
+        const edge = activeEdges[k % activeEdges.length];
+        if (!edge) continue;
 
-      spark.progress += spark.speed;
-      if (spark.progress >= 1.0) {
-        spark.edgeIdx = Math.floor(Math.random() * sphereEdges.length);
-        spark.progress = 0;
-        spark.forward = Math.random() > 0.5;
-        spark.history = [];
-      }
+        spark.progress += spark.speed;
+        if (spark.progress >= 1.0) {
+          spark.progress = 0;
+          spark.history = [];
+        }
 
-      const p1 = projectedNodes[spark.forward ? edge.from : edge.to];
-      const p2 = projectedNodes[spark.forward ? edge.to : edge.from];
-      if (!p1 || !p2) continue;
+        const p1 = projectedNodes[edge.from];
+        const p2 = projectedNodes[edge.to];
+        if (!p1 || !p2) continue;
 
-      const px = p1.screenX + (p2.screenX - p1.screenX) * spark.progress;
-      const py = p1.screenY + (p2.screenY - p1.screenY) * spark.progress;
-      const pDepth = (p1.depthAlpha + p2.depthAlpha) * 0.5;
+        const px = p1.screenX + (p2.screenX - p1.screenX) * spark.progress;
+        const py = p1.screenY + (p2.screenY - p1.screenY) * spark.progress;
+        const pDepth = (p1.depthAlpha + p2.depthAlpha) * 0.5;
 
-      // Update comet history trail
-      spark.history.push({ x: px, y: py, alpha: pDepth });
-      if (spark.history.length > 5) spark.history.shift();
+        spark.history.push({ x: px, y: py, alpha: pDepth });
+        if (spark.history.length > 5) spark.history.shift();
 
-      // Draw comet tail
-      for (let h = 0; h < spark.history.length; h++) {
-        const pt = spark.history[h];
-        const tAlpha = (h / spark.history.length) * pt.alpha * (isDark ? 0.7 : 0.5);
+        // Draw spark comet tail
+        for (let h = 0; h < spark.history.length; h++) {
+          const pt = spark.history[h];
+          const tAlpha = (h / spark.history.length) * pt.alpha * (isDark ? 0.7 : 0.45);
+          neuralCtx.beginPath();
+          neuralCtx.arc(pt.x, pt.y, (h + 1) * 0.45 * pt.alpha, 0, Math.PI * 2);
+          neuralCtx.fillStyle = `${trailColor} ${tAlpha})`;
+          neuralCtx.fill();
+        }
+
+        // Draw spark head
         neuralCtx.beginPath();
-        neuralCtx.arc(pt.x, pt.y, (h + 1) * 0.5 * pt.alpha, 0, Math.PI * 2);
-        neuralCtx.fillStyle = `${trailColor} ${tAlpha})`;
+        neuralCtx.arc(px, py, 2.5 * pDepth, 0, Math.PI * 2);
+        neuralCtx.fillStyle = sparkColor;
         neuralCtx.fill();
       }
-
-      // Draw spark head with high-glow center
-      neuralCtx.beginPath();
-      neuralCtx.arc(px, py, 2.8 * pDepth, 0, Math.PI * 2);
-      neuralCtx.fillStyle = sparkColor;
-      neuralCtx.fill();
     }
 
-    // 3. Draw 3D Nodes with Halos & Core Hub Rings
-    const nodeColor = isDark ? "rgba(199, 210, 254, 0.95)" : "rgba(67, 56, 202, 0.9)";
+    // 5. Draw Neural Nodes with Pulsing Hub Rings across Full Page
+    const nodeColor = isDark ? "rgba(199, 210, 254, 0.95)" : "rgba(67, 56, 202, 0.88)";
     const coreGlow = isDark ? "rgba(255, 255, 255, 1)" : "rgba(30, 27, 75, 1)";
 
     for (let i = 0; i < projectedNodes.length; i++) {
@@ -427,20 +363,20 @@
       const n = p.node;
       n.pulseOffset += n.pulseSpeed;
 
-      const r = (n.baseRadius + Math.sin(n.pulseOffset) * 0.7) * p.scale;
+      const r = (n.baseRadius + Math.sin(n.pulseOffset) * 0.6) * p.depthScale;
 
-      // Outer aura ring for core hubs
+      // Outer aura ring for major hub centers
       if (n.isCoreHub) {
         neuralCtx.beginPath();
-        neuralCtx.arc(p.screenX, p.screenY, r * 2.5, 0, Math.PI * 2);
-        neuralCtx.strokeStyle = isDark ? "rgba(165, 180, 252, 0.55)" : "rgba(99, 102, 241, 0.4)";
-        neuralCtx.lineWidth = 1.25;
+        neuralCtx.arc(p.screenX, p.screenY, r * 2.4, 0, Math.PI * 2);
+        neuralCtx.strokeStyle = isDark ? "rgba(165, 180, 252, 0.5)" : "rgba(99, 102, 241, 0.35)";
+        neuralCtx.lineWidth = 1.1;
         neuralCtx.stroke();
       }
 
       // Main node circle
       neuralCtx.beginPath();
-      neuralCtx.arc(p.screenX, p.screenY, Math.max(1.6, r), 0, Math.PI * 2);
+      neuralCtx.arc(p.screenX, p.screenY, Math.max(1.5, r), 0, Math.PI * 2);
       neuralCtx.fillStyle = n.isCoreHub ? coreGlow : nodeColor;
       neuralCtx.globalAlpha = p.depthAlpha;
       neuralCtx.fill();
