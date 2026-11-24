@@ -19,34 +19,37 @@
   --top-rim-beam: rgba(99, 102, 241, 0.15);
   
   /* FOREGROUND SAAS DESIGN TOKENS */
-  --header-bg: rgba(255, 255, 255, 0.92);
-  --header-border: #e2e8f0;
+  --header-bg: rgba(255, 255, 255, 0.96);
+  --header-border: #cbd5e1;
   
   --text-main: #0f172a;        /* High-contrast slate-900 */
-  --text-secondary: #334155;   /* Refined body slate-700 */
-  --text-muted: #64748b;       /* Crisp secondary slate-500 */
-  --text-subtle: #94a3b8;      /* Meta & caption slate-400 */
+  --text-secondary: #1e293b;   /* High-contrast body slate-800 */
+  --text-muted: #334155;       /* High-contrast secondary slate-700 */
+  --text-subtle: #475569;      /* Crisp meta & caption slate-600 */
   --text-gradient: linear-gradient(180deg, #0f172a 30%, #312e81 120%);
   
   --card-bg: #ffffff;
-  --card-border: #e2e8f0;
-  --card-inner-rim: rgba(255, 255, 255, 0.95);
+  --card-border: #cbd5e1;
+  --card-inner-rim: rgba(255, 255, 255, 1);
   --card-shadow: 
-    0 1px 3px 0 rgba(0, 0, 0, 0.03),
-    0 6px 18px -4px rgba(0, 0, 0, 0.05);
+    0 0 0 1px rgba(15, 23, 42, 0.06),
+    0 2px 6px -1px rgba(15, 23, 42, 0.06),
+    0 16px 32px -8px rgba(15, 23, 42, 0.1);
   --card-shadow-hover: 
-    0 2px 6px 0 rgba(0, 0, 0, 0.04),
-    0 12px 24px -6px rgba(0, 0, 0, 0.08);
+    0 0 0 1px rgba(15, 23, 42, 0.08),
+    0 4px 12px -2px rgba(15, 23, 42, 0.08),
+    0 20px 40px -8px rgba(15, 23, 42, 0.14);
   
-  --card-subtle-bg: #f8fafc;
-  --card-subtle-border: #e2e8f0;
+  --card-subtle-bg: #ffffff;
+  --card-subtle-border: #cbd5e1;
+  --card-subtle-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
   
-  --input-bg: #ffffff;
+  --input-bg: #f8fafc;
   --input-border: #cbd5e1;
   --input-text: #0f172a;
-  --input-placeholder: #94a3b8;
-  --input-focus-border: #6366f1;
-  --input-focus-ring: rgba(99, 102, 241, 0.14);
+  --input-placeholder: #64748b;
+  --input-focus-border: #4f46e5;
+  --input-focus-ring: rgba(79, 70, 229, 0.16);
   
   --btn-luxury-bg: #0f172a;
   --btn-luxury-text: #ffffff;
@@ -108,34 +111,37 @@
   --top-rim-beam: rgba(99, 102, 241, 0.3);
   
   /* FOREGROUND SAAS DESIGN TOKENS */
-  --header-bg: rgba(8, 10, 15, 0.88);
-  --header-border: rgba(255, 255, 255, 0.08);
+  --header-bg: rgba(9, 12, 18, 0.94);
+  --header-border: rgba(255, 255, 255, 0.12);
   
   --text-main: #f8fafc;        /* Crisp white */
-  --text-secondary: #cbd5e1;   /* Slate-300 */
-  --text-muted: #94a3b8;       /* Slate-400 */
-  --text-subtle: #64748b;      /* Slate-500 */
+  --text-secondary: #e2e8f0;   /* Slate-200 */
+  --text-muted: #cbd5e1;       /* Slate-300 */
+  --text-subtle: #94a3b8;      /* Slate-400 */
   --text-gradient: linear-gradient(180deg, #FFFFFF 20%, #a5b4fc 120%);
   
-  --card-bg: rgba(13, 15, 22, 0.92);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --card-inner-rim: rgba(255, 255, 255, 0.08);
+  --card-bg: #0d1117;
+  --card-border: rgba(255, 255, 255, 0.14);
+  --card-inner-rim: rgba(255, 255, 255, 0.1);
   --card-shadow: 
-    0 1px 3px 0 rgba(0, 0, 0, 0.5),
-    0 10px 28px -4px rgba(0, 0, 0, 0.7);
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 4px 14px 0 rgba(0, 0, 0, 0.6),
+    0 18px 36px -6px rgba(0, 0, 0, 0.85);
   --card-shadow-hover: 
-    0 2px 6px 0 rgba(0, 0, 0, 0.6),
-    0 16px 36px -6px rgba(0, 0, 0, 0.85);
+    0 0 0 1px rgba(255, 255, 255, 0.15),
+    0 6px 20px 0 rgba(0, 0, 0, 0.7),
+    0 24px 48px -6px rgba(0, 0, 0, 0.95);
   
-  --card-subtle-bg: rgba(20, 22, 32, 0.75);
-  --card-subtle-border: rgba(255, 255, 255, 0.06);
+  --card-subtle-bg: #11151f;
+  --card-subtle-border: rgba(255, 255, 255, 0.12);
+  --card-subtle-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.5);
   
-  --input-bg: rgba(9, 10, 15, 0.95);
-  --input-border: rgba(255, 255, 255, 0.1);
+  --input-bg: #090c10;
+  --input-border: rgba(255, 255, 255, 0.14);
   --input-text: #f8fafc;
-  --input-placeholder: #475569;
+  --input-placeholder: #64748b;
   --input-focus-border: #818cf8;
-  --input-focus-ring: rgba(129, 140, 248, 0.22);
+  --input-focus-ring: rgba(129, 140, 248, 0.25);
   
   --btn-luxury-bg: #ffffff;
   --btn-luxury-text: #0f172a;
@@ -225,24 +231,24 @@ body {
 }
 
 .stroke-major-grid {
-  stroke: rgba(15, 23, 42, 0.11);
+  stroke: rgba(15, 23, 42, 0.08);
 }
 [data-theme="dark"] .stroke-major-grid {
-  stroke: rgba(255, 255, 255, 0.14);
+  stroke: rgba(255, 255, 255, 0.09);
 }
 
 .stroke-cross {
-  stroke: rgba(79, 70, 229, 0.55);
+  stroke: rgba(79, 70, 229, 0.45);
 }
 [data-theme="dark"] .stroke-cross {
-  stroke: rgba(165, 180, 252, 0.85);
+  stroke: rgba(165, 180, 252, 0.65);
 }
 
 .fill-cross {
-  fill: rgba(79, 70, 229, 0.6);
+  fill: rgba(79, 70, 229, 0.45);
 }
 [data-theme="dark"] .fill-cross {
-  fill: rgba(165, 180, 252, 0.9);
+  fill: rgba(165, 180, 252, 0.7);
 }
 
 .stroke-cross-subtle {
@@ -270,11 +276,22 @@ body {
   transition: fill 0.3s ease, opacity 0.3s ease;
 }
 
-/* Enterprise SaaS Surface Cards */
+/* Foreground Readability Scrim (Ensures 100% crisp foreground distinction from background) */
+.foreground-scrim {
+  position: absolute;
+  inset: -16px -24px;
+  background: radial-gradient(ellipse at 50% 25%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.65) 55%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 2rem;
+}
+[data-theme="dark"] .foreground-scrim {
+  background: radial-gradient(ellipse at 50% 25%, rgba(3, 3, 4, 0.9) 0%, rgba(3, 3, 4, 0.65) 55%, rgba(3, 3, 4, 0) 100%);
+}
+
+/* Enterprise SaaS Surface Cards — 100% Opaque High-Elevation Surfaces */
 .mono-card {
   background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow);
   border-radius: 1.25rem;
@@ -287,11 +304,18 @@ body {
 
 .mono-card-subtle {
   background: var(--card-subtle-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-subtle-border);
+  box-shadow: var(--card-subtle-shadow);
   border-radius: 0.875rem;
   transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mono-card-subtle:hover {
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
+[data-theme="dark"] .mono-card-subtle:hover {
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Linear / Stripe Inspired Headline Contrast */
