@@ -80,6 +80,21 @@
   --verdict-border: #10b981;
   --footer-bg: rgba(255, 255, 255, 0.92);
   --footer-border: #e2e8f0;
+
+  /* Layer 3: Skyline Digital City & Horizon Colors */
+  --skyline-sky-start: #bae6fd;
+  --skyline-sky-end: #f0f9ff;
+  --skyline-wave1-start: #e0f2fe;
+  --skyline-wave1-end: #bae6fd;
+  --skyline-wave2-start: #7dd3fc;
+  --skyline-wave2-end: #38bdf8;
+  --skyline-wave3-start: #0ea5e9;
+  --skyline-wave3-end: #0284c7;
+  --skyline-wave4-start: #0284c7;
+  --skyline-wave4-end: #0369a1;
+  --skyline-win-fore: #0284c7;
+  --skyline-win-back: #38bdf8;
+  --skyline-mist: #ffffff;
 }
 
 /* 2. DARK THEME (ENTERPRISE OBSIDIAN GLASS) */
@@ -154,6 +169,21 @@
   --verdict-border: #34d399;
   --footer-bg: rgba(6, 7, 10, 0.92);
   --footer-border: rgba(255, 255, 255, 0.08);
+
+  /* Layer 3: Skyline Digital City & Horizon Colors (Dark Mode) */
+  --skyline-sky-start: #075985;
+  --skyline-sky-end: #031e33;
+  --skyline-wave1-start: #0c4a6e;
+  --skyline-wave1-end: #075985;
+  --skyline-wave2-start: #0369a1;
+  --skyline-wave2-end: #0284c7;
+  --skyline-wave3-start: #0c4a6e;
+  --skyline-wave3-end: #075985;
+  --skyline-wave4-start: #082f49;
+  --skyline-wave4-end: #030712;
+  --skyline-win-fore: #38bdf8;
+  --skyline-win-back: #0ea5e9;
+  --skyline-mist: #030304;
 }
 
 /* Base Body Styles */
@@ -227,6 +257,17 @@ body {
 }
 [data-theme="dark"] .fill-cross-subtle {
   fill: rgba(255, 255, 255, 0.35);
+}
+
+/* Layer 3: Digital City Matrix Skyline & Layered Horizon Waves */
+.skyline-sky-ribbon {
+  transition: fill 0.3s ease;
+}
+.skyline-wave {
+  transition: fill 0.3s ease;
+}
+.skyline-window {
+  transition: fill 0.3s ease, opacity 0.3s ease;
 }
 
 /* Enterprise SaaS Surface Cards */

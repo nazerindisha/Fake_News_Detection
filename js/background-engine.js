@@ -3,10 +3,11 @@
  * Masterwork Generative Patterns:
  *  1. Grid (+)  : Technical Blueprint Architectural Coordinate Grid with Corner Calipers
  *  2. Neural    : Dual-Shell 3D Geodesic AI Core with Synaptic Sparks & Comet Trails
+ *  3. Skyline   : Digital City Matrix Skyline & Layered Horizon Waves
  */
 
 (function () {
-  const PATTERNS = ["grid", "neural"];
+  const PATTERNS = ["grid", "neural", "skyline"];
   let currentPatternIndex = 0;
   let isAutoCycle = true;
   let cycleTimer = null;
@@ -25,6 +26,9 @@
 
     // Render Layer 2: Dual-Shell 3D Geodesic AI Constellation Canvas
     container.appendChild(createNeuralLayer());
+
+    // Render Layer 3: Digital City Matrix Skyline & Horizon Waves (User Style Match)
+    container.appendChild(createSkylineLayer());
 
     // Restore saved pattern or default to grid
     const savedPattern = localStorage.getItem("vf_bg_pattern") || "grid";
@@ -437,6 +441,205 @@
     }
 
     canvasAnimId = requestAnimationFrame(renderNeuralFrame);
+  }
+
+  // -------------------------------------------------------------
+  // 3. LAYER 3: DIGITAL CITY MATRIX SKYLINE & HORIZON WAVES (SKYLINE)
+  // -------------------------------------------------------------
+  function createSkylineLayer() {
+    const el = document.createElement("div");
+    el.id = "bgLayer-skyline";
+    el.className = "vector-bg-layer";
+
+    // Procedural building generator
+    let buildingsSVG = "";
+
+    // 1. Faint Background Skyline Silhouette (Depth layer)
+    const backBuildings = [
+      { x: 30, w: 45, h: 220 },
+      { x: 95, w: 40, h: 270 },
+      { x: 195, w: 55, h: 290 },
+      { x: 260, w: 50, h: 240 },
+      { x: 380, w: 60, h: 310 },
+      { x: 490, w: 45, h: 260 },
+      { x: 580, w: 50, h: 320 },
+      { x: 770, w: 45, h: 250 },
+      { x: 840, w: 55, h: 300 },
+      { x: 930, w: 45, h: 230 },
+      { x: 1010, w: 60, h: 280 },
+      { x: 1110, w: 50, h: 250 },
+      { x: 1210, w: 55, h: 290 },
+      { x: 1300, w: 65, h: 240 },
+      { x: 1380, w: 50, h: 200 }
+    ];
+
+    backBuildings.forEach((b) => {
+      const baseY = 820;
+      const bY = baseY - b.h;
+      const cols = Math.floor(b.w / 8);
+      const rows = Math.floor(b.h / 12);
+
+      let dots = "";
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const dx = b.x + 3 + c * 8;
+          const dy = bY + 6 + r * 12;
+          const op = (0.16 + (Math.sin(c * 1.5 + r * 0.8) * 0.5 + 0.5) * 0.22).toFixed(2);
+          dots += `<rect x="${dx}" y="${dy}" width="4" height="6" rx="1" fill="var(--skyline-win-back)" opacity="${op}" class="skyline-window" />`;
+        }
+      }
+      buildingsSVG += `<g class="skyline-bldg-back">${dots}</g>`;
+    });
+
+    // 2. Foreground High-Definition Matrix Skyline
+    const foreBuildings = [
+      { x: 65, w: 60, h: 260, style: "step", cols: 5 },
+      { x: 140, w: 65, h: 340, style: "matrix", cols: 6 },
+      { x: 220, w: 50, h: 230, style: "matrix", cols: 4 },
+      { x: 285, w: 95, h: 290, style: "stepped-tower", cols: 8 },
+      { x: 395, w: 45, h: 215, style: "matrix", cols: 4 },
+      { x: 455, w: 70, h: 320, style: "matrix", cols: 6 },
+      { x: 540, w: 55, h: 255, style: "matrix", cols: 5 },
+      // HERO CENTERPIECE: CYLINDER SKYSCRAPER (from user's image)
+      { x: 630, w: 126, h: 410, style: "cylinder", cols: 14 },
+      { x: 775, w: 75, h: 310, style: "matrix", cols: 7 },
+      { x: 865, w: 55, h: 235, style: "matrix", cols: 5 },
+      { x: 935, w: 85, h: 330, style: "stepped-tower", cols: 7 },
+      { x: 1035, w: 75, h: 285, style: "matrix", cols: 6 },
+      { x: 1125, w: 60, h: 240, style: "matrix", cols: 5 },
+      { x: 1200, w: 70, h: 275, style: "matrix", cols: 6 },
+      { x: 1285, w: 60, h: 220, style: "step", cols: 5 }
+    ];
+
+    foreBuildings.forEach((b) => {
+      const baseY = 820;
+      const bY = baseY - b.h;
+      let dots = "";
+
+      if (b.style === "cylinder") {
+        // Centerpiece Cylindrical Tower with curved elliptical window bands
+        const rows = Math.floor(b.h / 11);
+        const midC = (b.cols - 1) / 2;
+
+        // Top cap dome ellipse
+        dots += `<ellipse cx="${b.x + b.w / 2}" cy="${bY}" rx="${b.w / 2}" ry="12" fill="none" stroke="var(--skyline-win-fore)" stroke-width="1.5" opacity="0.5" />`;
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < b.cols; c++) {
+            // Horizontal cosine projection for 3D cylinder curvature
+            const normC = (c - midC) / midC;
+            const angle = normC * (Math.PI * 0.42);
+            const cx = b.x + b.w / 2 + Math.sin(angle) * (b.w / 2 - 4);
+            const curveOffset = (1 - Math.cos(angle)) * 5;
+            const cy = bY + 14 + r * 11 + curveOffset;
+
+            const dotW = Math.max(2.5, 5 * Math.cos(angle));
+            const dotH = 6;
+            const op = (0.42 + Math.cos(angle) * 0.45).toFixed(2);
+
+            dots += `<rect x="${(cx - dotW / 2).toFixed(1)}" y="${cy.toFixed(1)}" width="${dotW.toFixed(1)}" height="${dotH}" rx="1" fill="var(--skyline-win-fore)" opacity="${op}" class="skyline-window" />`;
+          }
+        }
+      } else {
+        // Standard high-tech rectangular or stepped tower
+        const rows = Math.floor(b.h / 12);
+        const colW = (b.w - 8) / b.cols;
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < b.cols; c++) {
+            if (b.style === "step" && r < 4 && (c === 0 || c === b.cols - 1)) continue;
+            if (b.style === "stepped-tower" && r < 6 && (c === 0 || c === b.cols - 1)) continue;
+            if (b.style === "stepped-tower" && r < 3 && (c === 1 || c === b.cols - 2)) continue;
+
+            const dx = b.x + 4 + c * colW;
+            const dy = bY + 8 + r * 12;
+            const op = (0.35 + (Math.sin(c * 2 + r * 1.3) * 0.5 + 0.5) * 0.5).toFixed(2);
+            dots += `<rect x="${dx.toFixed(1)}" y="${dy.toFixed(1)}" width="${(colW - 2.5).toFixed(1)}" height="6.5" rx="1.2" fill="var(--skyline-win-fore)" opacity="${op}" class="skyline-window" />`;
+          }
+        }
+      }
+
+      buildingsSVG += `<g class="skyline-bldg-fore">${dots}</g>`;
+    });
+
+    el.innerHTML = `
+      <svg class="w-full h-full" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Top Atmospheric Sky Gradients -->
+          <linearGradient id="skylineTopGrad1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--skyline-sky-start)" stop-opacity="0.55" />
+            <stop offset="100%" stop-color="var(--skyline-sky-end)" stop-opacity="0" />
+          </linearGradient>
+
+          <linearGradient id="skylineTopGrad2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--skyline-sky-start)" stop-opacity="0.32" />
+            <stop offset="100%" stop-color="var(--skyline-sky-end)" stop-opacity="0" />
+          </linearGradient>
+
+          <!-- Bottom Layered Horizon Wave Gradients (Graduated Cyan to Cerulean to Deep Blue) -->
+          <linearGradient id="skylineWave1" x1="0" y1="0" x2="1" y2="0.6">
+            <stop offset="0%" stop-color="var(--skyline-wave1-start)" stop-opacity="0.75" />
+            <stop offset="100%" stop-color="var(--skyline-wave1-end)" stop-opacity="0.55" />
+          </linearGradient>
+
+          <linearGradient id="skylineWave2" x1="0" y1="0" x2="1" y2="0.5">
+            <stop offset="0%" stop-color="var(--skyline-wave2-start)" stop-opacity="0.85" />
+            <stop offset="100%" stop-color="var(--skyline-wave2-end)" stop-opacity="0.7" />
+          </linearGradient>
+
+          <linearGradient id="skylineWave3" x1="0" y1="0" x2="1" y2="0.3">
+            <stop offset="0%" stop-color="var(--skyline-wave3-start)" stop-opacity="0.95" />
+            <stop offset="100%" stop-color="var(--skyline-wave3-end)" stop-opacity="0.85" />
+          </linearGradient>
+
+          <linearGradient id="skylineWave4" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="var(--skyline-wave4-start)" stop-opacity="1" />
+            <stop offset="100%" stop-color="var(--skyline-wave4-end)" stop-opacity="0.95" />
+          </linearGradient>
+
+          <!-- Soft Horizon Mist Mask to blend base of skyscrapers -->
+          <linearGradient id="skyMistMaskGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+            <stop offset="68%" stop-color="#ffffff" stop-opacity="0.95" />
+            <stop offset="88%" stop-color="#ffffff" stop-opacity="0.25" />
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+          </linearGradient>
+          <mask id="skyMistMask">
+            <rect x="0" y="0" width="1440" height="900" fill="url(#skyMistMaskGrad)" />
+          </mask>
+        </defs>
+
+        <!-- 1. Top Atmosphere Flowing Ribbons -->
+        <g class="skyline-sky-ribbon">
+          <path d="M 0 0 L 1440 0 L 1440 115 C 1050 50 500 160 0 90 Z" fill="url(#skylineTopGrad1)" />
+          <path d="M 0 0 L 1440 0 L 1440 65 C 950 15 420 105 0 50 Z" fill="url(#skylineTopGrad2)" />
+          <path d="M 0 80 C 480 150 980 45 1440 100" fill="none" stroke="var(--skyline-wave2-end)" stroke-width="1.2" opacity="0.25" />
+          <path d="M 0 110 C 550 185 1020 75 1440 135" fill="none" stroke="var(--skyline-wave1-end)" stroke-width="0.8" opacity="0.2" />
+        </g>
+
+        <!-- 2. Digital City Matrix Skyline (Masked with Horizon Mist) -->
+        <g mask="url(#skyMistMask)">
+          ${buildingsSVG}
+        </g>
+
+        <!-- 3. Bottom Layered Flowing Horizon Waves (Layered Cyan to Rich Blue) -->
+        <g class="skyline-wave">
+          <!-- Layer 1: Uppermost gentle crest -->
+          <path d="M 0 740 C 380 690 920 790 1440 710 L 1440 900 L 0 900 Z" fill="url(#skylineWave1)" />
+          
+          <!-- Layer 2: Rolling middle wave -->
+          <path d="M 0 780 C 420 740 980 835 1440 755 L 1440 900 L 0 900 Z" fill="url(#skylineWave2)" />
+          
+          <!-- Layer 3: Vibrant Cerulean wave -->
+          <path d="M 0 825 C 390 790 1040 870 1440 805 L 1440 900 L 0 900 Z" fill="url(#skylineWave3)" />
+          
+          <!-- Layer 4: Deepest corporate blue bottom horizon ribbon -->
+          <path d="M 0 865 C 450 835 1100 895 1440 850 L 1440 900 L 0 900 Z" fill="url(#skylineWave4)" />
+        </g>
+      </svg>
+    `;
+
+    return el;
   }
 
   // -------------------------------------------------------------
