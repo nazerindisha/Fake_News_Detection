@@ -211,12 +211,19 @@ body {
   stroke: rgba(255, 255, 255, 0.3);
 }
 
-/* Layer 2: Organic Topographic Waves */
-.stroke-topo-waves {
-  stroke: rgba(99, 102, 241, 0.18);
+/* Layer 2: Organic Topographic Waves & Elevation Contours */
+.stroke-topo-index {
+  stroke: rgba(79, 70, 229, 0.4);
 }
-[data-theme="dark"] .stroke-topo-waves {
-  stroke: rgba(165, 180, 252, 0.28);
+[data-theme="dark"] .stroke-topo-index {
+  stroke: rgba(165, 180, 252, 0.65);
+}
+
+.stroke-topo-hairline {
+  stroke: rgba(99, 102, 241, 0.16);
+}
+[data-theme="dark"] .stroke-topo-hairline {
+  stroke: rgba(165, 180, 252, 0.22);
 }
 
 .stroke-topo-accent {
@@ -226,12 +233,44 @@ body {
   stroke: #818cf8;
 }
 
-/* Layer 4: Cyber Telemetry HUD & Radar */
+.fill-topo-badge {
+  fill: rgba(238, 242, 255, 0.9);
+  stroke: rgba(99, 102, 241, 0.25);
+  stroke-width: 0.75;
+}
+[data-theme="dark"] .fill-topo-badge {
+  fill: rgba(15, 23, 42, 0.85);
+  stroke: rgba(165, 180, 252, 0.35);
+  stroke-width: 0.75;
+}
+
+.fill-topo-text {
+  fill: #4338ca;
+}
+[data-theme="dark"] .fill-topo-text {
+  fill: #c7d2fe;
+}
+
+.wave-breathe {
+  animation: waveBreathing 18s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes waveBreathing {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.012) translateY(-6px);
+  }
+}
+
+/* Layer 4: Aerospace CAD Blueprint Telemetry & Radar HUD */
 .stroke-telemetry-hud {
-  stroke: rgba(14, 165, 233, 0.22);
+  stroke: rgba(14, 165, 233, 0.24);
 }
 [data-theme="dark"] .stroke-telemetry-hud {
-  stroke: rgba(56, 189, 248, 0.4);
+  stroke: rgba(56, 189, 248, 0.45);
 }
 
 .stroke-telemetry-accent {
@@ -239,6 +278,21 @@ body {
 }
 [data-theme="dark"] .stroke-telemetry-accent {
   stroke: #38bdf8;
+}
+
+.fill-telemetry-text {
+  fill: #0369a1;
+}
+[data-theme="dark"] .fill-telemetry-text {
+  fill: #7dd3fc;
+}
+
+.fill-telemetry-beacon {
+  fill: #f43f5e;
+}
+
+.stroke-telemetry-beacon {
+  stroke: #f43f5e;
 }
 
 /* Luxury Glassmorphic Cards */
