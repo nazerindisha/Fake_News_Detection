@@ -1,86 +1,230 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VeriFact AI — Monochrome Edition</title>
+  <title>VeriFact AI — Luxury Monochrome Edition</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
   <style>
+    :root {
+      --bg-primary: #040405;
+      --bg-card: rgba(14, 14, 18, 0.72);
+      --bg-card-subtle: rgba(20, 20, 26, 0.65);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(255, 255, 255, 0.35);
+    }
+
     body {
       font-family: 'Inter', 'Hind Siliguri', sans-serif;
-      background-color: #050505;
-      color: #fafafa;
+      background-color: var(--bg-primary);
+      color: #f4f4f6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
     }
-    .mono-card {
-      background: #0d0d0f;
-      border: 1px solid #222226;
-    }
-    .mono-card-subtle {
-      background: #141417;
-      border: 1px solid #27272e;
-    }
+
     .font-code {
       font-family: 'JetBrains Mono', monospace;
     }
-    /* Subtle custom scrollbar */
+
+    /* Luxury Glassmorphic Cards */
+    .mono-card {
+      background: linear-gradient(180deg, rgba(18, 18, 22, 0.75) 0%, rgba(10, 10, 14, 0.85) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: 
+        0 0 0 1px rgba(0, 0, 0, 0.6),
+        0 24px 50px -12px rgba(0, 0, 0, 0.95),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+      border-radius: 1.25rem;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+    }
+
+    .mono-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 
+        0 0 0 1px rgba(0, 0, 0, 0.7),
+        0 30px 60px -15px rgba(0, 0, 0, 1),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+    }
+
+    .mono-card-subtle {
+      background: rgba(18, 18, 24, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+      border-radius: 0.875rem;
+    }
+
+    /* Luxury Headline Gradient */
+    .text-metallic {
+      background: linear-gradient(180deg, #FFFFFF 20%, #A1A1AA 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* High-contrast Luxury Button */
+    .btn-luxury {
+      background: linear-gradient(180deg, #FFFFFF 0%, #E4E4E7 100%);
+      color: #050507;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(255, 255, 255, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-luxury:hover {
+      background: #FFFFFF;
+      box-shadow: 
+        0 0 35px rgba(255, 255, 255, 0.4),
+        0 10px 25px -4px rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .btn-luxury:active {
+      transform: translateY(0);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Form Inputs */
+    .mono-input {
+      background: rgba(7, 7, 10, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: #fafafa;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .mono-input:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.25),
+        0 0 25px rgba(255, 255, 255, 0.06),
+        inset 0 2px 4px rgba(0, 0, 0, 0.5);
+      outline: none;
+    }
+
+    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #09090b;
+      background: #050507;
     }
     ::-webkit-scrollbar-thumb {
       background: #27272a;
-      border-radius: 3px;
+      border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
       background: #3f3f46;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-white selection:text-black">
+<body class="selection:bg-white selection:text-black flex flex-col justify-between">
 
-  <!-- Top Navbar -->
-  <header class="border-b border-zinc-800/80 bg-black/90 sticky top-0 z-30 backdrop-blur-md">
-    <div class="max-w-5xl mx-auto px-4 py-3.5 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-white text-black flex items-center justify-center font-bold text-base shadow-sm">
+  <!-- Luxury Ambient Background Canvas -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+    <!-- Top Central Spotlight -->
+    <div class="absolute -top-[250px] left-1/2 -translate-x-1/2 w-[1200px] h-[650px] bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.075),transparent_70%)]"></div>
+    
+    <!-- Secondary Bottom Ambient Glow -->
+    <div class="absolute -bottom-[200px] right-[-100px] w-[700px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.025),transparent_70%)]"></div>
+    <div class="absolute top-[40%] left-[-150px] w-[500px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.015),transparent_70%)]"></div>
+
+    <!-- Micro Dot-Matrix Grid -->
+    <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_35%,#000_60%,transparent_100%)] opacity-35"></div>
+
+    <!-- Sleek Top Rim Beam -->
+    <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+  </div>
+
+  <!-- Top Glassmorphic Navigation -->
+  <header class="relative z-20 border-b border-white/[0.08] bg-[#050507]/80 backdrop-blur-2xl sticky top-0">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3.5">
+        <!-- Logo Emblem -->
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-b from-white to-zinc-200 text-black flex items-center justify-center font-extrabold text-sm shadow-[0_0_20px_rgba(255,255,255,0.25)] border border-white">
           VF
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-base font-bold tracking-tight text-white uppercase">VeriFact AI</h1>
-            <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">v2.1</span>
+            <h1 class="text-sm sm:text-base font-extrabold tracking-tight text-white uppercase">VeriFact AI</h1>
+            <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-zinc-900 text-zinc-300 border border-zinc-700/80 shadow-inner">
+              Pro v2.1
+            </span>
           </div>
           <p class="text-[11px] text-zinc-400">Bilingual Misinformation & Multimodal Forensics</p>
         </div>
       </div>
 
       <!-- Backend Status Pill -->
-      <div id="serverStatus" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900 border border-zinc-800 text-zinc-300">
-        <span id="statusDot" class="w-2 h-2 rounded-full bg-zinc-500 animate-pulse"></span>
-        <span id="statusText">Checking Backend...</span>
+      <div id="serverStatus" class="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-xs font-mono bg-zinc-950/80 border border-white/[0.08] text-zinc-300 shadow-sm backdrop-blur-md">
+        <span id="statusDot" class="w-2 h-2 rounded-full bg-zinc-600 animate-pulse"></span>
+        <span id="statusText">Checking Engine...</span>
       </div>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main class="max-w-5xl w-full mx-auto px-4 py-8 space-y-6 flex-grow">
+  <main class="relative z-10 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6 flex-grow">
+
+    <!-- Hero Header Strip -->
+    <div class="text-center sm:text-left space-y-2">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase bg-white/[0.04] border border-white/[0.08] text-zinc-400 mb-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+        Enterprise Fact-Checking Intelligence
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-metallic">
+        Autonomous Claim & Forensics Engine
+      </h2>
+      <p class="text-xs sm:text-sm text-zinc-400 max-w-2xl leading-relaxed">
+        Verify textual claims, scrape live news URLs, and inspect digital images using Error Level Analysis (ELA) across 70,000+ factual ground-truth records.
+      </p>
+    </div>
+
+    <!-- Feature Pillars -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+      <div class="mono-card-subtle p-3 flex flex-col justify-between">
+        <span class="text-zinc-500 text-[10px] uppercase">NLP Core</span>
+        <span class="text-zinc-200 font-semibold mt-1">Dual EN / BN</span>
+      </div>
+      <div class="mono-card-subtle p-3 flex flex-col justify-between">
+        <span class="text-zinc-500 text-[10px] uppercase">Ground Truth</span>
+        <span class="text-zinc-200 font-semibold mt-1">70,000+ Articles</span>
+      </div>
+      <div class="mono-card-subtle p-3 flex flex-col justify-between">
+        <span class="text-zinc-500 text-[10px] uppercase">Vision Core</span>
+        <span class="text-zinc-200 font-semibold mt-1">ELA Forensics</span>
+      </div>
+      <div class="mono-card-subtle p-3 flex flex-col justify-between">
+        <span class="text-zinc-500 text-[10px] uppercase">Security</span>
+        <span class="text-zinc-200 font-semibold mt-1">SSRF Protected</span>
+      </div>
+    </div>
 
     <!-- Input Card -->
-    <section class="mono-card rounded-2xl p-6 shadow-2xl space-y-5">
-      <div class="flex flex-wrap items-center justify-between gap-4">
+    <section class="mono-card p-6 sm:p-7 space-y-6">
+      
+      <!-- Card Header: Title & Language Selector -->
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-5">
         <div>
-          <h2 class="text-xl font-bold tracking-tight text-white">Verify Claim, Article URL, or Image</h2>
-          <p class="text-xs text-zinc-400 mt-0.5">Cross-checks ML classifiers, 70,000+ verified records, live web sources, and ELA image forensics.</p>
+          <h3 class="text-lg font-bold tracking-tight text-white">Input Claim, URL, or Media</h3>
+          <p class="text-xs text-zinc-400 mt-0.5">Select verification modality and enter your material for assessment.</p>
         </div>
 
         <!-- Language Selector -->
-        <div id="langSelector" class="inline-flex rounded-xl bg-zinc-950 p-1 border border-zinc-800">
+        <div id="langSelector" class="inline-flex rounded-xl bg-zinc-950/90 p-1 border border-white/[0.08] shadow-inner">
           <button type="button" id="btnEn" onclick="setLanguage('en')"
-            class="px-3.5 py-1 rounded-lg text-xs font-semibold bg-white text-black transition">
+            class="px-3.5 py-1 rounded-lg text-xs font-semibold bg-white text-black shadow-sm transition">
             English
           </button>
           <button type="button" id="btnBn" onclick="setLanguage('bn')"
@@ -90,67 +234,74 @@
         </div>
       </div>
 
-      <!-- Input Mode Toggle -->
-      <div class="flex flex-wrap items-center gap-2 border-b border-zinc-800/80 pb-3">
+      <!-- Mode Selector Tabs -->
+      <div class="flex flex-wrap items-center gap-2">
         <button type="button" id="tabText" onclick="setInputMode('text')"
-          class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-black transition">
+          class="px-4 py-2 rounded-xl text-xs font-semibold bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)] transition">
           Raw Text / Headline
         </button>
         <button type="button" id="tabUrl" onclick="setInputMode('url')"
-          class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition">
+          class="px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-white/[0.05] transition">
           Article URL
         </button>
         <button type="button" id="tabImage" onclick="setInputMode('image')"
-          class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition">
+          class="px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-white/[0.05] transition">
           Image Forensics (ELA)
         </button>
       </div>
 
-      <!-- Mode 1: Textarea -->
+      <!-- Modality 1: Raw Text Input -->
       <div id="textInputContainer">
         <textarea id="newsInput" rows="5"
-          placeholder="Paste a news headline, claim, or article paragraph here..."
-          class="w-full rounded-xl bg-zinc-950 border border-zinc-800 focus:border-white focus:ring-1 focus:ring-white p-4 text-zinc-100 placeholder-zinc-600 text-sm outline-none transition resize-y font-normal"></textarea>
+          placeholder="Paste an English news headline, claim, or article paragraph here..."
+          class="mono-input w-full rounded-xl p-4 text-zinc-100 placeholder-zinc-600 text-sm outline-none resize-y font-normal leading-relaxed"></textarea>
       </div>
 
-      <!-- Mode 2: URL Input -->
-      <div id="urlInputContainer" class="hidden">
+      <!-- Modality 2: Article URL Input -->
+      <div id="urlInputContainer" class="hidden space-y-2">
         <input id="newsUrlInput" type="url"
           placeholder="Paste news article URL (e.g., https://www.bbc.com/news/article...)"
-          class="w-full rounded-xl bg-zinc-950 border border-zinc-800 focus:border-white focus:ring-1 focus:ring-white px-4 py-3 text-zinc-100 placeholder-zinc-600 text-sm outline-none transition" />
-        <p class="text-[11px] text-zinc-500 mt-1.5 font-mono">Article content will be securely extracted via server-side scraper with SSRF protection.</p>
-      </div>
-
-      <!-- Mode 3: Image Upload Input -->
-      <div id="imageInputContainer" class="hidden space-y-3">
-        <input id="imageFileInput" type="file" accept="image/jpeg,image/jpg,image/png,image/webp,image/avif"
-          onchange="previewSelectedImage()"
-          class="block w-full text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-white file:text-black hover:file:bg-zinc-200 cursor-pointer bg-zinc-950 border border-zinc-800 rounded-xl p-2.5" />
-        <p class="text-[11px] text-zinc-500 font-mono">
-          Supports JPEG, PNG, WebP up to 5 MB. Evaluates Error Level Analysis (ELA) divergence across RGB channels.
-        </p>
-        <div id="imagePreviewWrapper" class="hidden pt-1">
-          <img id="imagePreview" src="" alt="Selected preview" class="max-h-56 rounded-xl border border-zinc-800 object-contain bg-black p-1" />
+          class="mono-input w-full rounded-xl px-4 py-3 text-zinc-100 placeholder-zinc-600 text-sm outline-none" />
+        <div class="flex items-center gap-2 text-[11px] text-zinc-500 font-mono">
+          <span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span>
+          Article content is extracted securely via server-side scraper with SSRF protection.
         </div>
       </div>
 
-      <!-- Sample Prompts & Action Button -->
-      <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+      <!-- Modality 3: Image Forensics Input -->
+      <div id="imageInputContainer" class="hidden space-y-4">
+        <div class="mono-card-subtle p-5 border-dashed border-zinc-700/80 rounded-xl text-center space-y-3">
+          <input id="imageFileInput" type="file" accept="image/jpeg,image/jpg,image/png,image/webp,image/avif"
+            onchange="previewSelectedImage()"
+            class="block w-full text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-white file:text-black hover:file:bg-zinc-200 cursor-pointer bg-zinc-950/80 border border-zinc-800 rounded-xl p-2.5" />
+          <p class="text-[11px] text-zinc-500 font-mono">
+            Supported formats: JPEG, PNG, WebP up to 5 MB. Analyzes Error Level Analysis (ELA) divergence across RGB channels.
+          </p>
+        </div>
+        <div id="imagePreviewWrapper" class="hidden pt-1">
+          <div class="text-[11px] font-mono text-zinc-400 uppercase tracking-wider mb-2">Image Preview:</div>
+          <img id="imagePreview" src="" alt="Selected preview" class="max-h-60 rounded-xl border border-white/[0.1] object-contain bg-black/90 p-1.5 shadow-2xl" />
+        </div>
+      </div>
+
+      <!-- Card Action & Samples Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-white/[0.08]">
         <div id="sampleControls" class="flex flex-wrap items-center gap-2 text-xs">
-          <span class="text-zinc-500">Try sample:</span>
-          <button type="button" onclick="loadSample('en')" class="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 transition">
+          <span class="text-zinc-500 font-mono text-[11px]">Quick Samples:</span>
+          <button type="button" onclick="loadSample('en')" class="px-3 py-1 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 text-xs transition">
             English Sample
           </button>
-          <button type="button" onclick="loadSample('bn')" class="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 transition">
+          <button type="button" onclick="loadSample('bn')" class="px-3 py-1 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 text-xs transition">
             বাংলা নমুনা
           </button>
-          <button type="button" onclick="clearAll()" class="px-2.5 py-1 rounded-md text-zinc-500 hover:text-zinc-300 transition">
+          <button type="button" onclick="clearAll()" class="px-3 py-1 rounded-lg text-zinc-500 hover:text-zinc-300 transition text-xs font-mono">
             Clear
           </button>
         </div>
 
+        <!-- Verify Button -->
         <button id="verifyBtn" onclick="verifyNews()"
-          class="px-6 py-2.5 rounded-xl bg-white hover:bg-zinc-200 active:scale-[0.99] text-black font-bold text-xs shadow-md flex items-center gap-2 transition cursor-pointer">
+          class="btn-luxury px-6 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 cursor-pointer">
           <span id="btnLabel">Analyze & Verify Claim</span>
           <svg id="btnSpinner" class="hidden w-4 h-4 animate-spin text-black" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -161,67 +312,74 @@
     </section>
 
     <!-- Error Banner -->
-    <div id="errorBox" class="hidden rounded-xl bg-zinc-900 border border-zinc-700 p-4 text-xs text-zinc-300 font-mono"></div>
+    <div id="errorBox" class="hidden rounded-xl bg-zinc-950 border border-zinc-700/80 p-4 text-xs text-zinc-300 font-mono shadow-xl"></div>
 
     <!-- Results Section -->
-    <section id="resultSection" class="hidden space-y-5">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <section id="resultSection" class="hidden space-y-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         <!-- Verdict Card -->
-        <div id="verdictCard" class="mono-card rounded-2xl p-6 flex flex-col justify-between border-l-4 border-white">
+        <div id="verdictCard" class="mono-card p-6 flex flex-col justify-between border-l-4 border-white">
           <div>
             <div class="flex items-center justify-between">
               <span class="text-[11px] uppercase tracking-widest text-zinc-400 font-mono">Prediction Verdict</span>
-              <span id="langBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">English</span>
+              <span id="langBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-zinc-900 text-zinc-300 border border-zinc-700">English</span>
             </div>
             <h3 id="verdictTitle" class="text-2xl font-extrabold mt-3 text-white tracking-tight">REAL</h3>
             <p id="verdictSubtitle" class="text-xs text-zinc-400 mt-1 font-mono">Classification & Retrieval Assessment</p>
           </div>
-          <div class="mt-6">
-            <div class="flex justify-between text-xs mb-1.5 font-mono">
+
+          <div class="mt-8 space-y-2">
+            <div class="flex justify-between text-xs font-mono">
               <span class="text-zinc-500">Confidence Score</span>
-              <span id="confidenceText" class="font-bold text-white">0%</span>
+              <span id="confidenceText" class="font-bold text-white text-sm">0%</span>
             </div>
-            <div class="w-full h-2 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
-              <div id="confidenceBar" class="h-full bg-white rounded-full transition-all duration-500" style="width: 0%"></div>
+            <div class="w-full h-2.5 bg-zinc-950 rounded-full overflow-hidden border border-zinc-800 p-[1px]">
+              <div id="confidenceBar" class="h-full bg-white rounded-full transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.4)]" style="width: 0%"></div>
             </div>
           </div>
         </div>
 
         <!-- Evidence / Forensics Card -->
-        <div class="mono-card rounded-2xl p-6 md:col-span-2 flex flex-col justify-between space-y-4">
+        <div class="mono-card p-6 md:col-span-2 flex flex-col justify-between space-y-4">
           <div>
-            <div class="flex items-center justify-between gap-2 border-b border-zinc-800 pb-3">
+            <div class="flex items-center justify-between gap-2 border-b border-white/[0.08] pb-3">
               <span id="evidenceHeading" class="text-xs uppercase tracking-wider text-zinc-300 font-mono font-semibold">Hybrid Fact Retrieval & Pattern Analysis</span>
-              <span id="sourceBadge" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400">
+              <span id="sourceBadge" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-zinc-950 border border-zinc-800 text-zinc-400">
                 Ground-Truth Match
               </span>
             </div>
 
             <!-- Matches & Patterns Container -->
-            <div id="matchesContainer" class="mt-3 space-y-3 text-sm text-zinc-300 leading-relaxed"></div>
+            <div id="matchesContainer" class="mt-4 space-y-3 text-sm text-zinc-300 leading-relaxed"></div>
           </div>
 
           <!-- Reference Sources Links -->
-          <div id="linksContainer" class="hidden pt-3 border-t border-zinc-800 space-y-1.5">
-            <span class="text-xs font-mono uppercase text-zinc-400">Verified Sources:</span>
+          <div id="linksContainer" class="hidden pt-3 border-t border-white/[0.08] space-y-2">
+            <span class="text-xs font-mono uppercase text-zinc-400">Verified Ground Truth Sources:</span>
             <ul id="linksList" class="space-y-1 text-xs text-zinc-300 underline font-mono"></ul>
           </div>
         </div>
       </div>
 
       <!-- Raw API Response Accordion -->
-      <details class="mono-card rounded-xl p-4 text-xs text-zinc-400">
-        <summary class="cursor-pointer font-mono font-medium text-zinc-300 select-none">View Complete JSON Metadata</summary>
-        <pre id="rawJson" class="mt-3 p-3 rounded-lg bg-black text-zinc-300 border border-zinc-900 overflow-x-auto text-[11px] leading-relaxed font-code"></pre>
+      <details class="mono-card p-4 text-xs text-zinc-400">
+        <summary class="cursor-pointer font-mono font-medium text-zinc-300 select-none hover:text-white transition">
+          View Complete JSON Engine Metadata
+        </summary>
+        <pre id="rawJson" class="mt-3 p-3.5 rounded-xl bg-black/90 text-zinc-300 border border-white/[0.08] overflow-x-auto text-[11px] leading-relaxed font-code"></pre>
       </details>
     </section>
 
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-zinc-900 py-4 text-center text-xs text-zinc-500 font-mono">
-    VeriFact AI • Monochrome Enterprise Edition • Bilingual Misinformation & Forensics
+  <!-- Luxury Footer -->
+  <footer class="relative z-10 border-t border-white/[0.08] bg-[#040405]/90 py-5 text-center text-xs text-zinc-500 font-mono">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>VeriFact AI • Enterprise Monochrome Edition</div>
+      <div class="text-[11px] text-zinc-600">Dual NLP Classification • ELA Vision Forensics • SSRF Guard</div>
+    </div>
   </footer>
 
   <script>
@@ -229,7 +387,7 @@
     let selectedLang = "en";
     let inputMode = "text";
 
-    // 1. Check Backend Status via /openapi.json or root
+    // 1. Check Backend Status via /openapi.json
     async function initDashboard() {
       const dot = document.getElementById("statusDot");
       const text = document.getElementById("statusText");
@@ -237,11 +395,11 @@
       try {
         const res = await fetch(`${API_BASE}/openapi.json`);
         if (!res.ok) throw new Error("API unreachable");
-        dot.className = "w-2 h-2 rounded-full bg-white";
-        text.textContent = "API Online (/predict & /predict-image)";
+        dot.className = "w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]";
+        text.textContent = "Engine Online (/predict & /predict-image)";
       } catch (err) {
         dot.className = "w-2 h-2 rounded-full bg-zinc-600";
-        text.textContent = "API Offline (Run python run.py)";
+        text.textContent = "Engine Offline (Run python run.py)";
       }
     }
 
@@ -251,7 +409,7 @@
       const btnBn = document.getElementById("btnBn");
       const input = document.getElementById("newsInput");
 
-      const active = "px-3.5 py-1 rounded-lg text-xs font-semibold bg-white text-black transition";
+      const active = "px-3.5 py-1 rounded-lg text-xs font-semibold bg-white text-black shadow-sm transition";
       const inactive = "px-3.5 py-1 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition";
 
       if (lang === "en") {
@@ -277,8 +435,8 @@
       const langSelector = document.getElementById("langSelector");
       const btnLabel = document.getElementById("btnLabel");
 
-      const active = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-black transition";
-      const inactive = "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition";
+      const active = "px-4 py-2 rounded-xl text-xs font-semibold bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)] transition";
+      const inactive = "px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-white/[0.05] transition";
 
       tabText.className = mode === "text" ? active : inactive;
       tabUrl.className = mode === "url" ? active : inactive;
@@ -426,13 +584,13 @@
 
       verdictTitle.textContent = data.verdict || "ANALYZED";
       if (isSuspicious) {
-        verdictTitle.className = "text-xl font-extrabold mt-3 text-zinc-100 tracking-tight";
-        verdictCard.className = "mono-card rounded-2xl p-6 flex flex-col justify-between border-l-4 border-zinc-500 bg-zinc-950";
-        confidenceBar.className = "h-full bg-zinc-400 rounded-full transition-all duration-500";
+        verdictTitle.className = "text-xl font-extrabold mt-3 text-zinc-200 tracking-tight";
+        verdictCard.className = "mono-card p-6 flex flex-col justify-between border-l-4 border-zinc-500";
+        confidenceBar.className = "h-full bg-zinc-400 rounded-full transition-all duration-700 shadow-[0_0_10px_rgba(161,161,170,0.5)]";
       } else {
         verdictTitle.className = "text-xl font-extrabold mt-3 text-white tracking-tight";
-        verdictCard.className = "mono-card rounded-2xl p-6 flex flex-col justify-between border-l-4 border-white bg-zinc-950";
-        confidenceBar.className = "h-full bg-white rounded-full transition-all duration-500";
+        verdictCard.className = "mono-card p-6 flex flex-col justify-between border-l-4 border-white";
+        confidenceBar.className = "h-full bg-white rounded-full transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.6)]";
       }
 
       let conf = Number(data.confidence ?? 0.5);
@@ -445,28 +603,28 @@
       const matchesContainer = document.getElementById("matchesContainer");
       matchesContainer.innerHTML = `
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-          <div class="p-3 rounded-xl mono-card-subtle">
-            <div class="text-zinc-500">ela_mean</div>
-            <div class="text-base font-bold text-white mt-0.5">${f.ela_mean ?? "-"}</div>
+          <div class="p-3.5 rounded-xl mono-card-subtle">
+            <div class="text-zinc-500 text-[10px] uppercase">ela_mean</div>
+            <div class="text-base font-bold text-white mt-1">${f.ela_mean ?? "-"}</div>
           </div>
-          <div class="p-3 rounded-xl mono-card-subtle">
-            <div class="text-zinc-500">ela_std</div>
-            <div class="text-base font-bold text-white mt-0.5">${f.ela_std ?? "-"}</div>
+          <div class="p-3.5 rounded-xl mono-card-subtle">
+            <div class="text-zinc-500 text-[10px] uppercase">ela_std</div>
+            <div class="text-base font-bold text-white mt-1">${f.ela_std ?? "-"}</div>
           </div>
-          <div class="p-3 rounded-xl mono-card-subtle">
-            <div class="text-zinc-500">ela_max</div>
-            <div class="text-base font-bold text-white mt-0.5">${f.ela_max ?? "-"}</div>
+          <div class="p-3.5 rounded-xl mono-card-subtle">
+            <div class="text-zinc-500 text-[10px] uppercase">ela_max</div>
+            <div class="text-base font-bold text-white mt-1">${f.ela_max ?? "-"}</div>
           </div>
-          <div class="p-3 rounded-xl mono-card-subtle">
-            <div class="text-zinc-500">high_error_ratio</div>
-            <div class="text-base font-bold text-white mt-0.5">${f.high_error_ratio ?? "-"}</div>
+          <div class="p-3.5 rounded-xl mono-card-subtle">
+            <div class="text-zinc-500 text-[10px] uppercase">high_error_ratio</div>
+            <div class="text-base font-bold text-white mt-1">${f.high_error_ratio ?? "-"}</div>
           </div>
         </div>
-        <div class="p-3.5 rounded-xl mono-card-subtle text-xs text-zinc-300 space-y-1 font-mono">
+        <div class="p-4 rounded-xl mono-card-subtle text-xs text-zinc-300 space-y-1.5 font-mono">
           <div><span class="text-zinc-500">Dimensions & Format:</span> ${f.width ?? "?"}x${f.height ?? "?"} (${f.format ?? "UNKNOWN"}, quality=${f.quality ?? 90})</div>
           <div><span class="text-zinc-500">Content-Type:</span> ${data.content_type || "N/A"}</div>
         </div>
-        <p class="text-xs text-zinc-400 bg-zinc-900 border border-zinc-800 rounded-xl p-3 font-mono">
+        <p class="text-xs text-zinc-400 bg-zinc-950/90 border border-white/[0.08] rounded-xl p-3.5 font-mono">
           ${data.note || "Baseline ELA forensic analysis."}
         </p>
       `;
@@ -487,14 +645,14 @@
 
       if (isFake) {
         verdictTitle.textContent = "FAKE / MISLEADING";
-        verdictTitle.className = "text-2xl font-extrabold mt-3 text-zinc-300 tracking-tight";
-        verdictCard.className = "mono-card rounded-2xl p-6 flex flex-col justify-between border-l-4 border-zinc-500 bg-zinc-950";
-        confidenceBar.className = "h-full bg-zinc-400 rounded-full transition-all duration-500";
+        verdictTitle.className = "text-2xl font-extrabold mt-3 text-zinc-200 tracking-tight";
+        verdictCard.className = "mono-card p-6 flex flex-col justify-between border-l-4 border-zinc-500";
+        confidenceBar.className = "h-full bg-zinc-400 rounded-full transition-all duration-700 shadow-[0_0_10px_rgba(161,161,170,0.5)]";
       } else {
         verdictTitle.textContent = "REAL / AUTHENTIC";
         verdictTitle.className = "text-2xl font-extrabold mt-3 text-white tracking-tight";
-        verdictCard.className = "mono-card rounded-2xl p-6 flex flex-col justify-between border-l-4 border-white bg-zinc-950";
-        confidenceBar.className = "h-full bg-white rounded-full transition-all duration-500";
+        verdictCard.className = "mono-card p-6 flex flex-col justify-between border-l-4 border-white";
+        confidenceBar.className = "h-full bg-white rounded-full transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.6)]";
       }
 
       let conf = Number(data.confidence ?? 85);
@@ -509,10 +667,13 @@
 
       if (Array.isArray(data.explanations) && data.explanations.length > 0) {
         const expBox = document.createElement("div");
-        expBox.className = "p-3.5 rounded-xl mono-card-subtle space-y-1.5";
+        expBox.className = "p-4 rounded-xl mono-card-subtle space-y-2";
         expBox.innerHTML = `
-          <div class="text-[11px] font-bold uppercase tracking-wider text-white font-mono">Detected Linguistic & Model Patterns</div>
-          <ul class="list-disc list-inside text-xs text-zinc-300 space-y-1">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-white font-mono flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+            Detected Linguistic & Model Patterns
+          </div>
+          <ul class="list-disc list-inside text-xs text-zinc-300 space-y-1 pl-1">
             ${data.explanations.map(item => `<li>${item}</li>`).join("")}
           </ul>
         `;
@@ -523,20 +684,20 @@
       if (Array.isArray(matches) && matches.length > 0) {
         matches.forEach(item => {
           const card = document.createElement("div");
-          card.className = "p-3.5 rounded-xl mono-card-subtle space-y-1";
+          card.className = "p-4 rounded-xl mono-card-subtle space-y-1.5";
           if (typeof item === "string") {
             card.textContent = item;
           } else {
             const title = item.title || item.headline || "Verified Historical Match";
             const snippet = item.content || item.text || item.snippet || JSON.stringify(item);
             const score = item.similarity_score ? ` (Match: ${Math.round(item.similarity_score * 100)}%)` : "";
-            card.innerHTML = `<div class="font-semibold text-white text-xs">${title}${score}</div><p class="text-xs text-zinc-400">${snippet}</p>`;
+            card.innerHTML = `<div class="font-semibold text-white text-xs">${title}${score}</div><p class="text-xs text-zinc-400 leading-relaxed">${snippet}</p>`;
           }
           matchesContainer.appendChild(card);
         });
       } else {
         const emptyNote = document.createElement("p");
-        emptyNote.className = "text-xs text-zinc-500 font-mono";
+        emptyNote.className = "text-xs text-zinc-500 font-mono p-2";
         emptyNote.textContent = isFake
           ? "No matching verified article found in local corpus."
           : "Claim verified as authentic by the bilingual ML classification pipeline.";
