@@ -84,19 +84,19 @@
   --footer-bg: rgba(255, 255, 255, 0.92);
   --footer-border: #e2e8f0;
 
-  /* Layer 3: Skyline Digital City & Horizon Colors */
-  --skyline-sky-start: #bae6fd;
-  --skyline-sky-end: #f0f9ff;
-  --skyline-wave1-start: #e0f2fe;
-  --skyline-wave1-end: #bae6fd;
-  --skyline-wave2-start: #7dd3fc;
-  --skyline-wave2-end: #38bdf8;
-  --skyline-wave3-start: #0ea5e9;
-  --skyline-wave3-end: #0284c7;
-  --skyline-wave4-start: #0284c7;
-  --skyline-wave4-end: #0369a1;
-  --skyline-win-fore: #0284c7;
-  --skyline-win-back: #38bdf8;
+  /* Layer 3: Skyline Architectural Slate Gray & Layered Monochrome Horizon */
+  --skyline-sky-start: #cbd5e1;       /* Cool slate-300 */
+  --skyline-sky-end: #f8fafc;         /* Soft canvas slate-50 */
+  --skyline-wave1-start: #f1f5f9;     /* Slate-100 */
+  --skyline-wave1-end: #e2e8f0;       /* Slate-200 */
+  --skyline-wave2-start: #e2e8f0;     /* Slate-200 */
+  --skyline-wave2-end: #cbd5e1;       /* Slate-300 */
+  --skyline-wave3-start: #94a3b8;     /* Slate-400 */
+  --skyline-wave3-end: #64748b;       /* Slate-500 */
+  --skyline-wave4-start: #475569;     /* Slate-600 */
+  --skyline-wave4-end: #1e293b;       /* Deep slate-800 */
+  --skyline-win-fore: #334155;        /* Foreground building windows: Charcoal slate-700 */
+  --skyline-win-back: #94a3b8;        /* Background building windows: Slate-400 */
   --skyline-mist: #ffffff;
 }
 
@@ -176,19 +176,19 @@
   --footer-bg: rgba(6, 7, 10, 0.92);
   --footer-border: rgba(255, 255, 255, 0.08);
 
-  /* Layer 3: Skyline Digital City & Horizon Colors (Dark Mode) */
-  --skyline-sky-start: #075985;
-  --skyline-sky-end: #031e33;
-  --skyline-wave1-start: #0c4a6e;
-  --skyline-wave1-end: #075985;
-  --skyline-wave2-start: #0369a1;
-  --skyline-wave2-end: #0284c7;
-  --skyline-wave3-start: #0c4a6e;
-  --skyline-wave3-end: #075985;
-  --skyline-wave4-start: #082f49;
-  --skyline-wave4-end: #030712;
-  --skyline-win-fore: #38bdf8;
-  --skyline-win-back: #0ea5e9;
+  /* Layer 3: Skyline Architectural Slate Gray (Dark Mode) */
+  --skyline-sky-start: #1e293b;       /* Slate-800 */
+  --skyline-sky-end: #090d16;         /* Deep canvas */
+  --skyline-wave1-start: #0f172a;     /* Slate-900 */
+  --skyline-wave1-end: #1e293b;       /* Slate-800 */
+  --skyline-wave2-start: #1e293b;     /* Slate-800 */
+  --skyline-wave2-end: #334155;       /* Slate-700 */
+  --skyline-wave3-start: #1e293b;     /* Slate-800 */
+  --skyline-wave3-end: #0f172a;       /* Slate-900 */
+  --skyline-wave4-start: #090d16;     /* Deep slate */
+  --skyline-wave4-end: #030304;       /* Obsidian */
+  --skyline-win-fore: #e2e8f0;        /* Platinum / titanium silver dots */
+  --skyline-win-back: #64748b;        /* Subtle slate-500 dots */
   --skyline-mist: #030304;
 }
 
@@ -274,6 +274,45 @@ body {
 }
 .skyline-window {
   transition: fill 0.3s ease, opacity 0.3s ease;
+}
+
+/* Progressive Building Construction / Assembly Animation ("Build Making") */
+@keyframes buildingRiseUp {
+  0% {
+    transform: translateY(180px) scaleY(0.3);
+    opacity: 0;
+  }
+  65% {
+    transform: translateY(-6px) scaleY(1.02);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(0) scaleY(1);
+    opacity: 1;
+  }
+}
+
+.skyline-bldg-item {
+  transform-origin: bottom center;
+  will-change: transform, opacity;
+}
+
+.animate-build .skyline-bldg-item {
+  animation: buildingRiseUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Breathing Matrix Data Pulse on selected windows */
+@keyframes matrixWindowBlink {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.matrix-live-pulse {
+  animation: matrixWindowBlink 3.2s ease-in-out infinite alternate;
 }
 
 /* Foreground Readability Scrim (Ensures 100% crisp foreground distinction from background) */

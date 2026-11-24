@@ -134,6 +134,11 @@
   let targetRotX = 0.22;
   let targetRotY = 0.45;
 
+  let mouseNormX = 0;
+  let mouseNormY = 0;
+  let skylineParallaxX = 0;
+  let skylineParallaxAnimId = null;
+
   const OUTER_NODE_COUNT = 64;
   const INNER_NODE_COUNT = 16;
   const SPARK_COUNT = 20;
@@ -147,12 +152,12 @@
     neuralCanvas.className = "w-full h-full";
     el.appendChild(neuralCanvas);
 
-    // Interactive mouse tilt parallax tracking
+    // Interactive mouse tilt & parallax tracking (used by Neural & Skyline)
     window.addEventListener("mousemove", (e) => {
-      const nx = (e.clientX / window.innerWidth) - 0.5;
-      const ny = (e.clientY / window.innerHeight) - 0.5;
-      targetRotY = 0.45 + nx * 0.95;
-      targetRotX = 0.22 + ny * 0.7;
+      mouseNormX = (e.clientX / window.innerWidth) - 0.5;
+      mouseNormY = (e.clientY / window.innerHeight) - 0.5;
+      targetRotY = 0.45 + mouseNormX * 0.95;
+      targetRotX = 0.22 + mouseNormY * 0.7;
     });
 
     return el;
@@ -452,7 +457,8 @@
     el.className = "vector-bg-layer";
 
     // Procedural building generator
-    let buildingsSVG = "";
+    let backBuildingsSVG = "";
+    let foreBuildingsSVG = "";
 
     // 1. Faint Background Skyline Silhouette (Depth layer)
     const backBuildings = [
@@ -473,7 +479,7 @@
       { x: 1380, w: 50, h: 200 }
     ];
 
-    backBuildings.forEach((b) => {
+    backBuildings.forEach((b, idx) => {
       const baseY = 820;
       const bY = baseY - b.h;
       const cols = Math.floor(b.w / 8);
@@ -488,7 +494,7 @@
           dots += `<rect x="${dx}" y="${dy}" width="4" height="6" rx="1" fill="var(--skyline-win-back)" opacity="${op}" class="skyline-window" />`;
         }
       }
-      buildingsSVG += `<g class="skyline-bldg-back">${dots}</g>`;
+      backBuildingsSVG += `<g class="skyline-bldg-item" style="animation-delay: ${(idx * 35).toFixed(0)}ms">${dots}</g>`;
     });
 
     // 2. Foreground High-Definition Matrix Skyline
@@ -511,7 +517,7 @@
       { x: 1285, w: 60, h: 220, style: "step", cols: 5 }
     ];
 
-    foreBuildings.forEach((b) => {
+    foreBuildings.forEach((b, idx) => {
       const baseY = 820;
       const bY = baseY - b.h;
       let dots = "";
@@ -522,7 +528,7 @@
         const midC = (b.cols - 1) / 2;
 
         // Top cap dome ellipse
-        dots += `<ellipse cx="${b.x + b.w / 2}" cy="${bY}" rx="${b.w / 2}" ry="12" fill="none" stroke="var(--skyline-win-fore)" stroke-width="1.5" opacity="0.5" />`;
+        dots += `<ellipse cx="${b.x + b.w / 2}" cy="${bY}" rx="${b.w / 2}" ry="12" fill="none" stroke="var(--skyline-win-fore)" stroke-width="1.5" opacity="0.6" />`;
 
         for (let r = 0; r < rows; r++) {
           for (let c = 0; c < b.cols; c++) {
@@ -535,9 +541,11 @@
 
             const dotW = Math.max(2.5, 5 * Math.cos(angle));
             const dotH = 6;
-            const op = (0.42 + Math.cos(angle) * 0.45).toFixed(2);
+            const op = (0.42 + Math.cos(angle) * 0.48).toFixed(2);
+            const isPulse = (r + c) % 8 === 0 ? "matrix-live-pulse" : "";
+            const delay = ((r * 0.15 + c * 0.25) % 3).toFixed(2);
 
-            dots += `<rect x="${(cx - dotW / 2).toFixed(1)}" y="${cy.toFixed(1)}" width="${dotW.toFixed(1)}" height="${dotH}" rx="1" fill="var(--skyline-win-fore)" opacity="${op}" class="skyline-window" />`;
+            dots += `<rect x="${(cx - dotW / 2).toFixed(1)}" y="${cy.toFixed(1)}" width="${dotW.toFixed(1)}" height="${dotH}" rx="1" fill="var(--skyline-win-fore)" opacity="${op}" class="skyline-window ${isPulse}" style="animation-delay: ${delay}s" />`;
           }
         }
       } else {
@@ -554,42 +562,45 @@
             const dx = b.x + 4 + c * colW;
             const dy = bY + 8 + r * 12;
             const op = (0.35 + (Math.sin(c * 2 + r * 1.3) * 0.5 + 0.5) * 0.5).toFixed(2);
-            dots += `<rect x="${dx.toFixed(1)}" y="${dy.toFixed(1)}" width="${(colW - 2.5).toFixed(1)}" height="6.5" rx="1.2" fill="var(--skyline-win-fore)" opacity="${op}" class="skyline-window" />`;
+            const isPulse = (r * 3 + c) % 11 === 0 ? "matrix-live-pulse" : "";
+            const delay = ((r * 0.2 + c * 0.15) % 3).toFixed(2);
+
+            dots += `<rect x="${dx.toFixed(1)}" y="${dy.toFixed(1)}" width="${(colW - 2.5).toFixed(1)}" height="6.5" rx="1.2" fill="var(--skyline-win-fore)" opacity="${op}" class="skyline-window ${isPulse}" style="animation-delay: ${delay}s" />`;
           }
         }
       }
 
-      buildingsSVG += `<g class="skyline-bldg-fore">${dots}</g>`;
+      foreBuildingsSVG += `<g class="skyline-bldg-item" style="animation-delay: ${(idx * 55 + 60).toFixed(0)}ms">${dots}</g>`;
     });
 
     el.innerHTML = `
-      <svg class="w-full h-full" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <svg class="w-full h-full animate-build" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <!-- Top Atmospheric Sky Gradients -->
+          <!-- Top Atmospheric Sky Gradients (Architectural Slate Monochrome) -->
           <linearGradient id="skylineTopGrad1" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--skyline-sky-start)" stop-opacity="0.55" />
+            <stop offset="0%" stop-color="var(--skyline-sky-start)" stop-opacity="0.45" />
             <stop offset="100%" stop-color="var(--skyline-sky-end)" stop-opacity="0" />
           </linearGradient>
 
           <linearGradient id="skylineTopGrad2" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--skyline-sky-start)" stop-opacity="0.32" />
+            <stop offset="0%" stop-color="var(--skyline-sky-start)" stop-opacity="0.25" />
             <stop offset="100%" stop-color="var(--skyline-sky-end)" stop-opacity="0" />
           </linearGradient>
 
-          <!-- Bottom Layered Horizon Wave Gradients (Graduated Cyan to Cerulean to Deep Blue) -->
+          <!-- Bottom Layered Horizon Wave Gradients (Architectural Slate Monochrome) -->
           <linearGradient id="skylineWave1" x1="0" y1="0" x2="1" y2="0.6">
-            <stop offset="0%" stop-color="var(--skyline-wave1-start)" stop-opacity="0.75" />
-            <stop offset="100%" stop-color="var(--skyline-wave1-end)" stop-opacity="0.55" />
+            <stop offset="0%" stop-color="var(--skyline-wave1-start)" stop-opacity="0.8" />
+            <stop offset="100%" stop-color="var(--skyline-wave1-end)" stop-opacity="0.6" />
           </linearGradient>
 
           <linearGradient id="skylineWave2" x1="0" y1="0" x2="1" y2="0.5">
             <stop offset="0%" stop-color="var(--skyline-wave2-start)" stop-opacity="0.85" />
-            <stop offset="100%" stop-color="var(--skyline-wave2-end)" stop-opacity="0.7" />
+            <stop offset="100%" stop-color="var(--skyline-wave2-end)" stop-opacity="0.75" />
           </linearGradient>
 
           <linearGradient id="skylineWave3" x1="0" y1="0" x2="1" y2="0.3">
-            <stop offset="0%" stop-color="var(--skyline-wave3-start)" stop-opacity="0.95" />
-            <stop offset="100%" stop-color="var(--skyline-wave3-end)" stop-opacity="0.85" />
+            <stop offset="0%" stop-color="var(--skyline-wave3-start)" stop-opacity="0.92" />
+            <stop offset="100%" stop-color="var(--skyline-wave3-end)" stop-opacity="0.82" />
           </linearGradient>
 
           <linearGradient id="skylineWave4" x1="0" y1="0" x2="1" y2="0">
@@ -609,31 +620,36 @@
           </mask>
         </defs>
 
-        <!-- 1. Top Atmosphere Flowing Ribbons -->
-        <g class="skyline-sky-ribbon">
+        <!-- 1. Top Atmosphere Flowing Ribbons (Parallax Plane 1) -->
+        <g id="skylineGroupSky" class="skyline-sky-ribbon">
           <path d="M 0 0 L 1440 0 L 1440 115 C 1050 50 500 160 0 90 Z" fill="url(#skylineTopGrad1)" />
           <path d="M 0 0 L 1440 0 L 1440 65 C 950 15 420 105 0 50 Z" fill="url(#skylineTopGrad2)" />
-          <path d="M 0 80 C 480 150 980 45 1440 100" fill="none" stroke="var(--skyline-wave2-end)" stroke-width="1.2" opacity="0.25" />
-          <path d="M 0 110 C 550 185 1020 75 1440 135" fill="none" stroke="var(--skyline-wave1-end)" stroke-width="0.8" opacity="0.2" />
+          <path d="M 0 80 C 480 150 980 45 1440 100" fill="none" stroke="var(--skyline-wave2-end)" stroke-width="1.2" opacity="0.3" />
+          <path d="M 0 110 C 550 185 1020 75 1440 135" fill="none" stroke="var(--skyline-wave1-end)" stroke-width="0.8" opacity="0.25" />
         </g>
 
-        <!-- 2. Digital City Matrix Skyline (Masked with Horizon Mist) -->
+        <!-- 2. Digital City Matrix Skyline (Masked with Horizon Mist - Multiplane Parallax 2 & 3) -->
         <g mask="url(#skyMistMask)">
-          ${buildingsSVG}
+          <g id="skylineGroupBack" class="skyline-plane-back">
+            ${backBuildingsSVG}
+          </g>
+          <g id="skylineGroupFore" class="skyline-plane-fore">
+            ${foreBuildingsSVG}
+          </g>
         </g>
 
-        <!-- 3. Bottom Layered Flowing Horizon Waves (Layered Cyan to Rich Blue) -->
-        <g class="skyline-wave">
+        <!-- 3. Bottom Layered Flowing Horizon Waves (Parallax Plane 4) -->
+        <g id="skylineGroupWaves" class="skyline-wave">
           <!-- Layer 1: Uppermost gentle crest -->
           <path d="M 0 740 C 380 690 920 790 1440 710 L 1440 900 L 0 900 Z" fill="url(#skylineWave1)" />
           
           <!-- Layer 2: Rolling middle wave -->
           <path d="M 0 780 C 420 740 980 835 1440 755 L 1440 900 L 0 900 Z" fill="url(#skylineWave2)" />
           
-          <!-- Layer 3: Vibrant Cerulean wave -->
+          <!-- Layer 3: Graphite wave ribbon -->
           <path d="M 0 825 C 390 790 1040 870 1440 805 L 1440 900 L 0 900 Z" fill="url(#skylineWave3)" />
           
-          <!-- Layer 4: Deepest corporate blue bottom horizon ribbon -->
+          <!-- Layer 4: Deepest charcoal bottom horizon ribbon -->
           <path d="M 0 865 C 450 835 1100 895 1440 850 L 1440 900 L 0 900 Z" fill="url(#skylineWave4)" />
         </g>
       </svg>
@@ -643,7 +659,45 @@
   }
 
   // -------------------------------------------------------------
-  // 4. PATTERN DISPLAY & TRANSITIONS
+  // 4. SKYLINE INTERACTIVE 3D PARALLAX LOOP ("MOVABLE")
+  // -------------------------------------------------------------
+  function renderSkylineParallax() {
+    const layer = document.getElementById("bgLayer-skyline");
+    if (!layer || layer.style.opacity === "0") {
+      skylineParallaxAnimId = requestAnimationFrame(renderSkylineParallax);
+      return;
+    }
+
+    // Spring interpolation towards mouse position
+    skylineParallaxX += (mouseNormX - skylineParallaxX) * 0.055;
+
+    const groupFore = document.getElementById("skylineGroupFore");
+    const groupBack = document.getElementById("skylineGroupBack");
+    const groupWaves = document.getElementById("skylineGroupWaves");
+    const groupSky = document.getElementById("skylineGroupSky");
+
+    if (groupFore) {
+      // Foreground buildings move with noticeable depth parallax (28px)
+      groupFore.setAttribute("transform", `translate(${(skylineParallaxX * 28).toFixed(2)}, 0)`);
+    }
+    if (groupBack) {
+      // Background buildings move with subtle distance parallax (12px)
+      groupBack.setAttribute("transform", `translate(${(skylineParallaxX * 12).toFixed(2)}, 0)`);
+    }
+    if (groupWaves) {
+      // Horizon waves shift gently in foreground (7px)
+      groupWaves.setAttribute("transform", `translate(${(skylineParallaxX * 7).toFixed(2)}, 0)`);
+    }
+    if (groupSky) {
+      // Sky ribbons shift subtly in opposite direction (-8px)
+      groupSky.setAttribute("transform", `translate(${(-skylineParallaxX * 8).toFixed(2)}, 0)`);
+    }
+
+    skylineParallaxAnimId = requestAnimationFrame(renderSkylineParallax);
+  }
+
+  // -------------------------------------------------------------
+  // 5. PATTERN DISPLAY & TRANSITIONS
   // -------------------------------------------------------------
   function showPattern(patternName) {
     PATTERNS.forEach(name => {
@@ -681,6 +735,17 @@
     if (patternName === "neural") {
       resizeNeuralCanvas();
       if (!canvasAnimId) renderNeuralFrame();
+    }
+
+    // Trigger progressive construction ("Build Making") and start parallax when switching to Skyline
+    if (patternName === "skyline") {
+      const svgEl = document.querySelector("#bgLayer-skyline svg");
+      if (svgEl) {
+        svgEl.classList.remove("animate-build");
+        void svgEl.offsetWidth; // Force reflow to re-trigger rising animation
+        svgEl.classList.add("animate-build");
+      }
+      if (!skylineParallaxAnimId) renderSkylineParallax();
     }
   }
 
