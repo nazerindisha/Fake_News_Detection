@@ -1,0 +1,256 @@
+/* =========================================================
+   VERIFACT AI — LUXURY MONOCHROME DESIGN SYSTEM
+   Modular Stylesheet
+   ========================================================= */
+
+/* 1. LIGHT THEME (LUXURY WHITE - DEFAULT) */
+:root, [data-theme="light"] {
+  --bg-primary: #f8f9fb;
+  --bg-dots: rgba(0, 0, 0, 0.045);
+  --spotlight-1: rgba(0, 0, 0, 0.03);
+  --spotlight-2: rgba(0, 0, 0, 0.015);
+  --top-rim-beam: rgba(0, 0, 0, 0.08);
+  
+  --header-bg: rgba(255, 255, 255, 0.86);
+  --header-border: rgba(0, 0, 0, 0.07);
+  
+  --text-main: #09090b;
+  --text-secondary: #3f3f46;
+  --text-muted: #71717a;
+  --text-subtle: #a1a1aa;
+  --text-gradient: linear-gradient(180deg, #09090b 20%, #52525b 100%);
+  
+  --card-bg: linear-gradient(180deg, #ffffff 0%, #fafafc 100%);
+  --card-border: rgba(0, 0, 0, 0.07);
+  --card-inner-rim: rgba(255, 255, 255, 0.9);
+  --card-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 10px 30px -10px rgba(0, 0, 0, 0.05),
+    0 24px 48px -18px rgba(0, 0, 0, 0.04);
+  --card-shadow-hover: 
+    0 2px 4px rgba(0, 0, 0, 0.03),
+    0 16px 36px -10px rgba(0, 0, 0, 0.08),
+    0 32px 64px -20px rgba(0, 0, 0, 0.06);
+  
+  --card-subtle-bg: rgba(244, 245, 247, 0.85);
+  --card-subtle-border: rgba(0, 0, 0, 0.06);
+  
+  --input-bg: #ffffff;
+  --input-border: rgba(0, 0, 0, 0.1);
+  --input-text: #09090b;
+  --input-placeholder: #a1a1aa;
+  --input-focus-border: #09090b;
+  --input-focus-ring: rgba(9, 9, 11, 0.12);
+  
+  --btn-luxury-bg: linear-gradient(180deg, #18181b 0%, #09090b 100%);
+  --btn-luxury-text: #ffffff;
+  --btn-luxury-border: #000000;
+  --btn-luxury-shadow: 0 4px 14px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.08);
+  --btn-luxury-hover: #000000;
+  
+  --pill-bg: #f4f4f6;
+  --pill-border: rgba(0, 0, 0, 0.07);
+  --pill-text: #27272a;
+  
+  --tab-bar-bg: #f1f2f5;
+  --tab-active-bg: #ffffff;
+  --tab-active-text: #09090b;
+  --tab-active-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --tab-inactive-text: #71717a;
+  --tab-inactive-hover: #09090b;
+  
+  --logo-bg: #09090b;
+  --logo-text: #ffffff;
+  --logo-border: #000000;
+  
+  --progress-track: #e4e4e7;
+  --progress-bar: #09090b;
+  --progress-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  
+  --code-bg: #f4f5f7;
+  --code-border: rgba(0, 0, 0, 0.07);
+  --code-text: #18181b;
+  
+  --verdict-border: #09090b;
+  --footer-bg: rgba(255, 255, 255, 0.88);
+  --footer-border: rgba(0, 0, 0, 0.06);
+}
+
+/* 2. DARK THEME (LUXURY OBSIDIAN) */
+[data-theme="dark"] {
+  --bg-primary: #030304;
+  --bg-dots: rgba(255, 255, 255, 0.07);
+  --spotlight-1: rgba(255, 255, 255, 0.07);
+  --spotlight-2: rgba(255, 255, 255, 0.02);
+  --top-rim-beam: rgba(255, 255, 255, 0.2);
+  
+  --header-bg: rgba(6, 6, 8, 0.84);
+  --header-border: rgba(255, 255, 255, 0.08);
+  
+  --text-main: #f4f4f6;
+  --text-secondary: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --text-subtle: #71717a;
+  --text-gradient: linear-gradient(180deg, #FFFFFF 20%, #A1A1AA 100%);
+  
+  --card-bg: linear-gradient(180deg, rgba(16, 16, 20, 0.75) 0%, rgba(10, 10, 14, 0.85) 100%);
+  --card-border: rgba(255, 255, 255, 0.09);
+  --card-inner-rim: rgba(255, 255, 255, 0.12);
+  --card-shadow: 
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 20px 48px -12px rgba(0, 0, 0, 0.95);
+  --card-shadow-hover: 
+    0 0 0 1px rgba(0, 0, 0, 0.7),
+    0 28px 56px -12px rgba(0, 0, 0, 1);
+  
+  --card-subtle-bg: rgba(18, 18, 24, 0.65);
+  --card-subtle-border: rgba(255, 255, 255, 0.06);
+  
+  --input-bg: rgba(8, 8, 11, 0.85);
+  --input-border: rgba(255, 255, 255, 0.09);
+  --input-text: #fafafa;
+  --input-placeholder: #52525b;
+  --input-focus-border: rgba(255, 255, 255, 0.4);
+  --input-focus-ring: rgba(255, 255, 255, 0.25);
+  
+  --btn-luxury-bg: linear-gradient(180deg, #FFFFFF 0%, #E4E4E7 100%);
+  --btn-luxury-text: #050507;
+  --btn-luxury-border: rgba(255, 255, 255, 0.9);
+  --btn-luxury-shadow: 0 0 25px rgba(255, 255, 255, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --btn-luxury-hover: #ffffff;
+  
+  --pill-bg: #09090b;
+  --pill-border: rgba(255, 255, 255, 0.1);
+  --pill-text: #d4d4d8;
+  
+  --tab-bar-bg: rgba(10, 10, 12, 0.85);
+  --tab-active-bg: #ffffff;
+  --tab-active-text: #050507;
+  --tab-active-shadow: 0 0 15px rgba(255, 255, 255, 0.25);
+  --inactive-tab-text: #a1a1aa;
+  --inactive-tab-hover: #ffffff;
+  
+  --logo-bg: linear-gradient(180deg, #ffffff 0%, #e4e4e7 100%);
+  --logo-text: #000000;
+  --logo-border: #ffffff;
+  
+  --progress-track: #18181b;
+  --progress-bar: #ffffff;
+  --progress-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  
+  --code-bg: rgba(2, 2, 3, 0.9);
+  --code-border: rgba(255, 255, 255, 0.08);
+  --code-text: #d4d4d8;
+  
+  --verdict-border: #ffffff;
+  --footer-bg: rgba(4, 4, 5, 0.88);
+  --footer-border: rgba(255, 255, 255, 0.07);
+}
+
+/* Core Typography & Base */
+body {
+  font-family: 'Inter', 'Hind Siliguri', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  letter-spacing: -0.011em;
+}
+
+.font-code {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Luxury Glassmorphic Cards */
+.mono-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow), inset 0 1px 0 0 var(--card-inner-rim);
+  border-radius: 1.35rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease, background 0.3s ease;
+}
+
+.mono-card:hover {
+  box-shadow: var(--card-shadow-hover), inset 0 1px 0 0 var(--card-inner-rim);
+}
+
+.mono-card-subtle {
+  background: var(--card-subtle-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-subtle-border);
+  border-radius: 1rem;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Metallic Gradient Headlines */
+.text-metallic {
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Luxury Primary Action Button */
+.btn-luxury {
+  background: var(--btn-luxury-bg);
+  color: var(--btn-luxury-text);
+  border: 1px solid var(--btn-luxury-border);
+  box-shadow: var(--btn-luxury-shadow);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-luxury:hover {
+  transform: translateY(-1.5px);
+  opacity: 0.96;
+}
+
+.btn-luxury:active {
+  transform: translateY(0);
+}
+
+/* Luxury Micro Inputs */
+.mono-input {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--input-text);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+}
+
+.mono-input::placeholder {
+  color: var(--input-placeholder);
+}
+
+.mono-input:focus {
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 1px var(--input-focus-ring);
+  outline: none;
+}
+
+/* Theme Pill */
+.pill-theme {
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+  color: var(--pill-text);
+  transition: all 0.2s ease;
+}
+
+/* Smooth Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: #a1a1aa;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #71717a;
+}
