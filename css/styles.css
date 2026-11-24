@@ -169,73 +169,76 @@ body {
 }
 
 /* =========================================================
-   DYNAMIC BACKGROUND SHADE PATTERNS (USER PRESETS)
+   PURE DYNAMIC VECTOR SVG & CANVAS BACKGROUND LAYERS
    ========================================================= */
-.bg-layer-pattern {
+.vector-bg-layer {
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background-position: center;
-  background-repeat: repeat;
-  transition: opacity 0.4s ease, background-image 0.4s ease, filter 0.4s ease;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 1.2s;
+  overflow: hidden;
 }
 
-/* Pattern 1: Technical Grid & Crosses (+) */
-.pattern-grid {
-  background-image: url('../assets/backgrounds/bg-grid-cross.jpg');
-  background-size: 380px auto;
-  opacity: 0.55;
-  mix-blend-mode: multiply;
+/* Layer 1: Technical Blueprint Cross Grid (+) */
+.stroke-minor-grid {
+  stroke: rgba(15, 23, 42, 0.05);
 }
-[data-theme="dark"] .pattern-grid {
-  filter: invert(1) brightness(0.65) contrast(1.15);
-  opacity: 0.16;
-  mix-blend-mode: screen;
+[data-theme="dark"] .stroke-minor-grid {
+  stroke: rgba(255, 255, 255, 0.06);
 }
 
-/* Pattern 2: Wavy Topographic Fluid Contour Lines */
-.pattern-waves {
-  background-image: url('../assets/backgrounds/bg-contour-waves.jpg');
-  background-size: cover;
-  background-position: top center;
-  opacity: 0.35;
-  mix-blend-mode: multiply;
+.stroke-major-grid {
+  stroke: rgba(15, 23, 42, 0.09);
 }
-[data-theme="dark"] .pattern-waves {
-  filter: invert(1) brightness(0.65) contrast(1.15);
-  opacity: 0.15;
-  mix-blend-mode: screen;
+[data-theme="dark"] .stroke-major-grid {
+  stroke: rgba(255, 255, 255, 0.12);
 }
 
-/* Pattern 3: AI Neural Network Nodes */
-.pattern-neural {
-  background-image: url('../assets/backgrounds/bg-neural-nodes.jpg');
-  background-size: contain;
-  background-position: right center;
-  background-repeat: no-repeat;
-  opacity: 0.42;
-  mix-blend-mode: multiply;
+.stroke-cross {
+  stroke: rgba(79, 70, 229, 0.45);
 }
-[data-theme="dark"] .pattern-neural {
-  filter: invert(1) brightness(0.65) contrast(1.15);
-  opacity: 0.18;
-  mix-blend-mode: screen;
+[data-theme="dark"] .stroke-cross {
+  stroke: rgba(165, 180, 252, 0.8);
 }
 
-/* Pattern 4: Cyber Telemetry Arc Blueprint */
-.pattern-telemetry {
-  background-image: url('../assets/backgrounds/bg-cyber-telemetry.jpg');
-  background-size: 750px auto;
-  background-position: bottom left;
-  background-repeat: no-repeat;
-  opacity: 0.42;
-  mix-blend-mode: multiply;
+.stroke-cross-subtle {
+  stroke: rgba(15, 23, 42, 0.18);
 }
-[data-theme="dark"] .pattern-telemetry {
-  filter: invert(1) brightness(0.65) contrast(1.15);
-  opacity: 0.18;
-  mix-blend-mode: screen;
+[data-theme="dark"] .stroke-cross-subtle {
+  stroke: rgba(255, 255, 255, 0.3);
+}
+
+/* Layer 2: Organic Topographic Waves */
+.stroke-topo-waves {
+  stroke: rgba(99, 102, 241, 0.18);
+}
+[data-theme="dark"] .stroke-topo-waves {
+  stroke: rgba(165, 180, 252, 0.28);
+}
+
+.stroke-topo-accent {
+  stroke: #6366f1;
+}
+[data-theme="dark"] .stroke-topo-accent {
+  stroke: #818cf8;
+}
+
+/* Layer 4: Cyber Telemetry HUD & Radar */
+.stroke-telemetry-hud {
+  stroke: rgba(14, 165, 233, 0.22);
+}
+[data-theme="dark"] .stroke-telemetry-hud {
+  stroke: rgba(56, 189, 248, 0.4);
+}
+
+.stroke-telemetry-accent {
+  stroke: #0284c7;
+}
+[data-theme="dark"] .stroke-telemetry-accent {
+  stroke: #38bdf8;
 }
 
 /* Luxury Glassmorphic Cards */

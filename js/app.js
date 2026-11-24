@@ -43,41 +43,9 @@ function toggleTheme() {
 function updateTabStyles() {
   setLanguage(selectedLang);
   setInputMode(inputMode);
-  setBackgroundPattern(getStoredBgPattern());
-}
-
-// -------------------------------------------------------------
-// BACKGROUND SHADE PATTERN PRESETS
-// -------------------------------------------------------------
-function getStoredBgPattern() {
-  return localStorage.getItem("vf_bg_pattern") || "grid"; // Technical Cross Grid is default!
-}
-
-function setBackgroundPattern(pattern) {
-  const layer = document.getElementById("bgPatternLayer");
-  if (!layer) return;
-
-  layer.classList.remove("pattern-grid", "pattern-waves", "pattern-neural", "pattern-telemetry");
-  layer.classList.add(`pattern-${pattern}`);
-  localStorage.setItem("vf_bg_pattern", pattern);
-
-  const patterns = ["grid", "waves", "neural", "telemetry"];
-  patterns.forEach(p => {
-    const btn = document.getElementById(`bgBtn-${p}`);
-    if (btn) {
-      if (p === pattern) {
-        btn.style.background = "var(--tab-active-bg)";
-        btn.style.color = "var(--tab-active-text)";
-        btn.style.boxShadow = "var(--tab-active-shadow)";
-        btn.classList.add("font-bold");
-      } else {
-        btn.style.background = "transparent";
-        btn.style.color = "var(--tab-inactive-text)";
-        btn.style.boxShadow = "none";
-        btn.classList.remove("font-bold");
-      }
-    }
-  });
+  if (typeof window.setBackgroundPattern === "function") {
+    window.setBackgroundPattern(localStorage.getItem("vf_bg_pattern") || "grid");
+  }
 }
 
 // -------------------------------------------------------------
@@ -103,7 +71,9 @@ document.addEventListener("keydown", function(e) {
 // -------------------------------------------------------------
 async function initDashboard() {
   applyTheme(getStoredTheme());
-  setBackgroundPattern(getStoredBgPattern());
+  if (typeof window.setBackgroundPattern === "function") {
+    window.setBackgroundPattern(localStorage.getItem("vf_bg_pattern") || "grid");
+  }
 
   const dot = document.getElementById("statusDot");
   const text = document.getElementById("statusText");

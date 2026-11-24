@@ -16,8 +16,8 @@
 </head>
 <body class="selection:bg-indigo-600 selection:text-white flex flex-col justify-between">
 
-  <!-- Dynamic Background Shade Pattern Preset Layer -->
-  <div id="bgPatternLayer" class="bg-layer-pattern pattern-grid" aria-hidden="true"></div>
+  <!-- Pure Dynamic Vector Background Layer Container (SVG & Canvas) -->
+  <div id="dynamicBgContainer" class="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true"></div>
 
   <!-- Ambient Luxury Canvas with Subtle Pastel Glows -->
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
@@ -101,7 +101,7 @@
           Autonomous Fact-Checking Intelligence • Multimodal Suite
         </div>
 
-        <!-- Background Shades Preset Switcher -->
+        <!-- Background Shades Preset Switcher with Auto-Cycle -->
         <div class="flex items-center gap-1.5 text-xs font-mono">
           <span class="text-[11px] hidden sm:inline" style="color: var(--text-muted);">Background:</span>
           <div class="inline-flex rounded-xl p-0.5 shadow-sm" style="background: var(--tab-bar-bg); border: 1px solid var(--card-border);">
@@ -110,6 +110,11 @@
             <button type="button" onclick="setBackgroundPattern('neural')" id="bgBtn-neural" class="px-2.5 py-1 rounded-lg text-[11px] transition cursor-pointer" title="AI Neural Network Graph">Neural</button>
             <button type="button" onclick="setBackgroundPattern('telemetry')" id="bgBtn-telemetry" class="px-2.5 py-1 rounded-lg text-[11px] transition cursor-pointer" title="Cyber Telemetry Blueprint">Telemetry</button>
           </div>
+          <!-- Auto-Cycle Toggle Button -->
+          <button type="button" onclick="toggleAutoCycle()" id="bgBtn-auto" class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-bold transition cursor-pointer shadow-sm badge-indigo" title="Toggle Auto-Cycle">
+            <span id="bgAutoDot" class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping"></span>
+            <span>✦ Auto</span>
+          </button>
         </div>
       </div>
       <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-metallic leading-tight">
@@ -412,6 +417,8 @@
     </div>
   </footer>
 
+  <!-- Dynamic Vector Background Engine (Pure SVG & Canvas Auto-Cycling) -->
+  <script src="js/background-engine.js"></script>
   <!-- Modular Application Logic Script -->
   <script src="js/app.js"></script>
 </body>
