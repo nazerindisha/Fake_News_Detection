@@ -6,12 +6,12 @@
 /* 1. LIGHT THEME (LUXURY WHITE WITH SUBTLE PASTEL SHADES - DEFAULT) */
 :root, [data-theme="light"] {
   --bg-primary: #f8f9fb;
-  --bg-dots: rgba(0, 0, 0, 0.045);
+  --bg-dots: rgba(0, 0, 0, 0.04);
   
   /* Subtle light pastel ambient glows */
-  --spotlight-1: rgba(99, 102, 241, 0.055); /* Soft Indigo */
-  --spotlight-2: rgba(14, 165, 233, 0.04);   /* Soft Sky Cyan */
-  --spotlight-3: rgba(244, 63, 94, 0.02);   /* Soft Rose Aura */
+  --spotlight-1: rgba(99, 102, 241, 0.045); /* Soft Indigo */
+  --spotlight-2: rgba(14, 165, 233, 0.035); /* Soft Sky Cyan */
+  --spotlight-3: rgba(244, 63, 94, 0.015);  /* Soft Rose Aura */
   --top-rim-beam: rgba(99, 102, 241, 0.15);
   
   --header-bg: rgba(255, 255, 255, 0.88);
@@ -21,9 +21,9 @@
   --text-secondary: #3f3f46;
   --text-muted: #71717a;
   --text-subtle: #a1a1aa;
-  --text-gradient: linear-gradient(180deg, #09090b 20%, #4f46e5 140%);
+  --text-gradient: linear-gradient(180deg, #09090b 20%, #4338ca 140%);
   
-  --card-bg: linear-gradient(180deg, #ffffff 0%, #fafafc 100%);
+  --card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(250, 250, 252, 0.94) 100%);
   --card-border: rgba(0, 0, 0, 0.07);
   --card-inner-rim: rgba(255, 255, 255, 0.95);
   --card-shadow: 
@@ -35,7 +35,7 @@
     0 16px 36px -10px rgba(99, 102, 241, 0.08),
     0 32px 64px -20px rgba(0, 0, 0, 0.06);
   
-  --card-subtle-bg: rgba(244, 245, 248, 0.85);
+  --card-subtle-bg: rgba(244, 245, 248, 0.82);
   --card-subtle-border: rgba(0, 0, 0, 0.06);
   
   --input-bg: #ffffff;
@@ -168,11 +168,81 @@ body {
   font-family: 'JetBrains Mono', monospace;
 }
 
+/* =========================================================
+   DYNAMIC BACKGROUND SHADE PATTERNS (USER PRESETS)
+   ========================================================= */
+.bg-layer-pattern {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-position: center;
+  background-repeat: repeat;
+  transition: opacity 0.4s ease, background-image 0.4s ease, filter 0.4s ease;
+}
+
+/* Pattern 1: Technical Grid & Crosses (+) */
+.pattern-grid {
+  background-image: url('../assets/backgrounds/bg-grid-cross.jpg');
+  background-size: 380px auto;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] .pattern-grid {
+  filter: invert(1) brightness(0.65) contrast(1.15);
+  opacity: 0.16;
+  mix-blend-mode: screen;
+}
+
+/* Pattern 2: Wavy Topographic Fluid Contour Lines */
+.pattern-waves {
+  background-image: url('../assets/backgrounds/bg-contour-waves.jpg');
+  background-size: cover;
+  background-position: top center;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] .pattern-waves {
+  filter: invert(1) brightness(0.65) contrast(1.15);
+  opacity: 0.15;
+  mix-blend-mode: screen;
+}
+
+/* Pattern 3: AI Neural Network Nodes */
+.pattern-neural {
+  background-image: url('../assets/backgrounds/bg-neural-nodes.jpg');
+  background-size: contain;
+  background-position: right center;
+  background-repeat: no-repeat;
+  opacity: 0.42;
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] .pattern-neural {
+  filter: invert(1) brightness(0.65) contrast(1.15);
+  opacity: 0.18;
+  mix-blend-mode: screen;
+}
+
+/* Pattern 4: Cyber Telemetry Arc Blueprint */
+.pattern-telemetry {
+  background-image: url('../assets/backgrounds/bg-cyber-telemetry.jpg');
+  background-size: 750px auto;
+  background-position: bottom left;
+  background-repeat: no-repeat;
+  opacity: 0.42;
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] .pattern-telemetry {
+  filter: invert(1) brightness(0.65) contrast(1.15);
+  opacity: 0.18;
+  mix-blend-mode: screen;
+}
+
 /* Luxury Glassmorphic Cards */
 .mono-card {
   background: var(--card-bg);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow), inset 0 1px 0 0 var(--card-inner-rim);
   border-radius: 1.35rem;
@@ -185,8 +255,8 @@ body {
 
 .mono-card-subtle {
   background: var(--card-subtle-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--card-subtle-border);
   border-radius: 1rem;
   transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
@@ -244,9 +314,7 @@ body {
   transition: all 0.2s ease;
 }
 
-/* -------------------------------------------------------------
-   LIGHT PASTEL COLOR ACCENT HELPERS
-   ------------------------------------------------------------- */
+/* Light Pastel Badge Helpers */
 .badge-indigo {
   background: rgba(99, 102, 241, 0.08);
   border: 1px solid rgba(99, 102, 241, 0.2);
@@ -302,7 +370,7 @@ body {
   color: #7dd3fc;
 }
 
-/* Smooth Custom Scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

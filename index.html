@@ -16,6 +16,9 @@
 </head>
 <body class="selection:bg-indigo-600 selection:text-white flex flex-col justify-between">
 
+  <!-- Dynamic Background Shade Pattern Preset Layer -->
+  <div id="bgPatternLayer" class="bg-layer-pattern pattern-grid" aria-hidden="true"></div>
+
   <!-- Ambient Luxury Canvas with Subtle Pastel Glows -->
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
     <!-- Top Central Ambient Spotlight (Soft Indigo) -->
@@ -92,9 +95,22 @@
 
     <!-- Hero Announcement & Value Proposition -->
     <div class="text-center sm:text-left space-y-2.5">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase badge-indigo shadow-sm">
-        <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping"></span>
-        Autonomous Fact-Checking Intelligence • Multimodal Suite
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase badge-indigo shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping"></span>
+          Autonomous Fact-Checking Intelligence • Multimodal Suite
+        </div>
+
+        <!-- Background Shades Preset Switcher -->
+        <div class="flex items-center gap-1.5 text-xs font-mono">
+          <span class="text-[11px] hidden sm:inline" style="color: var(--text-muted);">Background:</span>
+          <div class="inline-flex rounded-xl p-0.5 shadow-sm" style="background: var(--tab-bar-bg); border: 1px solid var(--card-border);">
+            <button type="button" onclick="setBackgroundPattern('grid')" id="bgBtn-grid" class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer" title="Technical Cross Grid (+)">Grid (+)</button>
+            <button type="button" onclick="setBackgroundPattern('waves')" id="bgBtn-waves" class="px-2.5 py-1 rounded-lg text-[11px] transition cursor-pointer" title="Topographic Fluid Waves">Waves</button>
+            <button type="button" onclick="setBackgroundPattern('neural')" id="bgBtn-neural" class="px-2.5 py-1 rounded-lg text-[11px] transition cursor-pointer" title="AI Neural Network Graph">Neural</button>
+            <button type="button" onclick="setBackgroundPattern('telemetry')" id="bgBtn-telemetry" class="px-2.5 py-1 rounded-lg text-[11px] transition cursor-pointer" title="Cyber Telemetry Blueprint">Telemetry</button>
+          </div>
+        </div>
       </div>
       <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-metallic leading-tight">
         Truth Verification Across Language & Media
