@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+Updated upstream
 # 🛡️ VeriFact AI — Enterprise Bilingual Fake News Detection & Fact Verification Platform
 
 [![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -224,12 +224,12 @@ Fake_News_Detection/
 ├── check.py              # Dataset and environment verification script
 ├── .gitignore            # Excludes virtual environments, CSV datasets, and large models
 └── README.md             # Project documentation
->>>>>>> Stashed changes
+ Stashed changes
 ```
 
 ---
 
-<<<<<<< Updated upstream
+ Updated upstream
 ## 🔬 Layer-by-Layer Technical Breakdown
 
 ### 1. Application Core (`app/core/`)
@@ -471,4 +471,4 @@ This platform is open-source and distributed under the [MIT License](LICENSE).
 ## 🔮 Roadmap
 * Responsive frontend dashboard for seamless bilingual news verification.
 * AI-generated and manipulated image detection module.
->>>>>>> Stashed changes
+ Stashed changes
