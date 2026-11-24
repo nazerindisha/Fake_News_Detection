@@ -7,6 +7,8 @@ import numpy as np
 import os
 from scraper import extract_text_from_url
 from retriever import ActualNewsRetriever
+from app.api.v1.router import api_router
+from app.api.v1.endpoints.image_prediction import predict_image
 
 app = FastAPI(title="Multilingual & Multimodal Fake News Detection")
 
@@ -17,6 +19,18 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+# Mount versioned API router (exposes /api/v1/predict-image, etc.)
+app.include_router(api_router, prefix="/api/v1")
+
+# Expose /predict-image at root without duplicating the endpoint handler
+app.add_api_route(
+    "/predict-image",
+    predict_image,
+    methods=["POST"],
+    tags=["Image Forensics"],
+    include_in_schema=True,
 )
 
 # Anchor model paths dynamically relative to main.py

@@ -52,12 +52,12 @@
     <section class="glass-card rounded-2xl p-6 shadow-xl space-y-5">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 class="text-xl font-semibold text-white">Verify News Claim or Article</h2>
-          <p class="text-sm text-slate-400">Cross-checks ML classifiers, 70,000+ historical records, and live web sources.</p>
+          <h2 class="text-xl font-semibold text-white">Verify News Claim, Article, or Image</h2>
+          <p class="text-sm text-slate-400">Cross-checks ML classifiers, historical records, live web sources, and ELA image forensics.</p>
         </div>
 
-        <!-- Language Selector -->
-        <div class="inline-flex rounded-xl bg-slate-900/90 p-1 border border-slate-800">
+        <!-- Language Selector (used for Text/URL mode) -->
+        <div id="langSelector" class="inline-flex rounded-xl bg-slate-900/90 p-1 border border-slate-800">
           <button type="button" id="btnEn" onclick="setLanguage('en')"
             class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow transition">
             English
@@ -70,7 +70,7 @@
       </div>
 
       <!-- Input Mode Toggle -->
-      <div class="flex items-center gap-2 border-b border-slate-800 pb-3">
+      <div class="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-3">
         <button type="button" id="tabText" onclick="setInputMode('text')"
           class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-indigo-400 border border-indigo-500/30 transition">
           Raw Text / Headline
@@ -78,6 +78,10 @@
         <button type="button" id="tabUrl" onclick="setInputMode('url')"
           class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
           Article URL
+        </button>
+        <button type="button" id="tabImage" onclick="setInputMode('image')"
+          class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
+          Image Forensics (ELA)
         </button>
       </div>
 
@@ -96,9 +100,22 @@
         <p class="text-[11px] text-slate-500 mt-1.5">Article content will be securely extracted and analyzed via server-side scraper.</p>
       </div>
 
+      <!-- Mode 3: Image Upload Input -->
+      <div id="imageInputContainer" class="hidden space-y-3">
+        <input id="imageFileInput" type="file" accept="image/jpeg,image/jpg,image/png,image/webp,image/avif"
+          onchange="previewSelectedImage()"
+          class="block w-full text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer bg-slate-900/90 border border-slate-800 rounded-xl p-2" />
+        <p class="text-[11px] text-slate-500">
+          Supports JPEG, PNG, WebP, and AVIF up to 5 MB. Analyzes Error Level Analysis (ELA) compression consistency at quality 90.
+        </p>
+        <div id="imagePreviewWrapper" class="hidden pt-1">
+          <img id="imagePreview" src="" alt="Selected preview" class="max-h-56 rounded-xl border border-slate-800 object-contain bg-slate-950 p-1" />
+        </div>
+      </div>
+
       <!-- Sample Prompts & Action Button -->
       <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
-        <div class="flex flex-wrap items-center gap-2 text-xs">
+        <div id="sampleControls" class="flex flex-wrap items-center gap-2 text-xs">
           <span class="text-slate-400">Try sample:</span>
           <button type="button" onclick="loadSample('en')" class="px-2.5 py-1 rounded-md bg-slate-800/90 hover:bg-slate-700/90 text-slate-300 border border-slate-700/60 transition">
             English Sample
@@ -150,11 +167,11 @@
           </div>
         </div>
 
-        <!-- Evidence / Actual News Card -->
+        <!-- Evidence / Actual News / Forensics Card -->
         <div class="glass-card rounded-2xl p-6 md:col-span-2 flex flex-col justify-between space-y-4">
           <div>
             <div class="flex items-center justify-between gap-2">
-              <span class="text-xs uppercase tracking-wider text-indigo-400 font-bold">Hybrid Fact Retrieval & Pattern Analysis</span>
+              <span id="evidenceHeading" class="text-xs uppercase tracking-wider text-indigo-400 font-bold">Hybrid Fact Retrieval & Pattern Analysis</span>
               <span id="sourceBadge" class="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800/90 border border-slate-700 text-slate-300">
                 Local Verified Database
               </span>
@@ -183,7 +200,7 @@
 
   <!-- Footer -->
   <footer class="border-t border-slate-800/80 py-4 text-center text-xs text-slate-500">
-    VeriFact AI • Multilingual & Multimodal Misinformation Detection Platform • FastAPI + Scikit-Learn + Hybrid Web Retrieval
+    VeriFact AI • Multilingual & Multimodal Misinformation Detection Platform • FastAPI + Scikit-Learn + ELA Forensics
   </footer>
 
   <script>
@@ -200,7 +217,7 @@
         const res = await fetch(`${API_BASE}/openapi.json`);
         if (!res.ok) throw new Error("API unreachable");
         dot.className = "w-2 h-2 rounded-full bg-emerald-400";
-        text.textContent = "API Online (/predict)";
+        text.textContent = "API Online (/predict & /predict-image)";
       } catch (err) {
         dot.className = "w-2 h-2 rounded-full bg-rose-500";
         text.textContent = "API Offline (Run uvicorn main:app)";
@@ -228,19 +245,41 @@
       inputMode = mode;
       const tabText = document.getElementById("tabText");
       const tabUrl = document.getElementById("tabUrl");
+      const tabImage = document.getElementById("tabImage");
+
       const textContainer = document.getElementById("textInputContainer");
       const urlContainer = document.getElementById("urlInputContainer");
+      const imageContainer = document.getElementById("imageInputContainer");
+      const langSelector = document.getElementById("langSelector");
+      const btnLabel = document.getElementById("btnLabel");
 
-      if (mode === "text") {
-        tabText.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-indigo-400 border border-indigo-500/30 transition";
-        tabUrl.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition";
-        textContainer.classList.remove("hidden");
-        urlContainer.classList.add("hidden");
+      const activeCls = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-indigo-400 border border-indigo-500/30 transition";
+      const inactiveCls = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition";
+
+      tabText.className = mode === "text" ? activeCls : inactiveCls;
+      tabUrl.className = mode === "url" ? activeCls : inactiveCls;
+      tabImage.className = mode === "image" ? activeCls : inactiveCls;
+
+      textContainer.classList.toggle("hidden", mode !== "text");
+      urlContainer.classList.toggle("hidden", mode !== "url");
+      imageContainer.classList.toggle("hidden", mode !== "image");
+      langSelector.classList.toggle("hidden", mode === "image");
+
+      btnLabel.textContent = mode === "image" ? "Analyze Image Forensics" : "Analyze & Verify Claim";
+    }
+
+    function previewSelectedImage() {
+      const fileInput = document.getElementById("imageFileInput");
+      const wrapper = document.getElementById("imagePreviewWrapper");
+      const preview = document.getElementById("imagePreview");
+
+      if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        preview.src = URL.createObjectURL(file);
+        wrapper.classList.remove("hidden");
       } else {
-        tabUrl.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-indigo-400 border border-indigo-500/30 transition";
-        tabText.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition";
-        urlContainer.classList.remove("hidden");
-        textContainer.classList.add("hidden");
+        preview.src = "";
+        wrapper.classList.add("hidden");
       }
     }
 
@@ -258,6 +297,9 @@
     function clearAll() {
       document.getElementById("newsInput").value = "";
       document.getElementById("newsUrlInput").value = "";
+      document.getElementById("imageFileInput").value = "";
+      document.getElementById("imagePreview").src = "";
+      document.getElementById("imagePreviewWrapper").classList.add("hidden");
       document.getElementById("resultSection").classList.add("hidden");
       document.getElementById("errorBox").classList.add("hidden");
     }
@@ -273,6 +315,8 @@
 
       const textVal = document.getElementById("newsInput").value.trim();
       const urlVal = document.getElementById("newsUrlInput").value.trim();
+      const fileInput = document.getElementById("imageFileInput");
+      const imageFile = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
 
       if (inputMode === "text" && !textVal) {
         errorBox.textContent = "Please enter a news claim or article text before verifying.";
@@ -284,42 +328,129 @@
         errorBox.classList.remove("hidden");
         return;
       }
+      if (inputMode === "image" && !imageFile) {
+        errorBox.textContent = "Please select an image file before analyzing.";
+        errorBox.classList.remove("hidden");
+        return;
+      }
 
       verifyBtn.disabled = true;
       btnLabel.textContent = "Analyzing...";
       btnSpinner.classList.remove("hidden");
 
       try {
-        const payload = {
-          text: inputMode === "text" ? textVal : null,
-          url: inputMode === "url" ? urlVal : null,
-          language: selectedLang
-        };
+        if (inputMode === "image") {
+          const formData = new FormData();
+          formData.append("file", imageFile);
 
-        const response = await fetch(`${API_BASE}/predict`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
+          const response = await fetch(`${API_BASE}/predict-image?quality=90`, {
+            method: "POST",
+            body: formData,
+          });
+          const data = await response.json();
 
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.detail ? (typeof data.detail === "object" ? JSON.stringify(data.detail) : data.detail) : "Verification request failed.");
+          if (!response.ok) {
+            throw new Error(data.detail ? (typeof data.detail === "object" ? JSON.stringify(data.detail) : data.detail) : "Image analysis failed.");
+          }
+
+          renderImageResults(data);
+          resultSection.classList.remove("hidden");
+        } else {
+          const payload = {
+            text: inputMode === "text" ? textVal : null,
+            url: inputMode === "url" ? urlVal : null,
+            language: selectedLang
+          };
+
+          const response = await fetch(`${API_BASE}/predict`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.detail ? (typeof data.detail === "object" ? JSON.stringify(data.detail) : data.detail) : "Verification request failed.");
+          }
+
+          renderResults(data);
+          resultSection.classList.remove("hidden");
         }
-
-        renderResults(data);
-        resultSection.classList.remove("hidden");
       } catch (err) {
         errorBox.textContent = `Error: ${err.message}. Ensure your FastAPI server is running at ${API_BASE}.`;
         errorBox.classList.remove("hidden");
       } finally {
         verifyBtn.disabled = false;
-        btnLabel.textContent = "Analyze & Verify Claim";
+        btnLabel.textContent = inputMode === "image" ? "Analyze Image Forensics" : "Analyze & Verify Claim";
         btnSpinner.classList.add("hidden");
       }
     }
 
+    function renderImageResults(data) {
+      document.getElementById("rawJson").textContent = JSON.stringify(data, null, 2);
+      document.getElementById("langBadge").textContent = data.features?.format || "IMAGE";
+      document.getElementById("verdictSubtitle").textContent = `Mode: ${data.mode || "heuristic_baseline"}`;
+      document.getElementById("evidenceHeading").textContent = "Error Level Analysis (ELA) Forensic Metrics";
+      document.getElementById("sourceBadge").textContent = data.filename || "Uploaded Image";
+
+      const verdictStr = String(data.verdict || "UNKNOWN").toUpperCase();
+      const isSuspicious = verdictStr.includes("SUSPICIOUS") || verdictStr.includes("FAKE") || verdictStr.includes("EDITED");
+
+      const verdictTitle = document.getElementById("verdictTitle");
+      const verdictCard = document.getElementById("verdictCard");
+      const confidenceBar = document.getElementById("confidenceBar");
+
+      verdictTitle.textContent = data.verdict || "ANALYZED";
+      if (isSuspicious) {
+        verdictTitle.className = "text-xl font-extrabold mt-3 text-rose-400";
+        verdictCard.className = "glass-card rounded-2xl p-6 flex flex-col justify-between border-l-4 border-rose-500";
+        confidenceBar.className = "h-full bg-rose-500 rounded-full transition-all duration-500";
+      } else {
+        verdictTitle.className = "text-xl font-extrabold mt-3 text-emerald-400";
+        verdictCard.className = "glass-card rounded-2xl p-6 flex flex-col justify-between border-l-4 border-emerald-500";
+        confidenceBar.className = "h-full bg-emerald-500 rounded-full transition-all duration-500";
+      }
+
+      let conf = Number(data.confidence ?? 0.5);
+      if (conf <= 1) conf = Math.round(conf * 100);
+      else conf = Math.round(conf);
+      document.getElementById("confidenceText").textContent = `${conf}%`;
+      confidenceBar.style.width = `${Math.min(Math.max(conf, 5), 100)}%`;
+
+      const f = data.features || {};
+      const matchesContainer = document.getElementById("matchesContainer");
+      matchesContainer.innerHTML = `
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+            <div class="text-slate-400">ela_mean</div>
+            <div class="text-base font-bold text-indigo-300 mt-0.5">${f.ela_mean ?? "-"}</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+            <div class="text-slate-400">ela_std</div>
+            <div class="text-base font-bold text-indigo-300 mt-0.5">${f.ela_std ?? "-"}</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+            <div class="text-slate-400">ela_max</div>
+            <div class="text-base font-bold text-indigo-300 mt-0.5">${f.ela_max ?? "-"}</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+            <div class="text-slate-400">high_error_ratio</div>
+            <div class="text-base font-bold text-indigo-300 mt-0.5">${f.high_error_ratio ?? "-"}</div>
+          </div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-300 space-y-1">
+          <div><span class="text-slate-400">Dimensions & Format:</span> ${f.width ?? "?"}x${f.height ?? "?"} (${f.format ?? "UNKNOWN"}, quality=${f.quality ?? 90})</div>
+          <div><span class="text-slate-400">Content-Type:</span> ${data.content_type || "N/A"}</div>
+        </div>
+        <p class="text-xs text-amber-300/90 bg-amber-950/30 border border-amber-500/20 rounded-xl p-3">
+          ${data.note || "Baseline ELA forensic analysis only."}
+        </p>
+      `;
+    }
+
     function renderResults(data) {
+      document.getElementById("verdictSubtitle").textContent = "Classification & Retrieval Assessment";
+      document.getElementById("evidenceHeading").textContent = "Hybrid Fact Retrieval & Pattern Analysis";
       document.getElementById("rawJson").textContent = JSON.stringify(data, null, 2);
       document.getElementById("langBadge").textContent = data.language || (selectedLang === "bn" ? "Bangla" : "English");
 
@@ -342,7 +473,6 @@
         confidenceBar.className = "h-full bg-emerald-500 rounded-full transition-all duration-500";
       }
 
-      // Confidence score
       let conf = Number(data.confidence ?? 85);
       if (conf <= 1) conf = Math.round(conf * 100);
       else conf = Math.round(conf);
@@ -350,11 +480,9 @@
       document.getElementById("confidenceText").textContent = `${conf}%`;
       confidenceBar.style.width = `${Math.min(Math.max(conf, 5), 100)}%`;
 
-      // Container for explanations + matched articles
       const matchesContainer = document.getElementById("matchesContainer");
       matchesContainer.innerHTML = "";
 
-      // 1. Render Linguistic & Model Pattern Explanations
       if (Array.isArray(data.explanations) && data.explanations.length > 0) {
         const expBox = document.createElement("div");
         expBox.className = "p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-500/30 space-y-1.5";
@@ -367,7 +495,6 @@
         matchesContainer.appendChild(expBox);
       }
 
-      // 2. Render actual_news_matches from main.py
       const matches = data.actual_news_matches || [];
       if (Array.isArray(matches) && matches.length > 0) {
         matches.forEach(item => {
