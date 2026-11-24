@@ -23,10 +23,10 @@ function applyTheme(theme) {
 
   if (themeIcon && themeLabel) {
     if (theme === "dark") {
-      themeIcon.textContent = "🌙";
+      themeIcon.innerHTML = `<svg class="w-3.5 h-3.5 text-indigo-400 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>`;
       themeLabel.textContent = "Dark Mode";
     } else {
-      themeIcon.textContent = "☀️";
+      themeIcon.innerHTML = `<svg class="w-3.5 h-3.5 text-amber-500 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
       themeLabel.textContent = "White Mode";
     }
   }
@@ -237,21 +237,30 @@ async function verifyNews() {
 
   if (inputMode === "text" && !textVal) {
     if (errorBox) {
-      errorBox.textContent = "Please enter a news claim or article text before verifying.";
+      errorBox.innerHTML = `
+        <svg class="w-4 h-4 text-rose-500 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <span>Please enter a news claim or article text before verifying.</span>
+      `;
       errorBox.classList.remove("hidden");
     }
     return;
   }
   if (inputMode === "url" && !urlVal) {
     if (errorBox) {
-      errorBox.textContent = "Please enter a valid article URL before verifying.";
+      errorBox.innerHTML = `
+        <svg class="w-4 h-4 text-rose-500 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <span>Please enter a valid article URL before verifying.</span>
+      `;
       errorBox.classList.remove("hidden");
     }
     return;
   }
   if (inputMode === "image" && !imageFile) {
     if (errorBox) {
-      errorBox.textContent = "Please select an image file before analyzing.";
+      errorBox.innerHTML = `
+        <svg class="w-4 h-4 text-rose-500 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <span>Please select an image file before analyzing.</span>
+      `;
       errorBox.classList.remove("hidden");
     }
     return;
@@ -301,7 +310,10 @@ async function verifyNews() {
     }
   } catch (err) {
     if (errorBox) {
-      errorBox.textContent = `Error: ${err.message}. Ensure your FastAPI server is running at ${API_BASE}.`;
+      errorBox.innerHTML = `
+        <svg class="w-4 h-4 text-rose-500 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <span>Error: ${err.message}. Ensure your FastAPI server is running at ${API_BASE}.</span>
+      `;
       errorBox.classList.remove("hidden");
     }
   } finally {
@@ -332,15 +344,20 @@ function renderImageResults(data) {
   const confidenceBar = document.getElementById("confidenceBar");
   const confidenceLevel = document.getElementById("confidenceLevel");
 
-  if (verdictTitle) verdictTitle.textContent = data.verdict || "ANALYZED";
   if (isSuspicious) {
-    if (verdictTitle) verdictTitle.className = "text-xl font-black mt-3.5 tracking-tight text-amber-600 dark:text-amber-400";
+    if (verdictTitle) {
+      verdictTitle.innerHTML = `<svg class="w-5 h-5 text-amber-500 shrink-0 inline-block mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span>${data.verdict || "SUSPICIOUS / MANIPULATED"}</span>`;
+      verdictTitle.className = "text-xl font-black mt-3.5 tracking-tight text-amber-600 dark:text-amber-400 flex items-center";
+    }
     if (verdictCard) verdictCard.style.borderLeft = "5px solid #f59e0b";
     if (confidenceBar) confidenceBar.style.background = "#f59e0b";
     if (confidenceLevel) confidenceLevel.textContent = "High Local Compression Discrepancy";
     if (langBadge) langBadge.className = "text-[10px] font-mono px-2.5 py-0.5 rounded-full badge-amber font-bold";
   } else {
-    if (verdictTitle) verdictTitle.className = "text-xl font-black mt-3.5 tracking-tight text-emerald-700 dark:text-emerald-400";
+    if (verdictTitle) {
+      verdictTitle.innerHTML = `<svg class="w-5 h-5 text-emerald-500 shrink-0 inline-block mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span>${data.verdict || "AUTHENTIC / UNMODIFIED"}</span>`;
+      verdictTitle.className = "text-xl font-black mt-3.5 tracking-tight text-emerald-700 dark:text-emerald-400 flex items-center";
+    }
     if (verdictCard) verdictCard.style.borderLeft = "5px solid #10b981";
     if (confidenceBar) confidenceBar.style.background = "#10b981";
     if (confidenceLevel) confidenceLevel.textContent = "Uniform Error Level Spectrum";
@@ -413,8 +430,8 @@ function renderResults(data) {
 
   if (isFake) {
     if (verdictTitle) {
-      verdictTitle.textContent = "FAKE / MISLEADING";
-      verdictTitle.className = "text-2xl font-black mt-3.5 tracking-tight text-rose-600 dark:text-rose-400";
+      verdictTitle.innerHTML = `<svg class="w-5 h-5 text-rose-500 shrink-0 inline-block mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg><span>FAKE / MISLEADING</span>`;
+      verdictTitle.className = "text-2xl font-black mt-3.5 tracking-tight text-rose-600 dark:text-rose-400 flex items-center";
     }
     if (verdictCard) verdictCard.style.borderLeft = "5px solid #f43f5e";
     if (confidenceBar) confidenceBar.style.background = "#f43f5e";
@@ -425,8 +442,8 @@ function renderResults(data) {
     if (langBadge) langBadge.className = "text-[10px] font-mono px-2.5 py-0.5 rounded-full badge-amber font-bold";
   } else {
     if (verdictTitle) {
-      verdictTitle.textContent = "REAL / AUTHENTIC";
-      verdictTitle.className = "text-2xl font-black mt-3.5 tracking-tight text-emerald-700 dark:text-emerald-400";
+      verdictTitle.innerHTML = `<svg class="w-5 h-5 text-emerald-500 shrink-0 inline-block mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span>REAL / AUTHENTIC</span>`;
+      verdictTitle.className = "text-2xl font-black mt-3.5 tracking-tight text-emerald-700 dark:text-emerald-400 flex items-center";
     }
     if (verdictCard) verdictCard.style.borderLeft = "5px solid #10b981";
     if (confidenceBar) confidenceBar.style.background = "#10b981";
@@ -531,10 +548,13 @@ function copyJsonPayload(e) {
   const code = rawJson ? rawJson.textContent : "";
   navigator.clipboard.writeText(code).then(() => {
     const btn = document.getElementById("copyJsonBtnText");
-    if (btn) {
-      btn.textContent = "Copied!";
-      setTimeout(() => { btn.textContent = "Copy JSON"; }, 2000);
-    }
+    const icon = document.getElementById("copyJsonIcon");
+    if (btn) btn.textContent = "Copied!";
+    if (icon) icon.innerHTML = `<polyline points="20 6 9 17 4 12"></polyline>`;
+    setTimeout(() => {
+      if (btn) btn.textContent = "Copy JSON";
+      if (icon) icon.innerHTML = `<rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>`;
+    }, 2000);
   });
 }
 
