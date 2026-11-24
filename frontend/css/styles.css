@@ -186,117 +186,47 @@ body {
   overflow: hidden;
 }
 
-/* Layer 1: Technical Blueprint Cross Grid (+) */
+/* Layer 1: Enhanced Technical Blueprint Coordinate Grid (+) */
 .stroke-minor-grid {
-  stroke: rgba(15, 23, 42, 0.05);
+  stroke: rgba(15, 23, 42, 0.06);
 }
 [data-theme="dark"] .stroke-minor-grid {
-  stroke: rgba(255, 255, 255, 0.06);
+  stroke: rgba(255, 255, 255, 0.07);
 }
 
 .stroke-major-grid {
-  stroke: rgba(15, 23, 42, 0.09);
+  stroke: rgba(15, 23, 42, 0.11);
 }
 [data-theme="dark"] .stroke-major-grid {
-  stroke: rgba(255, 255, 255, 0.12);
+  stroke: rgba(255, 255, 255, 0.14);
 }
 
 .stroke-cross {
-  stroke: rgba(79, 70, 229, 0.45);
+  stroke: rgba(79, 70, 229, 0.55);
 }
 [data-theme="dark"] .stroke-cross {
-  stroke: rgba(165, 180, 252, 0.8);
+  stroke: rgba(165, 180, 252, 0.85);
+}
+
+.fill-cross {
+  fill: rgba(79, 70, 229, 0.6);
+}
+[data-theme="dark"] .fill-cross {
+  fill: rgba(165, 180, 252, 0.9);
 }
 
 .stroke-cross-subtle {
-  stroke: rgba(15, 23, 42, 0.18);
+  stroke: rgba(15, 23, 42, 0.2);
 }
 [data-theme="dark"] .stroke-cross-subtle {
-  stroke: rgba(255, 255, 255, 0.3);
+  stroke: rgba(255, 255, 255, 0.35);
 }
 
-/* Layer 2: Organic Topographic Waves & Elevation Contours */
-.stroke-topo-index {
-  stroke: rgba(79, 70, 229, 0.4);
+.fill-cross-subtle {
+  fill: rgba(15, 23, 42, 0.2);
 }
-[data-theme="dark"] .stroke-topo-index {
-  stroke: rgba(165, 180, 252, 0.65);
-}
-
-.stroke-topo-hairline {
-  stroke: rgba(99, 102, 241, 0.16);
-}
-[data-theme="dark"] .stroke-topo-hairline {
-  stroke: rgba(165, 180, 252, 0.22);
-}
-
-.stroke-topo-accent {
-  stroke: #6366f1;
-}
-[data-theme="dark"] .stroke-topo-accent {
-  stroke: #818cf8;
-}
-
-.fill-topo-badge {
-  fill: rgba(238, 242, 255, 0.9);
-  stroke: rgba(99, 102, 241, 0.25);
-  stroke-width: 0.75;
-}
-[data-theme="dark"] .fill-topo-badge {
-  fill: rgba(15, 23, 42, 0.85);
-  stroke: rgba(165, 180, 252, 0.35);
-  stroke-width: 0.75;
-}
-
-.fill-topo-text {
-  fill: #4338ca;
-}
-[data-theme="dark"] .fill-topo-text {
-  fill: #c7d2fe;
-}
-
-.wave-breathe {
-  animation: waveBreathing 18s ease-in-out infinite;
-  transform-origin: center center;
-}
-
-@keyframes waveBreathing {
-  0%, 100% {
-    transform: scale(1) translateY(0);
-  }
-  50% {
-    transform: scale(1.012) translateY(-6px);
-  }
-}
-
-/* Layer 4: Aerospace CAD Blueprint Telemetry & Radar HUD */
-.stroke-telemetry-hud {
-  stroke: rgba(14, 165, 233, 0.24);
-}
-[data-theme="dark"] .stroke-telemetry-hud {
-  stroke: rgba(56, 189, 248, 0.45);
-}
-
-.stroke-telemetry-accent {
-  stroke: #0284c7;
-}
-[data-theme="dark"] .stroke-telemetry-accent {
-  stroke: #38bdf8;
-}
-
-.fill-telemetry-text {
-  fill: #0369a1;
-}
-[data-theme="dark"] .fill-telemetry-text {
-  fill: #7dd3fc;
-}
-
-.fill-telemetry-beacon {
-  fill: #f43f5e;
-}
-
-.stroke-telemetry-beacon {
-  stroke: #f43f5e;
+[data-theme="dark"] .fill-cross-subtle {
+  fill: rgba(255, 255, 255, 0.35);
 }
 
 /* Enterprise SaaS Surface Cards */
