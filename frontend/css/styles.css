@@ -3,164 +3,168 @@
    Modular Stylesheet
    ========================================================= */
 
-/* 1. LIGHT THEME (LUXURY WHITE WITH SUBTLE PASTEL SHADES - DEFAULT) */
+/* =========================================================
+   VERIFACT AI — PREMIUM ENTERPRISE SAAS DESIGN SYSTEM
+   Linear, Stripe & Vercel Inspired Foreground Component Architecture
+   ========================================================= */
+
+/* 1. LIGHT THEME (LUXURY WHITE MINIMALISM - DEFAULT) */
 :root, [data-theme="light"] {
+  /* BACKGROUND TOKENS - STRICTLY PRESERVED */
   --bg-primary: #f8f9fb;
   --bg-dots: rgba(0, 0, 0, 0.04);
-  
-  /* Subtle light pastel ambient glows */
-  --spotlight-1: rgba(99, 102, 241, 0.045); /* Soft Indigo */
-  --spotlight-2: rgba(14, 165, 233, 0.035); /* Soft Sky Cyan */
-  --spotlight-3: rgba(244, 63, 94, 0.015);  /* Soft Rose Aura */
+  --spotlight-1: rgba(99, 102, 241, 0.045);
+  --spotlight-2: rgba(14, 165, 233, 0.035);
+  --spotlight-3: rgba(244, 63, 94, 0.015);
   --top-rim-beam: rgba(99, 102, 241, 0.15);
   
-  --header-bg: rgba(255, 255, 255, 0.88);
-  --header-border: rgba(0, 0, 0, 0.07);
+  /* FOREGROUND SAAS DESIGN TOKENS */
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --header-border: #e2e8f0;
   
-  --text-main: #09090b;
-  --text-secondary: #3f3f46;
-  --text-muted: #71717a;
-  --text-subtle: #a1a1aa;
-  --text-gradient: linear-gradient(180deg, #09090b 20%, #4338ca 140%);
+  --text-main: #0f172a;        /* High-contrast slate-900 */
+  --text-secondary: #334155;   /* Refined body slate-700 */
+  --text-muted: #64748b;       /* Crisp secondary slate-500 */
+  --text-subtle: #94a3b8;      /* Meta & caption slate-400 */
+  --text-gradient: linear-gradient(180deg, #0f172a 30%, #312e81 120%);
   
-  --card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(250, 250, 252, 0.94) 100%);
-  --card-border: rgba(0, 0, 0, 0.07);
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
   --card-inner-rim: rgba(255, 255, 255, 0.95);
   --card-shadow: 
-    0 1px 2px rgba(0, 0, 0, 0.03),
-    0 10px 30px -10px rgba(0, 0, 0, 0.05),
-    0 24px 48px -18px rgba(99, 102, 241, 0.03);
+    0 1px 3px 0 rgba(0, 0, 0, 0.03),
+    0 6px 18px -4px rgba(0, 0, 0, 0.05);
   --card-shadow-hover: 
-    0 2px 4px rgba(0, 0, 0, 0.03),
-    0 16px 36px -10px rgba(99, 102, 241, 0.08),
-    0 32px 64px -20px rgba(0, 0, 0, 0.06);
+    0 2px 6px 0 rgba(0, 0, 0, 0.04),
+    0 12px 24px -6px rgba(0, 0, 0, 0.08);
   
-  --card-subtle-bg: rgba(244, 245, 248, 0.82);
-  --card-subtle-border: rgba(0, 0, 0, 0.06);
+  --card-subtle-bg: #f8fafc;
+  --card-subtle-border: #e2e8f0;
   
   --input-bg: #ffffff;
-  --input-border: rgba(0, 0, 0, 0.1);
-  --input-text: #09090b;
-  --input-placeholder: #a1a1aa;
+  --input-border: #cbd5e1;
+  --input-text: #0f172a;
+  --input-placeholder: #94a3b8;
   --input-focus-border: #6366f1;
-  --input-focus-ring: rgba(99, 102, 241, 0.18);
+  --input-focus-ring: rgba(99, 102, 241, 0.14);
   
-  --btn-luxury-bg: linear-gradient(180deg, #18181b 0%, #09090b 100%);
+  --btn-luxury-bg: #0f172a;
   --btn-luxury-text: #ffffff;
-  --btn-luxury-border: #000000;
-  --btn-luxury-shadow: 0 4px 14px rgba(99, 102, 241, 0.18), 0 1px 2px rgba(0, 0, 0, 0.08);
-  --btn-luxury-hover: #000000;
+  --btn-luxury-border: #0f172a;
+  --btn-luxury-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06), 0 4px 12px 0 rgba(15, 23, 42, 0.18);
+  --btn-luxury-hover: #1e293b;
   
-  --pill-bg: #f4f4f7;
-  --pill-border: rgba(0, 0, 0, 0.07);
-  --pill-text: #27272a;
+  --pill-bg: #f1f5f9;
+  --pill-border: #e2e8f0;
+  --pill-text: #334155;
   
-  --tab-bar-bg: #f1f2f6;
+  --tab-bar-bg: #f1f5f9;
   --tab-active-bg: #ffffff;
-  --tab-active-text: #09090b;
-  --tab-active-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(99, 102, 241, 0.08);
-  --tab-inactive-text: #71717a;
-  --tab-inactive-hover: #4f46e5;
+  --tab-active-text: #0f172a;
+  --tab-active-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --tab-inactive-text: #64748b;
+  --tab-inactive-hover: #0f172a;
   
-  --logo-bg: linear-gradient(135deg, #18181b 0%, #312e81 100%);
+  --logo-bg: #0f172a;
   --logo-text: #ffffff;
-  --logo-border: rgba(99, 102, 241, 0.3);
+  --logo-border: #1e293b;
   
-  --progress-track: #e4e4e7;
+  --progress-track: #e2e8f0;
   --progress-bar: #10b981;
   --progress-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
   
-  --code-bg: #f4f5f8;
-  --code-border: rgba(0, 0, 0, 0.07);
-  --code-text: #18181b;
+  --code-bg: #f8fafc;
+  --code-border: #e2e8f0;
+  --code-text: #0f172a;
   
   --verdict-border: #10b981;
-  --footer-bg: rgba(255, 255, 255, 0.88);
-  --footer-border: rgba(0, 0, 0, 0.06);
+  --footer-bg: rgba(255, 255, 255, 0.92);
+  --footer-border: #e2e8f0;
 }
 
-/* 2. DARK THEME (LUXURY OBSIDIAN WITH SUBTLE PASTEL GLOWS) */
+/* 2. DARK THEME (ENTERPRISE OBSIDIAN GLASS) */
 [data-theme="dark"] {
+  /* BACKGROUND TOKENS - STRICTLY PRESERVED */
   --bg-primary: #030304;
   --bg-dots: rgba(255, 255, 255, 0.07);
-  
-  --spotlight-1: rgba(99, 102, 241, 0.1);   /* Subtle Violet Beam */
-  --spotlight-2: rgba(14, 165, 233, 0.045); /* Subtle Sky Glow */
+  --spotlight-1: rgba(99, 102, 241, 0.1);
+  --spotlight-2: rgba(14, 165, 233, 0.045);
   --spotlight-3: rgba(244, 63, 94, 0.03);
   --top-rim-beam: rgba(99, 102, 241, 0.3);
   
-  --header-bg: rgba(6, 6, 9, 0.85);
+  /* FOREGROUND SAAS DESIGN TOKENS */
+  --header-bg: rgba(8, 10, 15, 0.88);
   --header-border: rgba(255, 255, 255, 0.08);
   
-  --text-main: #f4f4f6;
-  --text-secondary: #d4d4d8;
-  --text-muted: #a1a1aa;
-  --text-subtle: #71717a;
+  --text-main: #f8fafc;        /* Crisp white */
+  --text-secondary: #cbd5e1;   /* Slate-300 */
+  --text-muted: #94a3b8;       /* Slate-400 */
+  --text-subtle: #64748b;      /* Slate-500 */
   --text-gradient: linear-gradient(180deg, #FFFFFF 20%, #a5b4fc 120%);
   
-  --card-bg: linear-gradient(180deg, rgba(16, 16, 22, 0.75) 0%, rgba(10, 10, 15, 0.85) 100%);
-  --card-border: rgba(255, 255, 255, 0.09);
-  --card-inner-rim: rgba(255, 255, 255, 0.12);
+  --card-bg: rgba(13, 15, 22, 0.92);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-inner-rim: rgba(255, 255, 255, 0.08);
   --card-shadow: 
-    0 0 0 1px rgba(0, 0, 0, 0.6),
-    0 20px 48px -12px rgba(0, 0, 0, 0.95);
+    0 1px 3px 0 rgba(0, 0, 0, 0.5),
+    0 10px 28px -4px rgba(0, 0, 0, 0.7);
   --card-shadow-hover: 
-    0 0 0 1px rgba(99, 102, 241, 0.3),
-    0 28px 56px -12px rgba(0, 0, 0, 1);
+    0 2px 6px 0 rgba(0, 0, 0, 0.6),
+    0 16px 36px -6px rgba(0, 0, 0, 0.85);
   
-  --card-subtle-bg: rgba(18, 18, 26, 0.65);
+  --card-subtle-bg: rgba(20, 22, 32, 0.75);
   --card-subtle-border: rgba(255, 255, 255, 0.06);
   
-  --input-bg: rgba(8, 8, 12, 0.85);
-  --input-border: rgba(255, 255, 255, 0.09);
-  --input-text: #fafafa;
-  --input-placeholder: #52525b;
+  --input-bg: rgba(9, 10, 15, 0.95);
+  --input-border: rgba(255, 255, 255, 0.1);
+  --input-text: #f8fafc;
+  --input-placeholder: #475569;
   --input-focus-border: #818cf8;
-  --input-focus-ring: rgba(129, 140, 248, 0.25);
+  --input-focus-ring: rgba(129, 140, 248, 0.22);
   
-  --btn-luxury-bg: linear-gradient(180deg, #FFFFFF 0%, #E4E4E7 100%);
-  --btn-luxury-text: #050507;
-  --btn-luxury-border: rgba(255, 255, 255, 0.9);
-  --btn-luxury-shadow: 0 0 25px rgba(99, 102, 241, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-  --btn-luxury-hover: #ffffff;
+  --btn-luxury-bg: #ffffff;
+  --btn-luxury-text: #0f172a;
+  --btn-luxury-border: #ffffff;
+  --btn-luxury-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 14px 0 rgba(255, 255, 255, 0.15);
+  --btn-luxury-hover: #f1f5f9;
   
-  --pill-bg: #09090d;
-  --pill-border: rgba(255, 255, 255, 0.1);
-  --pill-text: #d4d4d8;
+  --pill-bg: rgba(18, 20, 28, 0.85);
+  --pill-border: rgba(255, 255, 255, 0.08);
+  --pill-text: #cbd5e1;
   
-  --tab-bar-bg: rgba(11, 11, 15, 0.85);
-  --tab-active-bg: #ffffff;
-  --tab-active-text: #050507;
-  --tab-active-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
-  --inactive-tab-text: #a1a1aa;
-  --inactive-tab-hover: #c7d2fe;
+  --tab-bar-bg: rgba(18, 20, 28, 0.9);
+  --tab-active-bg: rgba(35, 38, 52, 0.95);
+  --tab-active-text: #ffffff;
+  --tab-active-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  --inactive-tab-text: #94a3b8;
+  --inactive-tab-hover: #cbd5e1;
   
-  --logo-bg: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%);
+  --logo-bg: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
   --logo-text: #ffffff;
-  --logo-border: rgba(129, 140, 248, 0.4);
+  --logo-border: rgba(129, 140, 248, 0.35);
   
-  --progress-track: #18181b;
+  --progress-track: #1e293b;
   --progress-bar: #34d399;
-  --progress-shadow: 0 0 12px rgba(52, 211, 153, 0.5);
+  --progress-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
   
-  --code-bg: rgba(2, 2, 4, 0.9);
+  --code-bg: rgba(6, 7, 10, 0.95);
   --code-border: rgba(255, 255, 255, 0.08);
-  --code-text: #d4d4d8;
+  --code-text: #cbd5e1;
   
   --verdict-border: #34d399;
-  --footer-bg: rgba(4, 4, 6, 0.88);
-  --footer-border: rgba(255, 255, 255, 0.07);
+  --footer-bg: rgba(6, 7, 10, 0.92);
+  --footer-border: rgba(255, 255, 255, 0.08);
 }
 
 /* Base Body Styles */
 body {
-  font-family: 'Inter', 'Hind Siliguri', sans-serif;
+  font-family: 'Inter', 'Noto Sans Bengali', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.25s ease, color 0.25s ease;
   letter-spacing: -0.011em;
 }
 
@@ -295,62 +299,75 @@ body {
   stroke: #f43f5e;
 }
 
-/* Luxury Glassmorphic Cards */
+/* Enterprise SaaS Surface Cards */
 .mono-card {
   background: var(--card-bg);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--card-border);
-  box-shadow: var(--card-shadow), inset 0 1px 0 0 var(--card-inner-rim);
-  border-radius: 1.35rem;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease, background 0.3s ease;
+  box-shadow: var(--card-shadow);
+  border-radius: 1.25rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.25s ease;
 }
 
 .mono-card:hover {
-  box-shadow: var(--card-shadow-hover), inset 0 1px 0 0 var(--card-inner-rim);
+  box-shadow: var(--card-shadow-hover);
 }
 
 .mono-card-subtle {
   background: var(--card-subtle-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-subtle-border);
-  border-radius: 1rem;
-  transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+  border-radius: 0.875rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Metallic / Subtle Tint Gradient Headlines */
+/* Linear / Stripe Inspired Headline Contrast */
 .text-metallic {
-  background: var(--text-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-main);
+  letter-spacing: -0.03em;
 }
 
-/* Luxury Primary Action Button */
+/* Enterprise Primary CTA Button */
 .btn-luxury {
   background: var(--btn-luxury-bg);
   color: var(--btn-luxury-text);
   border: 1px solid var(--btn-luxury-border);
   box-shadow: var(--btn-luxury-shadow);
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.btn-luxury:hover {
-  transform: translateY(-1.5px);
+.btn-luxury:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px 0 rgba(15, 23, 42, 0.25);
   opacity: 0.96;
 }
 
-.btn-luxury:active {
+.btn-luxury:active:not(:disabled) {
   transform: translateY(0);
 }
 
-/* Luxury Micro Inputs */
+.btn-luxury:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-luxury:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* Precision Micro Inputs */
 .mono-input {
   background: var(--input-bg);
   border: 1px solid var(--input-border);
   color: var(--input-text);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
 }
 
 .mono-input::placeholder {
@@ -359,7 +376,7 @@ body {
 
 .mono-input:focus {
   border-color: var(--input-focus-border);
-  box-shadow: 0 0 0 1px var(--input-focus-ring);
+  box-shadow: 0 0 0 3px var(--input-focus-ring);
   outline: none;
 }
 

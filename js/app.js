@@ -75,6 +75,28 @@ async function initDashboard() {
     window.setBackgroundPattern(localStorage.getItem("vf_bg_pattern") || "grid");
   }
 
+  // Setup drag-and-drop feedback for image forensics
+  const dropzone = document.getElementById("imageDropzone");
+  const fileInput = document.getElementById("imageFileInput");
+  if (dropzone && fileInput) {
+    dropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropzone.classList.add("border-violet-500", "bg-violet-50/50");
+    });
+    dropzone.addEventListener("dragleave", (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("border-violet-500", "bg-violet-50/50");
+    });
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("border-violet-500", "bg-violet-50/50");
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        fileInput.files = e.dataTransfer.files;
+        previewSelectedImage();
+      }
+    });
+  }
+
   const dot = document.getElementById("statusDot");
   const text = document.getElementById("statusText");
 
@@ -95,8 +117,8 @@ function setLanguage(lang) {
   const btnBn = document.getElementById("btnBn");
   const input = document.getElementById("newsInput");
 
-  const activeStyle = "background: var(--tab-active-bg); color: var(--tab-active-text); box-shadow: var(--tab-active-shadow);";
-  const inactiveStyle = "background: transparent; color: var(--tab-inactive-text); box-shadow: none;";
+  const activeStyle = "background: var(--tab-active-bg); color: var(--tab-active-text); box-shadow: var(--tab-active-shadow); font-weight: 600;";
+  const inactiveStyle = "background: transparent; color: var(--tab-inactive-text); box-shadow: none; font-weight: 500;";
 
   if (btnEn && btnBn) {
     if (lang === "en") {
@@ -106,7 +128,7 @@ function setLanguage(lang) {
     } else {
       btnBn.style = activeStyle;
       btnEn.style = inactiveStyle;
-      if (input) input.placeholder = "এখানে বাংলা সংবাদের শিরোনাম বা তথ্য পেস্ট করুন...";
+      if (input) input.placeholder = "বাংলা সংবাদ শিরোনাম, দাবি অথবা অনুচ্ছেদ এখানে লিখুন...";
     }
   }
 }
@@ -123,8 +145,8 @@ function setInputMode(mode) {
   const langSelector = document.getElementById("langSelector");
   const btnLabel = document.getElementById("btnLabel");
 
-  const activeStyle = "background: var(--tab-active-bg); color: var(--tab-active-text); box-shadow: var(--tab-active-shadow);";
-  const inactiveStyle = "background: transparent; color: var(--tab-inactive-text); box-shadow: none;";
+  const activeStyle = "background: var(--tab-active-bg); color: var(--tab-active-text); box-shadow: var(--tab-active-shadow); font-weight: 600;";
+  const inactiveStyle = "background: transparent; color: var(--tab-inactive-text); box-shadow: none; font-weight: 500;";
 
   if (tabText) tabText.style = mode === "text" ? activeStyle : inactiveStyle;
   if (tabUrl) tabUrl.style = mode === "url" ? activeStyle : inactiveStyle;
@@ -144,13 +166,17 @@ function previewSelectedImage() {
   const fileInput = document.getElementById("imageFileInput");
   const wrapper = document.getElementById("imagePreviewWrapper");
   const preview = document.getElementById("imagePreview");
+  const fileInfo = document.getElementById("imageFileInfo");
 
   if (fileInput && fileInput.files && fileInput.files[0]) {
     const file = fileInput.files[0];
+    const sizeKb = (file.size / 1024).toFixed(1);
+    if (fileInfo) fileInfo.textContent = `${file.name} (${sizeKb} KB)`;
     if (preview) preview.src = URL.createObjectURL(file);
     if (wrapper) wrapper.classList.remove("hidden");
   } else {
     if (preview) preview.src = "";
+    if (fileInfo) fileInfo.textContent = "";
     if (wrapper) wrapper.classList.add("hidden");
   }
 }
@@ -159,9 +185,11 @@ function clearImagePreview() {
   const fileInput = document.getElementById("imageFileInput");
   const preview = document.getElementById("imagePreview");
   const wrapper = document.getElementById("imagePreviewWrapper");
+  const fileInfo = document.getElementById("imageFileInfo");
 
   if (fileInput) fileInput.value = "";
   if (preview) preview.src = "";
+  if (fileInfo) fileInfo.textContent = "";
   if (wrapper) wrapper.classList.add("hidden");
 }
 
@@ -464,6 +492,37 @@ function renderResults(data) {
 
   const srcBadge = document.getElementById("sourceBadge");
   if (srcBadge) srcBadge.textContent = `${data.language || "Bilingual"} Hybrid Engine`;
+
+  // Render ground-truth verified sources links
+  const linksList = document.getElementById("linksList");
+  const linksContainer = document.getElementById("linksContainer");
+  if (linksList && linksContainer) {
+    linksList.innerHTML = "";
+    const urls = [];
+    if (Array.isArray(data.sources)) {
+      data.sources.forEach(s => urls.push(s));
+    }
+    if (Array.isArray(data.actual_news_matches)) {
+      data.actual_news_matches.forEach(m => {
+        if (m && m.url) urls.push({ url: m.url, title: m.title || m.headline || m.url });
+      });
+    }
+    if (urls.length > 0) {
+      urls.forEach(u => {
+        const urlStr = typeof u === "string" ? u : (u.url || "#");
+        const titleStr = typeof u === "string" ? u : (u.title || urlStr);
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="${urlStr}" target="_blank" rel="noopener noreferrer" class="text-sky-600 dark:text-sky-400 hover:opacity-80 transition inline-flex items-center gap-1.5 break-all">
+          <svg class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          ${titleStr}
+        </a>`;
+        linksList.appendChild(li);
+      });
+      linksContainer.classList.remove("hidden");
+    } else {
+      linksContainer.classList.add("hidden");
+    }
+  }
 }
 
 function copyJsonPayload(e) {
