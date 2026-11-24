@@ -9,13 +9,13 @@ def run_diagnostics():
     print("🔍 VeriFact AI — Industrial System Diagnostics")
     print("==================================================")
     print(f"Base Project Path: {BASE_DIR}")
-    
+
     data_dir = BASE_DIR / "data"
     models_dir = BASE_DIR / "models"
-    
+
     print(f"Data Directory:    {data_dir} (Exists: {data_dir.exists()})")
     print(f"Models Directory:  {models_dir} (Exists: {models_dir.exists()})\n")
-    
+
     components = {
         "English Real Dataset (True.csv)": [data_dir / "True.csv", BASE_DIR / "True.csv"],
         "English Fake Dataset (Fake.csv)": [data_dir / "Fake.csv", BASE_DIR / "Fake.csv"],
@@ -23,8 +23,9 @@ def run_diagnostics():
         "Bangla Fake Dataset (Fake-1K.csv)": [data_dir / "Fake-1K.csv", BASE_DIR / "Fake-1K.csv"],
         "English Trained Model (.joblib)": [models_dir / "fake_news_model.joblib", BASE_DIR / "fake_news_model.joblib"],
         "Bangla Trained Model (.joblib)": [models_dir / "fake_news_model_bn.joblib", BASE_DIR / "fake_news_model_bn.joblib"],
+        "Image Forensics Model (.joblib)": [models_dir / "image_forensics_model.joblib", BASE_DIR / "image_forensics_model.joblib"],
     }
-    
+
     for name, paths in components.items():
         found = False
         for p in paths:
@@ -36,7 +37,7 @@ def run_diagnostics():
                 break
         if not found:
             print(f"⚠️ {name}: Not found (Place in 'data/' or 'models/')")
-            
+
     print("\nVerifying Application Package Modules:")
     try:
         from app.core.config import settings
@@ -70,9 +71,16 @@ def run_diagnostics():
     except Exception as e:
         print(f"❌ app.services.retriever: {e}")
 
+    try:
+        from app.services.image_detector import ImageDetectorService
+        ids = ImageDetectorService()
+        has_model = ids.model is not None
+        print(f"✅ app.services.image_detector (ELA Forensics: Ready, ML Model Loaded: {has_model})")
+    except Exception as e:
+        print(f"❌ app.services.image_detector: {e}")
+
     print("==================================================")
 
 if __name__ == "__main__":
-    # Ensure project root is on PYTHONPATH
     sys.path.insert(0, str(BASE_DIR))
     run_diagnostics()

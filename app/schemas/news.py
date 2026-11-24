@@ -41,6 +41,10 @@ class PredictResponse(BaseModel):
     language_code: str = Field(..., description="Language ISO code ('en' or 'bn')")
     prediction: str = Field(..., description="Classification verdict: 'Real', 'Fake', or 'Unverified'")
     confidence: float = Field(..., description="Percentage confidence score (0 to 100)")
+    explanations: List[str] = Field(
+        default_factory=list,
+        description="Explainability signals (stylometrics, sensationalism, model indicators)"
+    )
     actual_news_matches: List[RetrievalMatch] = Field(
         default_factory=list,
         description="Matched verified ground-truth records or web references"

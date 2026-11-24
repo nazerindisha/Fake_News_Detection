@@ -10,6 +10,7 @@ pandas>=2.2.0
 numpy>=1.26.0
 joblib>=1.3.0
 scipy>=1.12.0
+pillow>=10.2.0
 
 # Web Scraping & Fact Retrieval
 trafilatura>=1.8.0

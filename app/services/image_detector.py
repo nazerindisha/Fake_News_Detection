@@ -1,27 +1,67 @@
 from io import BytesIO
 from pathlib import Path
-import joblib
-import numpy as np
-import pandas as pd
-from PIL import Image, ImageChops
+from typing import Optional
+
+try:
+    import numpy as np
+    NUMPY_AVAILABLE = True
+except ImportError:
+    np = None
+    NUMPY_AVAILABLE = False
+
+try:
+    import pandas as pd
+    PANDAS_AVAILABLE = True
+except ImportError:
+    pd = None
+    PANDAS_AVAILABLE = False
+
+try:
+    import joblib
+    JOBLIB_AVAILABLE = True
+except ImportError:
+    joblib = None
+    JOBLIB_AVAILABLE = False
+
+try:
+    from PIL import Image, ImageChops
+    PIL_AVAILABLE = True
+except ImportError:
+    PIL_AVAILABLE = False
 
 FEATURE_COLS = ["ela_mean", "ela_std", "ela_max", "high_error_ratio"]
 HIGH_ERROR_THRESHOLD = 25.0
 
 
 class ImageDetectorService:
-    def __init__(self, quality: int = 90, model_path: str | None = None):
+    def __init__(self, quality: int = 90, model_path: Optional[str] = None):
         self.quality = quality
-        # app/services/image_detector.py -> parents[2] is the project root
         project_root = Path(__file__).resolve().parents[2]
-        default_model = project_root / "image_forensics_model.joblib"
-        self.model_path = Path(model_path) if model_path else default_model
+        candidate_paths = [
+            project_root / "models" / "image_forensics_model.joblib",
+            project_root / "image_forensics_model.joblib"
+        ]
+
+        if model_path:
+            self.model_path = Path(model_path)
+        else:
+            resolved = None
+            for p in candidate_paths:
+                if p.exists():
+                    resolved = p
+                    break
+            self.model_path = resolved or candidate_paths[1]
+
         self.model = self._load_model()
 
     def _load_model(self):
+        if not JOBLIB_AVAILABLE:
+            return None
         if self.model_path.exists():
             try:
-                return joblib.load(self.model_path)
+                model = joblib.load(self.model_path)
+                print(f"✅ Loaded Image Forensics model from '{self.model_path}'")
+                return model
             except Exception as exc:
                 print(
                     f"[ImageDetectorService] Warning: failed to load model "
@@ -29,7 +69,12 @@ class ImageDetectorService:
                 )
         return None
 
-    def compute_ela_features(self, image_bytes: bytes, quality: int | None = None) -> dict:
+    def compute_ela_features(self, image_bytes: bytes, quality: Optional[int] = None) -> dict:
+        if not PIL_AVAILABLE:
+            raise RuntimeError("Pillow is not installed. Install requirements.txt (pip install pillow).")
+        if not NUMPY_AVAILABLE:
+            raise RuntimeError("NumPy is not installed. Install requirements.txt.")
+
         target_quality = quality if quality is not None else self.quality
 
         try:
@@ -89,10 +134,13 @@ class ImageDetectorService:
             "mode": "heuristic_baseline",
             "confidence": confidence,
             "features": features,
-            "note": "Baseline ELA forensic analysis only; prior JPEG re-compression or format differences can influence error values.",
+            "note": "Baseline ELA forensic analysis; prior JPEG re-compression or format differences can influence error values.",
         }
 
     def _predict_with_ml(self, features: dict) -> dict:
+        if not PANDAS_AVAILABLE or not NUMPY_AVAILABLE:
+            return self._predict_with_heuristic(features)
+
         row = pd.DataFrame([{col: float(features[col]) for col in FEATURE_COLS}])
         pred = int(self.model.predict(row)[0])
 
@@ -110,7 +158,7 @@ class ImageDetectorService:
             "note": "Classified using trained ELA LogisticRegression pipeline.",
         }
 
-    def predict(self, image_bytes: bytes, quality: int | None = None) -> dict:
+    def predict(self, image_bytes: bytes, quality: Optional[int] = None) -> dict:
         features = self.compute_ela_features(image_bytes=image_bytes, quality=quality)
 
         if self.model is not None:

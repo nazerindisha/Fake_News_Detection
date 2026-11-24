@@ -36,5 +36,22 @@ class TestSchemas(unittest.TestCase):
         self.assertEqual(match.similarity_score, 0.88)
         self.assertEqual(match.title, "Sample Title")
 
+    def test_predict_response_with_explanations(self):
+        if not PYDANTIC_AVAILABLE:
+            self.skipTest("pydantic not installed in global environment")
+        resp = PredictResponse(
+            language="English",
+            language_code="en",
+            prediction="Real",
+            confidence=95.0,
+            explanations=["Sensational punctuation detected", "Key authentic signals"],
+            actual_news_matches=[],
+            evidence="Evidence statement",
+            sources=[],
+            input_preview="Preview text"
+        )
+        self.assertEqual(len(resp.explanations), 2)
+        self.assertEqual(resp.prediction, "Real")
+
 if __name__ == "__main__":
     unittest.main()

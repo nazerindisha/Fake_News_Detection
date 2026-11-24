@@ -33,6 +33,7 @@ def predict_news(
     - Analyzes raw claim text or scrapes and inspects an external news URL.
     - Classifies via language-tailored ML pipeline (English or Bangla).
     - Augments verdict with ground-truth records or regional real-time web references.
+    - Extracts linguistic patterns & top model feature indicators.
     """
     input_text = request.text.strip() if request.text else None
     scraped_title = None
@@ -55,8 +56,9 @@ def predict_news(
     lang_code = request.language.value if hasattr(request.language, "value") else str(request.language or "en").lower()
     lang_name = "Bangla" if lang_code == "bn" else "English"
 
-    # 3. Model Classification
+    # 3. Model Classification & Explainability Patterns
     verdict, confidence, model_note = classifier.predict(input_text, language=lang_code)
+    explanations = classifier.explain_patterns(input_text, language=lang_code)
 
     # 4. Ground-Truth Retrieval
     matches_raw = retriever.find_matches(input_text, language=lang_code, top_k=2)
@@ -83,6 +85,7 @@ def predict_news(
         language_code=lang_code,
         prediction=verdict,
         confidence=confidence,
+        explanations=explanations,
         actual_news_matches=matches,
         evidence=evidence,
         sources=sources,

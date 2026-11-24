@@ -1,13 +1,12 @@
-Updated upstream
-# 🛡️ VeriFact AI — Enterprise Bilingual Fake News Detection & Fact Verification Platform
+# 🛡️ VeriFact AI — Enterprise Bilingual Fake News Detection & Image Forensics Platform
 
 [![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Framework](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](https://fastapi.tiangolo.com/)
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.4%2B-orange.svg)](https://scikit-learn.org/)
-[![Architecture](https://img.shields.io/badge/Architecture-Modular%20Layered-purple.svg)]()
+[![Image Forensics](https://img.shields.io/badge/Image%20Forensics-ELA%20Analysis-purple.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An industrial-grade, modular, full-stack bilingual (**English & Bangla**) misinformation detection and retrieval-augmented fact verification platform. **VeriFact AI** utilizes a decoupled, enterprise layered architecture with dedicated API routing, validation schemas, ML classification pipelines, hybrid ground-truth retrieval (indexing 70,000+ authentic articles + live DuckDuckGo web search fallback), and server-side scraping with SSRF security.
+An industrial-grade, modular, full-stack bilingual (**English & Bangla**) misinformation detection, multimodal image forensics, and retrieval-augmented fact verification platform. **VeriFact AI** utilizes a decoupled, enterprise layered architecture with dedicated API routing, validation schemas, ML classification pipelines, ELA (Error Level Analysis) image manipulation detection, hybrid ground-truth retrieval (70,000+ authentic articles + live DuckDuckGo web search fallback), and server-side scraping with SSRF protection.
 
 ---
 
@@ -17,37 +16,33 @@ An industrial-grade, modular, full-stack bilingual (**English & Bangla**) misinf
   - [Modular Component Architecture](#modular-component-architecture)
   - [End-to-End Verification Flow](#end-to-end-verification-flow)
 - [Enterprise Directory Structure](#-enterprise-directory-structure)
-- [Layer-by-Layer Technical Breakdown](#-layer-by-layer-technical-breakdown)
-  - [1. Application Core (`app/core/`)](#1-application-core-appcore)
-  - [2. Validation Schemas (`app/schemas/`)](#2-validation-schemas-appschemas)
-  - [3. Business & ML Services (`app/services/`)](#3-business--ml-services-appservices)
-  - [4. API Routing Layer (`app/api/v1/`)](#4-api-routing-layer-appapiv1)
-  - [5. ML Pipelines (`pipelines/`)](#5-ml-pipelines-pipelines)
-  - [6. Diagnostics & Scripts (`scripts/`)](#6-diagnostics--scripts-scripts)
-  - [7. Automated Test Suite (`tests/`)](#7-automated-test-suite-tests)
+- [Key Platform Capabilities](#-key-platform-capabilities)
+  - [1. Bilingual Text Classification & Linguistic Explainability](#1-bilingual-text-classification--linguistic-explainability)
+  - [2. Image Forensics & Manipulation Detection (ELA)](#2-image-forensics--manipulation-detection-ela)
+  - [3. Hybrid Ground-Truth Retrieval](#3-hybrid-ground-truth-retrieval)
+  - [4. Secure Server-Side Web Scraping](#4-secure-server-side-web-scraping)
 - [Installation & Environment Setup](#-installation--environment-setup)
 - [Dataset Preparation](#-dataset-preparation)
-- [Training & Evaluating ML Models](#-training--evaluating-ml-models)
+- [Training ML Pipelines](#-training-ml-pipelines)
 - [Running the Platform](#-running-the-platform)
 - [REST API Reference & Payloads](#-rest-api-reference--payloads)
-- [Backward Compatibility Layer](#-backward-compatibility-layer)
-- [Security & Defense Specifications](#-security--defense-specifications)
+- [Testing & Quality Verification](#-testing--quality-verification)
 - [Team Collaboration & Contributing](#-team-collaboration--contributing)
 
 ---
 
 ## 🏛️ System Architecture & Layered Design
 
-The codebase adheres to **Domain-Driven Modular Design** principles, ensuring separation of concerns between HTTP transport, request validation, business logic, machine learning pipelines, and dataset ingestion.
+The codebase adheres to **Domain-Driven Modular Design** principles, ensuring clear separation of concerns between HTTP transport, request validation, business logic, machine learning pipelines, and dataset ingestion.
 
 ### Modular Component Architecture
 
 ```mermaid
 flowchart TD
-    Client([Web Client / Dashboard / Third-Party Consumer])
+    Client([Web Client / Dashboard / External Consumer])
 
     subgraph Presentation & Gateway Layer
-        Client -->|HTTP / JSON| FastAPIGateway[FastAPI Application Gateway: app.main]
+        Client -->|HTTP / JSON / Multipart| FastAPIGateway[FastAPI Application Gateway: app.main]
         FastAPIGateway --> CORSMiddleware[CORS Middleware]
         FastAPIGateway --> V1Router[API v1 Router: app.api.v1.router]
     end
@@ -55,6 +50,7 @@ flowchart TD
     subgraph API Routing & DTO Layer
         V1Router --> HealthEP[Health Endpoint: /api/v1/health]
         V1Router --> PredictEP[Prediction Endpoint: /api/v1/predict]
+        V1Router --> ImageEP[Image Forensics Endpoint: /api/v1/predict-image]
         PredictEP --> PydanticSchemas[Pydantic DTOs: app.schemas.news]
     end
 
@@ -62,207 +58,119 @@ flowchart TD
         PredictEP --> ScraperService[Scraper Service: app.services.scraper]
         PredictEP --> ClassifierService[ML Classifier Service: app.services.classifier]
         PredictEP --> RetrieverService[Hybrid Retriever Service: app.services.retriever]
+        ImageEP --> ImageDetectorService[Image Detector Service: app.services.image_detector]
     end
 
     subgraph Security & Core Infrastructure
         ScraperService --> SSRFGuard[SSRF Guard & URL Validator: app.core.security]
         ClassifierService --> Settings[Config & Settings: app.core.config]
         RetrieverService --> Settings
+        ImageDetectorService --> Settings
     end
 
     subgraph Data & Storage Layer
-        ClassifierService --> ModelsDir[(models/: .joblib Artifacts)]
+        ClassifierService --> TextModels[(models/: Text .joblib Artifacts)]
+        ImageDetectorService --> ImageModel[(models/: image_forensics_model.joblib)]
         RetrieverService --> DataDir[(data/: True.csv & Authentic-48K.csv)]
         RetrieverService --> DuckDuckGoLive[Live Web Search: DuckDuckGo API]
     end
 ```
 
-### End-to-End Verification Flow
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User as User / Client
-    participant UI as Frontend Dashboard (frontend/index.html)
-    participant API as REST API Endpoint (app/api/v1/endpoints/prediction.py)
-    participant Scraper as ScraperService (app/services/scraper.py)
-    participant Model as ClassifierService (app/services/classifier.py)
-    participant Ret as RetrieverService (app/services/retriever.py)
-    participant Web as Live Search (DuckDuckGo)
-
-    User->>UI: Submits claim text or news article URL
-    UI->>API: POST /api/v1/predict {text, url, language}
-    
-    alt URL Provided
-        API->>Scraper: scrape_article(url)
-        Scraper->>Scraper: Validate URL & check SSRF blacklist
-        Scraper-->>API: {success: true, content: "...", title: "..."}
-    end
-
-    API->>Model: predict(content, language)
-    Model-->>API: verdict ("Real" / "Fake"), confidence (94.5%)
-
-    API->>Ret: find_matches(content, language)
-    alt Local Ground-Truth Match (Cosine Sim >= Threshold)
-        Ret-->>API: Local Verified Archive Record
-    else Similarity Below Threshold
-        Ret->>Web: Query real-time regional web search
-        Web-->>Ret: Recent news articles & URLs
-        Ret-->>API: Live Web Search Evidence
-    end
-
-    API-->>UI: PredictResponse JSON (verdict, confidence, actual_news_matches, sources)
-    UI-->>User: Renders Verdict Badge, Confidence Bar & Evidence Card
-```
-
 ---
 
 ## 📁 Enterprise Directory Structure
-=======
-# 🛡️ Multilingual & Multimodal Fake News Detection Platform
-
-A full-stack misinformation and fake news verification system supporting **English and Bangla**, powered by machine learning classification, local historical dataset matching, and real-time live web search fallback.
-
----
-
-## 🚀 Key Features
-
-* **Bilingual Text Classification:** Instant verification for both English and regional Bangla news claims using TF-IDF vectorization and supervised ML models.
-* **Hybrid Actual News Retrieval:** 
-  * **Offline Historical Match:** Cross-references claims against local datasets (`True.csv` and `Authentic-48K.csv`).
-  * **Real-Time Live Web Search Fallback:** Automatically queries live web results via DuckDuckGo to verify breaking news and 2026 current events.
-* **FastAPI Backend:** Asynchronous REST API with automatic Swagger UI documentation and CORS middleware enabled.
-
----
-
-## 🛠️ Tech Stack
-
-* **Backend Framework:** FastAPI, Uvicorn, Pydantic
-* **Machine Learning & NLP:** Scikit-Learn, Pandas, Joblib, Cosine Similarity
-* **Live Search Integration:** `duckduckgo-search`
-* **Version Control:** Git & GitHub
-
----
-
-## 📂 Project Structure
->>>>>>> Stashed changes
 
 ```text
 Fake_News_Detection/
 │
-<<<<<<< Updated upstream
 ├── app/                                 # Main Application Core Package
 │   ├── __init__.py                      # Package initialization and metadata
 │   ├── main.py                          # FastAPI application factory & router mounting
 │   │
 │   ├── api/                             # API Transport Layer
-│   │   ├── __init__.py
 │   │   └── v1/                          # Version 1 API Specification
-│   │       ├── __init__.py
 │   │       ├── router.py                # Aggregates endpoints under /api/v1
 │   │       └── endpoints/
-│   │           ├── __init__.py
-│   │           ├── prediction.py        # POST /api/v1/predict
+│   │           ├── prediction.py        # POST /api/v1/predict (Text / Claim Verification)
+│   │           ├── image_prediction.py  # POST /api/v1/predict-image (ELA Forensics)
 │   │           └── health.py            # GET /api/v1/health
 │   │
 │   ├── core/                            # Cross-Cutting Infrastructure
-│   │   ├── __init__.py
 │   │   ├── config.py                    # Environment settings, constants & paths
 │   │   └── security.py                  # SSRF prevention & URL sanitization
 │   │
 │   ├── schemas/                         # Data Transfer Objects (DTOs)
-│   │   ├── __init__.py
 │   │   └── news.py                      # Pydantic models (NewsRequest, PredictResponse, etc.)
 │   │
 │   └── services/                        # Isolated Business & ML Logic
-│       ├── __init__.py
-│       ├── classifier.py                # Dual ML model inference manager
+│       ├── classifier.py                # Dual ML model inference & explainability
+│       ├── image_detector.py            # ELA extraction & ML image forensics
 │       ├── retriever.py                 # 70k+ vector retriever + DuckDuckGo fallback
 │       └── scraper.py                   # Trafilatura web article extractor
 │
 ├── frontend/                            # Web Client Application
-│   └── index.html                       # Responsive Tailwind CSS dashboard
+│   └── index.html                       # Responsive Tailwind CSS dashboard (Text, URL & Image)
 │
 ├── pipelines/                           # Data Science & Training Pipelines
-│   ├── __init__.py
 │   ├── train_en.py                      # English dataset training (TF-IDF + Logistic Regression)
-│   ├── train_bn.py                      # Bangla dataset training (Unicode Regex + Balanced Weights)
-│   └── evaluate.py                      # Benchmark validation & evaluation metrics
+│   ├── train_bn.py                      # Bangla dataset training (Hybrid Word+Char FeatureUnion)
+│   ├── evaluate.py                      # Benchmark validation & evaluation metrics
+│   └── test_ela.py                      # ELA image test script
 │
 ├── scripts/                             # Utility & Automation Scripts
 │   ├── check_system.py                  # Comprehensive system diagnostic tool
-│   └── run_server.py                    # Server startup script
+│   ├── run_server.py                    # Server startup script
+│   ├── collect_ela_dataset.py           # Image forensics dataset builder
+│   └── train_image_model.py             # Image classifier training script
 │
 ├── tests/                               # Automated Test Suite
-│   ├── __init__.py
 │   ├── test_security.py                 # SSRF filter & URL validation tests
-│   └── test_schemas.py                  # Pydantic request/response schema tests
+│   ├── test_schemas.py                  # Pydantic request/response schema tests
+│   └── test_image_detector.py           # ELA image feature extraction tests
 │
 ├── data/                                # Datasets Directory (Gitignored)
 │   └── README.md                        # Dataset placement instructions
 │
-├── models/                              # Trained Model Weights (Gitignored)
+├── models/                              # Trained Model Weights
 │   └── .gitkeep                         # Preserves directory structure in git
 │
+├── samples/                             # Sample images for testing ELA forensics
+├── image_forensics_model.joblib         # Trained ELA image classification model
 ├── .env.example                         # Example environment variables
 ├── .gitignore                           # Excludes large binaries, CSVs, and venvs
 ├── check.py                             # Root wrapper for scripts.check_system
-├── index.html                           # Root dashboard alias
+├── index.html                           # Root dashboard (synced with frontend/index.html)
 ├── main.py                              # Root backward-compatible FastAPI entrypoint
 ├── requirements.txt                     # Pinned, tested production dependencies
 ├── retriever.py                         # Root backward-compatible retriever wrapper
 ├── run.py                               # Top-level executable: python run.py
 ├── scraper.py                           # Root backward-compatible scraper wrapper
+├── test_ela.py                          # Root ELA test wrapper
 ├── train.py                             # Root backward-compatible English training wrapper
 └── train_bn.py                          # Root backward-compatible Bangla training wrapper
-=======
-├── main.py               # FastAPI endpoints, model loading, and CORS setup
-├── retriever.py          # Hybrid local dataset & live web search engine
-├── train.py              # English model training pipeline
-├── train_bn.py           # Bangla model training pipeline
-├── scraper.py            # Web scraping utility
-├── check.py              # Dataset and environment verification script
-├── .gitignore            # Excludes virtual environments, CSV datasets, and large models
-└── README.md             # Project documentation
- Stashed changes
 ```
 
 ---
 
- Updated upstream
-## 🔬 Layer-by-Layer Technical Breakdown
+## 🔬 Key Platform Capabilities
 
-### 1. Application Core (`app/core/`)
-* **`config.py`**: Centralizes configuration using strongly-typed defaults and environment variable overrides (`DATA_DIR`, `MODELS_DIR`, `HOST`, `PORT`, `CORS_ORIGINS`). Resolves paths dynamically across operating systems.
-* **`security.py`**: Implements defense-in-depth URL sanitization. Validates protocol schemes (`http`, `https`), prevents SSRF attempts against `localhost`, `127.0.0.1`, loopbacks, and private IP blocks (`10.0.0.0/8`, `192.168.0.0/16`, `172.16.0.0/12`).
+### 1. Bilingual Text Classification & Linguistic Explainability
+* **English Pipeline:** Trained on the ISOT dataset utilizing TF-IDF n-grams (1, 2) and Logistic Regression.
+* **Bangla Pipeline:** Enhanced Hybrid Word+Char `FeatureUnion` on BanFakeNews dataset combining word tokens (`[\u0980-\u09FF\w]+`) and character n-grams (3 to 5) with balanced class weights.
+* **Pattern Explainability:** Automatically analyzes sensationalist punctuation (`!`, `??`), ALL-CAPS emphasis, clickbait phrasing (`breaking`, `exposed`, `ভাইরাল`, `ফাঁস`), and extracts influential model feature indicators.
 
-### 2. Validation Schemas (`app/schemas/`)
-* **`news.py`**:
-  * `NewsRequest`: Validates input text or URL and language selection (`LanguageEnum.EN` / `LanguageEnum.BN`).
-  * `RetrievalMatch`: Strict schema for ground-truth evidence (title, snippet, similarity score, source type, URL).
-  * `PredictResponse`: Uniform JSON response providing prediction, confidence, evidence aggregation, and operational notes.
-  * `HealthResponse`: System status and individual model/index availability flags.
+### 2. Image Forensics & Manipulation Detection (ELA)
+* **Error Level Analysis (ELA):** Re-compresses images in memory at a controlled JPEG quality (90) and computes pixel-wise compression divergence.
+* **Forensic Feature Extraction:** Evaluates `ela_mean`, `ela_std`, `ela_max`, and `high_error_ratio` ($\ge 25.0$).
+* **Dual Inference Modes:** Predicts through a trained Logistic Regression pipeline with heuristic baseline fallback.
 
-### 3. Business & ML Services (`app/services/`)
-* **`classifier.py` (`ClassifierService`)**:
-  * Loads serialized English (`fake_news_model.joblib`) and Bangla (`fake_news_model_bn.joblib`) model pipelines.
-  * Provides thread-safe inference with probabilistic confidence scoring.
-  * Graceful fallback: If models have not yet been trained, the server reports an `"Unverified"` status without crashing.
-* **`retriever.py` (`RetrieverService`)**:
-  * Vectorizes and indexes 70,000+ authentic records (21k English in `True.csv` and 48k Bangla in `Authentic-48K.csv`).
-  * Automatically caches precomputed TF-IDF matrices to disk for instant subsequent startups.
-  * Detects low cosine similarity and triggers a live regional search query via DuckDuckGo (`bn-bd` for Bangla, `wt-wt` for English).
-* **`scraper.py` (`ScraperService`)**:
-  * Wraps `trafilatura` to extract clean article text, headline, author, and publication timestamp while stripping boilerplate ads, navigation bars, and tracking scripts.
+### 3. Hybrid Ground-Truth Retrieval
+* **Local Verified Archive:** Indexes 70,000+ authentic records (21k English in `True.csv` and 48k Bangla in `Authentic-48K.csv`) with disk-cached TF-IDF matrices for instant server boots.
+* **Live Search Fallback:** When local similarity falls below threshold, automatically queries DuckDuckGo (`bn-bd` for Bangla, `wt-wt` for English) for real-time web verification.
 
-### 4. API Routing Layer (`app/api/v1/`)
-* **`prediction.py`**: Encapsulates FastAPI dependency injection (`Depends(get_classifier)`, `Depends(get_retriever)`), orchestrating scraping, classification, and retrieval into a unified response.
-* **`health.py`**: Exposes `/health` status check monitoring service uptime and readiness of ML models.
-
-### 5. ML Pipelines (`pipelines/`)
-* **`train_en.py`**: Trains English classification on ISOT dataset with TF-IDF n-grams (1, 2) and Logistic Regression.
-* **`train_bn.py`**: Trains Bangla classification on BanFakeNews dataset. Incorporates regex `[\u0980-\u09FF\w]+` to preserve vowel signs (*kar/fala*) and `class_weight='balanced'` to offset the 48:1 class distribution.
-* **`evaluate.py`**: Computes classification matrices, Precision, Recall, and F1-Scores.
+### 4. Secure Server-Side Web Scraping
+* Uses `trafilatura` to extract article body text, headline, author, and date.
+* Built-in **SSRF Protection** blocks private, loopback, and cloud metadata IPs (`127.0.0.1`, `10.0.0.0/8`, `169.254.169.254`).
 
 ---
 
@@ -302,84 +210,71 @@ python check.py
 
 Place the dataset CSV files inside the `data/` directory:
 
-| Dataset File | Language | Articles | Source |
+| Dataset File | Language | Records | Description |
 |---|---|---|---|
-| **`True.csv`** | English | 21,417 | ISOT Fake News Dataset (Reuters verified real news) |
-| **`Fake.csv`** | English | 23,481 | ISOT Fake News Dataset (Flagged misinformation) |
+| **`True.csv`** | English | 21,417 | ISOT Dataset (Reuters verified authentic news) |
+| **`Fake.csv`** | English | 23,481 | ISOT Dataset (Misinformation and false claims) |
 | **`Authentic-48K.csv`** | Bangla | 48,678 | BanFakeNews Dataset (Authentic mainstream media) |
 | **`Fake-1K.csv`** | Bangla | ~1,300 | BanFakeNews Dataset (Fact-checked false reports) |
 
 ---
 
-## 🧠 Training & Evaluating ML Models
-
-To train the models and export serialized `.joblib` artifacts to the `models/` directory:
+## 🧠 Training ML Pipelines
 
 ```bash
 # Train English Pipeline
 python pipelines/train_en.py
 
-# Train Bangla Pipeline
+# Train Enhanced Bangla Pipeline (Word+Char FeatureUnion)
 python pipelines/train_bn.py
 
-# Run Evaluation Benchmark
-python pipelines/evaluate.py
+# Train Image Forensics Model (if collecting ELA dataset)
+python scripts/train_image_model.py
 ```
 
 ---
 
 ## 🚀 Running the Platform
 
-### Option A: Standard Application Runner (Recommended)
+### Start the Backend Server
 ```bash
 python run.py
 ```
+*(Alternative: `uvicorn main:app --reload`)*
 
-### Option B: Direct Uvicorn Command
+* **API Home:** `http://127.0.0.1:8000/`
+* **Interactive Swagger UI:** `http://127.0.0.1:8000/docs`
+* **Health Check:** `http://127.0.0.1:8000/health`
+
+### Launch the Frontend Dashboard
+Simply open `index.html` (or `frontend/index.html`) in your browser, or serve it:
 ```bash
-uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+python -m http.server 3000
 ```
-
-* **Interactive Swagger UI:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-* **API Documentation (Redoc):** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
-* **System Health Endpoint:** [http://127.0.0.1:8000/api/v1/health](http://127.0.0.1:8000/api/v1/health)
-
-### Running the Frontend Dashboard
-Simply open [frontend/index.html](file:///frontend/index.html) in your web browser, or serve it locally:
-```bash
-python -m http.server 3000 --directory frontend
-```
-Visit `http://localhost:3000` to interact with the responsive dashboard.
+Visit `http://localhost:3000` to access Text, URL, and Image Forensics modes.
 
 ---
 
 ## 📡 REST API Reference & Payloads
 
-### POST `/api/v1/predict` (and root `/predict`)
-
-#### Request Payload (Text Verification)
+### 1. News Verification: `POST /predict` (or `/api/v1/predict`)
 ```json
 {
-  "text": "NASA confirms water ice deposits discovered on the Moon ahead of lunar missions.",
+  "text": "NASA confirms new water ice deposits discovered on the Moon.",
   "language": "en"
 }
 ```
 
-#### Request Payload (URL Extraction & Verification)
-```json
-{
-  "url": "https://www.bbc.com/news/articles/c04901g7x9vo",
-  "language": "en"
-}
-```
-
-#### Successful JSON Response
+#### Example Response:
 ```json
 {
   "language": "English",
   "language_code": "en",
   "prediction": "Real",
   "confidence": 96.42,
+  "explanations": [
+    "Key model indicators — Fake signals: [uncovered, conspiracy] | Authentic signals: [nasa, scientists, reuters]"
+  ],
   "actual_news_matches": [
     {
       "source_type": "local_historical",
@@ -391,84 +286,51 @@ Visit `http://localhost:3000` to interact with the responsive dashboard.
       "snippet": "WASHINGTON (Reuters) - Scientists working on NASA's lunar exploration initiative...",
       "url": null
     }
-  ],
-  "evidence": "[Verified Archive (True.csv)] NASA announces new discoveries...",
-  "sources": [],
-  "input_preview": "NASA confirms water ice deposits discovered on the Moon...",
-  "note": null
+  ]
+}
+```
+
+### 2. Image Forensics: `POST /predict-image` (or `/api/v1/predict-image`)
+Multipart form upload with field `file` (`JPEG`, `PNG`, `WebP`).
+
+#### Example Response:
+```json
+{
+  "verdict": "POTENTIALLY EDITED",
+  "mode": "ml_logistic_regression",
+  "confidence": 88.5,
+  "features": {
+    "format": "JPEG",
+    "width": 1200,
+    "height": 800,
+    "quality": 90,
+    "ela_mean": 4.125,
+    "ela_std": 8.642,
+    "ela_max": 142.0,
+    "high_error_ratio": 0.0542
+  },
+  "note": "Classified using trained ELA LogisticRegression pipeline."
 }
 ```
 
 ---
 
-## 🔄 Backward Compatibility Layer
+## 🧪 Testing & Quality Verification
 
-For team members who are accustomed to previous root-level script commands, transparent wrapper shims have been retained at the repository root:
-
-* `python main.py` $\rightarrow$ Executes `app.main:app`
-* `python check.py` $\rightarrow$ Executes `scripts.check_system`
-* `python train.py` $\rightarrow$ Executes `pipelines.train_en`
-* `python train_bn.py` $\rightarrow$ Executes `pipelines.train_bn`
-* Root `/predict` $\rightarrow$ Routes to `/api/v1/predict`
-
----
-
-## 🔒 Security & Defense Specifications
-
-1. **SSRF Guard:** The `app.core.security` module prevents attackers from leveraging URL scraping to map internal networks or probe cloud instance metadata (`http://169.254.169.254`).
-2. **CORS Whitelisting:** Configured in `app.core.config` to prevent unauthorized cross-origin browser abuse.
-3. **Pydantic Validation:** All incoming HTTP payloads are strongly validated, sanitized, and type-checked before reaching business logic.
+Run the automated test suite:
+```bash
+python -m unittest discover tests
+```
 
 ---
 
 ## 👥 Team Collaboration & Contributing
 
-This project is maintained as a collaborative team engineering effort.
-
-1. **Create Branch:** `git checkout -b feature/your-feature-name`
-2. **Follow Layered Architecture:** Do not place monolithic code in single files. Add endpoints to `app/api/v1/endpoints/`, models to `app/schemas/`, and business logic to `app/services/`.
-3. **Execute Diagnostics & Tests:**
-   ```bash
-   python check.py
-   python -m unittest discover tests
-   ```
-4. **Submit Pull Request:** Detail changes, pipeline accuracy benchmarks, and test outcomes.
+1. **Branch Workflow:** Create a feature branch (`git checkout -b feature/name`).
+2. **Layered Structure:** Add endpoints to `app/api/v1/endpoints/`, DTOs to `app/schemas/`, and business services to `app/services/`.
+3. **Execute Diagnostics:** Verify with `python check.py` before submitting a Pull Request.
 
 ---
 
 ## 📄 License
 This platform is open-source and distributed under the [MIT License](LICENSE).
-=======
-## ⚙️ Installation & Running Locally
-
-1. **Clone the Repository:**
-   ```bash
-   git clone [https://github.com/nazerindisha/Fake_News_Detection.git](https://github.com/nazerindisha/Fake_News_Detection.git)
-   cd Fake_News_Detection
-   ```
-
-2. **Create and Activate a Virtual Environment:**
-   ```bash
-   python -m venv venv
-   source venv/Scripts/activate  # On Windows Git Bash
-   ```
-
-3. **Install Dependencies:**
-   ```bash
-   pip install fastapi uvicorn pandas scikit-learn duckduckgo-search pydantic joblib
-   ```
-
-4. **Run the FastAPI Server:**
-   ```bash
-   uvicorn main:app --reload
-   ```
-
-5. **Open Interactive API Docs:**
-   Navigate to **`http://127.0.0.1:8000/docs`** in your browser to test endpoints interactively.
-
----
-
-## 🔮 Roadmap
-* Responsive frontend dashboard for seamless bilingual news verification.
-* AI-generated and manipulated image detection module.
- Stashed changes
