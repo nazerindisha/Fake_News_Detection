@@ -34,18 +34,25 @@ function applyTheme(theme) {
   updateTabStyles();
 }
 
+let themeTransitionTimer = null;
+
 function toggleTheme() {
   const current = document.documentElement.getAttribute("data-theme") || "light";
   const next = current === "light" ? "dark" : "light";
+  
+  // Enable synchronized 60fps/120fps GPU theme transition across all UI layers
+  document.documentElement.classList.add("theme-transitioning");
   applyTheme(next);
+
+  clearTimeout(themeTransitionTimer);
+  themeTransitionTimer = setTimeout(() => {
+    document.documentElement.classList.remove("theme-transitioning");
+  }, 350);
 }
 
 function updateTabStyles() {
   setLanguage(selectedLang);
   setInputMode(inputMode);
-  if (typeof window.setBackgroundPattern === "function") {
-    window.setBackgroundPattern(localStorage.getItem("vf_bg_pattern") || "grid");
-  }
 }
 
 // -------------------------------------------------------------
@@ -117,17 +124,26 @@ function setLanguage(lang) {
   const btnBn = document.getElementById("btnBn");
   const input = document.getElementById("newsInput");
 
-  const activeStyle = "background: var(--tab-active-bg); color: var(--tab-active-text); box-shadow: var(--tab-active-shadow); font-weight: 600;";
-  const inactiveStyle = "background: transparent; color: var(--tab-inactive-text); box-shadow: none; font-weight: 500;";
-
   if (btnEn && btnBn) {
     if (lang === "en") {
-      btnEn.style = activeStyle;
-      btnBn.style = inactiveStyle;
+      btnEn.style.background = "var(--tab-active-bg)";
+      btnEn.style.color = "var(--tab-active-text)";
+      btnEn.style.boxShadow = "var(--tab-active-shadow)";
+      btnEn.style.fontWeight = "600";
+      btnBn.style.background = "transparent";
+      btnBn.style.color = "var(--tab-inactive-text)";
+      btnBn.style.boxShadow = "none";
+      btnBn.style.fontWeight = "500";
       if (input) input.placeholder = "Paste an English news headline, claim, or article paragraph here...";
     } else {
-      btnBn.style = activeStyle;
-      btnEn.style = inactiveStyle;
+      btnBn.style.background = "var(--tab-active-bg)";
+      btnBn.style.color = "var(--tab-active-text)";
+      btnBn.style.boxShadow = "var(--tab-active-shadow)";
+      btnBn.style.fontWeight = "600";
+      btnEn.style.background = "transparent";
+      btnEn.style.color = "var(--tab-inactive-text)";
+      btnEn.style.boxShadow = "none";
+      btnEn.style.fontWeight = "500";
       if (input) input.placeholder = "বাংলা সংবাদ শিরোনাম, দাবি অথবা অনুচ্ছেদ এখানে লিখুন...";
     }
   }
@@ -145,12 +161,26 @@ function setInputMode(mode) {
   const langSelector = document.getElementById("langSelector");
   const btnLabel = document.getElementById("btnLabel");
 
-  const activeStyle = "background: var(--tab-active-bg); color: var(--tab-active-text); box-shadow: var(--tab-active-shadow); font-weight: 600;";
-  const inactiveStyle = "background: transparent; color: var(--tab-inactive-text); box-shadow: none; font-weight: 500;";
+  const tabs = [
+    { el: tabText, id: "text" },
+    { el: tabUrl, id: "url" },
+    { el: tabImage, id: "image" }
+  ];
 
-  if (tabText) tabText.style = mode === "text" ? activeStyle : inactiveStyle;
-  if (tabUrl) tabUrl.style = mode === "url" ? activeStyle : inactiveStyle;
-  if (tabImage) tabImage.style = mode === "image" ? activeStyle : inactiveStyle;
+  tabs.forEach(t => {
+    if (!t.el) return;
+    if (t.id === mode) {
+      t.el.style.background = "var(--tab-active-bg)";
+      t.el.style.color = "var(--tab-active-text)";
+      t.el.style.boxShadow = "var(--tab-active-shadow)";
+      t.el.style.fontWeight = "600";
+    } else {
+      t.el.style.background = "transparent";
+      t.el.style.color = "var(--tab-inactive-text)";
+      t.el.style.boxShadow = "none";
+      t.el.style.fontWeight = "500";
+    }
+  });
 
   if (textContainer) textContainer.classList.toggle("hidden", mode !== "text");
   if (urlContainer) urlContainer.classList.toggle("hidden", mode !== "url");

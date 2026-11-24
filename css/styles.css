@@ -135,11 +135,11 @@
   --input-focus-border: #818cf8;
   --input-focus-ring: rgba(129, 140, 248, 0.25);
   
-  --btn-luxury-bg: #ffffff;
-  --btn-luxury-text: #0f172a;
-  --btn-luxury-border: #ffffff;
-  --btn-luxury-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 14px 0 rgba(255, 255, 255, 0.15);
-  --btn-luxury-hover: #f1f5f9;
+  --btn-luxury-bg: #181b26;
+  --btn-luxury-text: #ffffff;
+  --btn-luxury-border: rgba(99, 102, 241, 0.45);
+  --btn-luxury-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.4), 0 4px 16px 0 rgba(99, 102, 241, 0.22);
+  --btn-luxury-hover: #232738;
   
   --pill-bg: rgba(18, 20, 28, 0.85);
   --pill-border: rgba(255, 255, 255, 0.08);
@@ -177,6 +177,20 @@
 }
 
 /* Base Body Styles */
+/* Universal Butter-Smooth Theme Switching (Linear/Vercel/Stripe style) */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: background-color 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important,
+              border-color 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important,
+              color 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important,
+              box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important,
+              stroke 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important,
+              fill 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition-delay: 0s !important;
+}
+
 body {
   font-family: 'Inter', 'Noto Sans Bengali', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg-primary);
@@ -184,7 +198,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  transition: background-color 0.32s cubic-bezier(0.16, 1, 0.3, 1), color 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   letter-spacing: -0.011em;
 }
 
@@ -384,17 +398,37 @@ body {
   animation: matrixWindowBlink 3.2s ease-in-out infinite alternate;
 }
 
-/* Foreground Readability Scrim (Ensures 100% crisp foreground distinction from background) */
+/* Foreground Readability Scrim (Cross-fades smoothly between light and dark via GPU opacity) */
 .foreground-scrim {
   position: absolute;
   inset: -16px -24px;
-  background: radial-gradient(ellipse at 50% 25%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.65) 55%, rgba(255, 255, 255, 0) 100%);
   pointer-events: none;
   z-index: -1;
   border-radius: 2rem;
+  overflow: hidden;
 }
-[data-theme="dark"] .foreground-scrim {
-  background: radial-gradient(ellipse at 50% 25%, rgba(3, 3, 4, 0.9) 0%, rgba(3, 3, 4, 0.65) 55%, rgba(3, 3, 4, 0) 100%);
+.foreground-scrim::before,
+.foreground-scrim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+.foreground-scrim::before {
+  background: radial-gradient(ellipse at 50% 25%, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.68) 55%, rgba(255, 255, 255, 0) 100%);
+  opacity: 1;
+}
+.foreground-scrim::after {
+  background: radial-gradient(ellipse at 50% 25%, rgba(3, 3, 4, 0.92) 0%, rgba(3, 3, 4, 0.68) 55%, rgba(3, 3, 4, 0) 100%);
+  opacity: 0;
+}
+[data-theme="dark"] .foreground-scrim::before {
+  opacity: 0;
+}
+[data-theme="dark"] .foreground-scrim::after {
+  opacity: 1;
 }
 
 /* Enterprise SaaS Surface Cards — 100% Opaque High-Elevation Surfaces */
